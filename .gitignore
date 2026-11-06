@@ -1,0 +1,36 @@
+# Environment secrets and API keys
+.env
+.env.*
+*.key
+credentials.json
+oauth_creds.json
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Weights, checkpoints and datasets
+*.pth
+*.pt
+*.ckpt
+*.bin
+*.h5
+*.hdf5
+data/
+datasets/
+logs/
+wandb/
+runs/
+videos/
+
+# IDE and OS
+.DS_Store
+.idea/
+.vscode/
