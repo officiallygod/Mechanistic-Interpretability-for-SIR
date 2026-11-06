@@ -1,0 +1,4 @@
+- What do the experiements look like? Are there static objects. If not, then why "This model consistently includes un-
+related objects, such as the Oven, FramedWindow and Mi-
+crowave."
+- How long is the predicted trajectory? Does the attention to nodes change throughout?
