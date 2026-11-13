@@ -9,10 +9,9 @@
   <!-- Mermaid.js for diagrams -->
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <!-- KaTeX for Math -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
-          onload="renderMathInElement(document.body);"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -177,9 +176,9 @@ flowchart LR
         </div>
 
         <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-800 space-y-3">
-          <h4 class="font-semibold text-white">What does the $7 \times 7$ Grid actually mean?</h4>
+          <h4 class="font-semibold text-white">What does the 7 × 7 Grid actually mean?</h4>
           <p>
-            Imagine dividing the entire camera view into a <strong>$7 \times 7$ chessboard of 49 local square patches</strong> ($224 / 7 = 32$ pixels per patch):
+            Imagine dividing the entire camera view into a <strong>7 × 7 chessboard of 49 local square patches</strong> (224 / 7 = 32 pixels per patch):
           </p>
           <ul class="list-disc list-inside space-y-1.5 pl-2 text-slate-300">
             <li>Each patch contains an exact <strong>512-dimensional vector</strong>: $\mathbf{x}_{(u,v)} \in \mathbb{R}^{512}$.</li>
@@ -390,6 +389,27 @@ flowchart LR
 
   <script>
     mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+
+    function initMath() {
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false,
+          ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+        });
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", initMath);
+    window.addEventListener("load", initMath);
+    setTimeout(initMath, 100);
+    setTimeout(initMath, 500);
+    setTimeout(initMath, 1500);
   </script>
 </body>
 </html>
