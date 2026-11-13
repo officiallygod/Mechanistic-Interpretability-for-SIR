@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mechanistic Interpretability with Object Sets for Robot Policies</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Mermaid.js for diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <!-- KaTeX for Math -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body);"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .math { font-family: 'KaTeX_Math', serif; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 antialiased selection:bg-sky-500 selection:text-white">
+
+  <!-- Header / Hero -->
+  <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <span class="px-2.5 py-1 text-xs font-semibold bg-sky-500/20 text-sky-400 rounded-full border border-sky-500/30">Topic 2</span>
+        <h1 class="text-lg font-bold tracking-tight text-white">Mechanistic Interpretability with Object Sets</h1>
+      </div>
+      <div class="flex items-center space-x-4 text-sm">
+        <a href="#architecture" class="text-slate-400 hover:text-white transition">Architecture</a>
+        <a href="#methodology" class="text-slate-400 hover:text-white transition">Methodology</a>
+        <a href="#conditions" class="text-slate-400 hover:text-white transition">3 Conditions</a>
+        <a href="https://github.com/officiallygod/Mechanistic-Interpretability-for-SIR" target="_blank"
+           class="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-medium transition flex items-center space-x-1.5">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="max-w-5xl mx-auto px-6 py-12 space-y-16">
+    <section class="text-center space-y-4">
+      <div class="inline-flex items-center space-x-2 text-xs text-sky-400 bg-sky-950/60 border border-sky-800/50 rounded-full px-3 py-1">
+        <span>Seminar &amp; Praktikum</span>
+        <span>•</span>
+        <span>Intuitive Robots Lab, KIT</span>
+      </div>
+      <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
+        Explainable Object Sets for Robot Policies
+      </h2>
+      <p class="text-lg text-slate-300 max-w-3xl mx-auto">
+        Investigating whether an untouched, end-to-end vision policy implicitly forms a sparse, latent kept set of task-relevant objects using Sparse Autoencoders (SAEs).
+      </p>
+      <div class="pt-2 flex justify-center items-center space-x-6 text-sm text-slate-400">
+        <div><strong class="text-white">Authors:</strong> Allen &amp; Luca (Group 4)</div>
+        <div>•</div>
+        <div><strong class="text-white">Supervisor:</strong> Paul Mattes</div>
+        <div>•</div>
+        <div><strong class="text-white">Lab:</strong> Intuitive Robots Lab (KIT)</div>
+      </div>
+    </section>
+
+    <!-- Core Research Question -->
+    <section class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-8 space-y-4">
+      <h3 class="text-xl font-bold text-sky-400 flex items-center space-x-2">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span>The Guiding Research Question</span>
+      </h3>
+      <blockquote class="text-xl italic text-slate-200 border-l-4 border-sky-500 pl-4 py-1">
+        "Does a robot manipulation policy trained without any explicit object selection form an implicit, latent 'kept set' of objects inside its intermediate representations?"
+      </blockquote>
+      <p class="text-sm text-slate-300 leading-relaxed">
+        While prior methods like <strong>SIR (CVPR 2026)</strong> explicitly prune a scene graph inside the policy, the companion <strong>ICLR 2027</strong> paper revealed that explicit subset bottlenecks often suffer from subtle leakage paths (e.g. graph-level normalizations and survivor score scaling) and struggle to simultaneously satisfy <em>Discovery</em>, <em>Removal</em>, and <em>Consequence</em>. In <strong>Topic 2</strong>, we take an unconstrained vision policy (ResNet-18 + MDT diffusion action generator) and use mechanistic interpretability to determine whether object modularity emerges naturally.
+      </p>
+    </section>
+
+    <!-- Complete Pipeline Diagram (Mermaid) -->
+    <section id="architecture" class="space-y-6">
+      <div class="border-b border-slate-800 pb-3">
+        <h3 class="text-2xl font-bold text-white">End-to-End Technical Architecture</h3>
+        <p class="text-sm text-slate-400">Visual perception backbone, Sparse Autoencoder tap, grounding, and diffusion action generator.</p>
+      </div>
+
+      <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 overflow-x-auto">
+        <pre class="mermaid text-center">
+flowchart TD
+    subgraph S1["1. Visual Observation & Backbone (ResNet-18)"]
+        Cam["Static / In-Hand Camera\nRGB: 224 x 224 x 3"] --> Conv1["Conv1 + MaxPool\n56 x 56 x 64"]
+        Conv1 --> L1["Layer 1 (BasicBlock)\n56 x 56 x 64"]
+        L1 --> L2["Layer 2 (BasicBlock)\n28 x 28 x 128"]
+        L2 --> L3["Layer 3 (BasicBlock)\n14 x 14 x 256"]
+        L3 --> L4["Layer 4 (BasicBlock)\n7 x 7 x 512"]
+        L4 --> Pool["Global Average Pooling\nVector: 512-d"]
+    end
+
+    subgraph S2["2. Mechanistic Interpretability: Sparse Autoencoder (SAE)"]
+        L4 -.->|"Tap 49 Spatial Cells (x_i in R^512)"| SAE_Enc["SAE Encoder: ReLU(W_enc · x + b)\nTop-K / L1 Sparsity"]
+        SAE_Enc --> SparseF["Overcomplete Sparse Code\nf in R^4096 (L0 ≪ 4096)"]
+        SparseF --> SAE_Dec["SAE Decoder: W_dec · f + b\nx_hat in R^512"]
+        SparseF --> Grounding["Spatial Receptive Field Heatmaps\nIoU overlap with Simulator Bounding Boxes"]
+        Grounding --> LatentSet["Emergent Latent Kept Set K_latent\n(Mug, Drawer Handle, Gripper)"]
+    end
+
+    subgraph S3["3. Action Generator: MDT Diffusion Transformer"]
+        Pool --> MDT_Enc["4-layer Transformer Encoder\n(Dim: 512, 16 Attention Heads)"]
+        Goal["Language Instruction (CLIP)\n512-d Embedding"] --> MDT_Enc
+        Noise["Noisy Action Chunk a_t^(k)\n[10 x 12] + Step k"] --> MDT_Dec["6-layer Transformer Decoder\n(Cross-Attention over Observations)"]
+        MDT_Enc --> MDT_Dec
+        MDT_Dec --> DDIM["10-Step DDIM Denoising"]
+        DDIM --> Action["10-Step Action Chunk\n[10 x 12] (Arm Velocity, Gripper Pose)"]
+    end
+
+    SAE_Dec -.->|"Causal Ablation / Activation Steering"| Pool
+        </pre>
+      </div>
+    </section>
+
+    <!-- Methodology Breakdown -->
+    <section id="methodology" class="space-y-6">
+      <div class="border-b border-slate-800 pb-3">
+        <h3 class="text-2xl font-bold text-white">Methodology &amp; Step-by-Step Pipeline</h3>
+        <p class="text-sm text-slate-400">How we extract, ground, and test implicit object sets without modifying policy weights.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-slate-800/40 border border-slate-700/50 p-6 rounded-xl space-y-3">
+          <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 font-bold flex items-center justify-center">1</div>
+          <h4 class="text-lg font-semibold text-white">Activation Tapping (layer4)</h4>
+          <p class="text-sm text-slate-300">
+            During policy execution, we register forward hooks at ResNet-18 <code>layer4</code>. Rather than pooling across space, we extract the raw $7 \times 7$ grid of 512-dimensional vectors (49 spatial tokens), each possessing an isolated receptive field over the camera view.
+          </p>
+        </div>
+
+        <div class="bg-slate-800/40 border border-slate-700/50 p-6 rounded-xl space-y-3">
+          <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 font-bold flex items-center justify-center">2</div>
+          <h4 class="text-lg font-semibold text-white">Overcomplete Sparse Autoencoder</h4>
+          <p class="text-sm text-slate-300">
+            We train an SAE to reconstruct the 512-d activations using an expanded feature dictionary ($M = 4096$, $8\times$ expansion). Enforcing Top-K sparsity ($K \approx 32$) decomposes polysemantic neuron activations into distinct, monosemantic feature directions.
+          </p>
+        </div>
+
+        <div class="bg-slate-800/40 border border-slate-700/50 p-6 rounded-xl space-y-3">
+          <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 font-bold flex items-center justify-center">3</div>
+          <h4 class="text-lg font-semibold text-white">Spatial Grounding to Simulator Boxes</h4>
+          <p class="text-sm text-slate-300">
+            Active SAE features are mapped across the $7 \times 7$ spatial grid into 2D heatmaps. By computing Intersection-over-Union (IoU) against simulator 2D/3D bounding boxes from RoboCasa/CALVIN, features are semantically labeled to specific objects.
+          </p>
+        </div>
+
+        <div class="bg-slate-800/40 border border-slate-700/50 p-6 rounded-xl space-y-3">
+          <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 font-bold flex items-center justify-center">4</div>
+          <h4 class="text-lg font-semibold text-white">Latent Kept Set ($K_{latent}$)</h4>
+          <p class="text-sm text-slate-300">
+            At any timestep $t$, the objects whose grounded SAE features are active constitute the policy's <em>Latent Kept Set</em> $K_{latent}$. This provides a dynamic, human-interpretable readout of what the policy is internally attending to.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- The 3 Verification Conditions -->
+    <section id="conditions" class="space-y-6">
+      <div class="border-b border-slate-800 pb-3">
+        <h3 class="text-2xl font-bold text-white">The Three Foundational Verification Tests</h3>
+        <p class="text-sm text-slate-400">Rigorous tests established in the companion ICLR 2027 paper applied to the latent kept set.</p>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Discovery -->
+        <div class="bg-slate-800/40 border border-slate-700/50 p-6 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <h4 class="text-lg font-semibold text-emerald-400">1. Discovery Condition (D-C)</h4>
+            <span class="text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5 rounded">Measured</span>
+          </div>
+          <p class="text-sm text-slate-300">
+            <strong>Requirement:</strong> The selection must be discovered by the model itself rather than imposed by ground-truth supervisory lists.
+          </p>
+          <p class="text-xs text-slate-400">
+            <em>Our Test:</em> Because the baseline ResNet-18 is trained end-to-end on image pixels without any object bounding-box loss or node annotations, it passes the permutation test by construction. We measure whether the emergent SAE features spontaneously identify task-relevant objects above chance level.
+          </p>
+        </div>
+
+        <!-- Removal -->
+        <div class="bg-slate-800/40 border border-slate-700/50 p-6 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <h4 class="text-lg font-semibold text-amber-400">2. Removal Condition (R-C)</h4>
+            <span class="text-xs bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded">Causal Ablation</span>
+          </div>
+          <p class="text-sm text-slate-300">
+            <strong>Requirement:</strong> Excluded objects must be strictly absent from the downstream computation, ensuring the action depends only on $K_{latent}$.
+          </p>
+          <p class="text-xs text-slate-400">
+            <em>Our Test:</em> We perform causal feature ablation during policy rollouts: for any object outside $K_{latent}$, we clamp its corresponding SAE feature activations to zero ($f_j = 0$), decode the reconstructed activation vector $\hat{x}$, and inject it back into the MDT action generator. We record whether the generated action remains completely invariant.
+          </p>
+        </div>
+
+        <!-- Consequence -->
+        <div class="bg-slate-800/40 border border-slate-700/50 p-6 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <h4 class="text-lg font-semibold text-sky-400">3. Consequence Condition (C-C)</h4>
+            <span class="text-xs bg-sky-950 text-sky-300 border border-sky-800 px-2 py-0.5 rounded">Closed-Loop Success</span>
+          </div>
+          <p class="text-sm text-slate-300">
+            <strong>Requirement:</strong> The selection must matter beyond a matched random subset of the same size (sufficiency + selectivity).
+          </p>
+          <p class="text-xs text-slate-400">
+            <em>Our Test:</em> We evaluate full rollout success rates when ablating task-relevant features vs. ablating random feature sets of identical sparsity. If ablating $K_{latent}$ features drops success to the blind policy baseline while ablating irrelevant features preserves task completion, the explanation is causally validated.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Structure & Roadmap -->
+    <section class="space-y-6">
+      <div class="border-b border-slate-800 pb-3">
+        <h3 class="text-2xl font-bold text-white">Repository Organization &amp; Deliverables</h3>
+        <p class="text-sm text-slate-400">Code structure, seminar report milestones, and practical execution.</p>
+      </div>
+
+      <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 space-y-1">
+        <div>Mechanistic-Interpretability-for-SIR/</div>
+        <div>├── .github/workflows/deploy-pages.yml  # Automatic GitHub Pages CI/CD</div>
+        <div>├── docs/                             # Interactive documentation website (this page)</div>
+        <div>│   ├── index.html                    # Single-page documentation portal</div>
+        <div>│   └── architecture_deep_dive.md     # In-depth architectural & tensor breakdown</div>
+        <div>├── papers/                           # Foundational papers (CVPR 2026, ICLR 2027)</div>
+        <div>│   └── README.md                     # Paper summaries and theoretical context</div>
+        <div>├── notes/                            # Research logs and supervisor notes</div>
+        <div>│   └── questions_to_paul.md          # Open questions on biases & dynamics</div>
+        <div>├── src/                              # Core implementation modules</div>
+        <div>│   ├── activation_recorder.py        # Forward hook for ResNet-18 layer4 activations</div>
+        <div>│   ├── sae.py                        # Top-K / L1 Sparse Autoencoder model</div>
+        <div>│   ├── grounding.py                  # Heatmap IoU alignment to simulator bboxes</div>
+        <div>│   └── causal_intervention.py        # Feature clamping & closed-loop ablation hooks</div>
+        <div>├── SIR_Model/                        # Upstream SIR model & environment benchmarks</div>
+        <div>└── README.md                         # Main repository guide</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 bg-slate-950 py-8 text-center text-xs text-slate-500">
+    <p>Seminar &amp; Praktikum: Explainable Object Sets for Robot Policies • Intuitive Robots Lab, KIT</p>
+    <p class="mt-1">Group 4: Allen &amp; Luca • Supervised by Paul Mattes</p>
+  </footer>
+
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+  </script>
+</body>
+</html>

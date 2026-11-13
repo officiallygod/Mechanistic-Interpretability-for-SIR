@@ -1,6 +1,35 @@
 # Policy Architecture & Mechanistic Interpretability Tap
 
-![Policy Architecture Diagram](assets/policy_architecture_diagram.jpg)
+```mermaid
+flowchart TD
+    subgraph S1["1. Visual Observation & Backbone (ResNet-18)"]
+        Cam["Static / In-Hand Camera\nRGB [B, 3, 224, 224]"] --> Conv1["Conv1 + MaxPool\n[B, 64, 56, 56]"]
+        Conv1 --> L1["Layer 1 (2x BasicBlock)\n[B, 64, 56, 56]"]
+        L1 --> L2["Layer 2 (2x BasicBlock)\n[B, 128, 28, 28]"]
+        L2 --> L3["Layer 3 (2x BasicBlock)\n[B, 256, 14, 14]"]
+        L3 --> L4["Layer 4 (2x BasicBlock)\n[B, 512, 7, 7]"]
+        L4 --> Pool["Global Avg Pooling\n[B, 512]"]
+    end
+
+    subgraph S2["2. Mechanistic Interpretability: Sparse Autoencoder (SAE) Tap"]
+        L4 -.->|"Tap 49 spatial vectors (x_i in R^512)"| SAE_Enc["SAE Encoder: W_enc · x + b\nTop-K / L1 Sparsity"]
+        SAE_Enc --> SparseF["Overcomplete Sparse Code\nf in R^M (M = 4096)"]
+        SparseF --> SAE_Dec["SAE Decoder: W_dec · f + b\nReconstruction x_hat in R^512"]
+        SparseF --> Grounding["Spatial Receptive Field Heatmap\nOverlap with Simulator 2D/3D Bounding Boxes"]
+        Grounding --> KeptSet["Emergent Latent Kept Set K_latent\n(Task objects: Mug, Drawer, Gripper)"]
+    end
+
+    subgraph S3["3. Action Generator (MDT Diffusion Transformer)"]
+        Pool --> MDT_Enc["4-layer Transformer Encoder\n(Hidden dim: 512, 16 Heads)"]
+        Goal["Language Goal (CLIP)\n[B, 512]"] --> MDT_Enc
+        Noise["Noisy Action a_t^(k)\n[B, 10, 12]"] --> MDT_Dec["6-layer Transformer Decoder\n(Cross-Attention over Observations)"]
+        MDT_Enc --> MDT_Dec
+        MDT_Dec --> DDIM["10-Step DDIM Denoising"]
+        DDIM --> Action["10-Step Action Chunk\n[10 x 12] (Arm Velocity, Gripper Pose)"]
+    end
+
+    SAE_Dec -.->|"Causal Ablation / Intervention during rollout"| Pool
+```
 
 This document details the exact neural architecture currently deployed in the `SIR_Model` codebase and how the **Mechanistic Interpretability (Topic 2)** pipeline taps into it to discover and evaluate implicit object sets.
 
