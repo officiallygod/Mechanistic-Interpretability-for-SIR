@@ -11,7 +11,7 @@
 > **Topic 2:** Mechanistic Interpretability with Object Sets (Sparse Autoencoders)  
 > **Team (Group 4):** Allen & Luca  
 > **Supervisor:** Paul Mattes  
-> **Quick Links:** [🌐 Interactive Docs](https://officiallygod.github.io/Mechanistic-Interpretability-for-SIR/) • [📊 Bi-Weekly Slides](https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing) • [🧠 Miro Board](https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076) • [📅 Progress Logs](progress/)
+> **Quick Links:** [🌐 Interactive Docs](https://officiallygod.github.io/Mechanistic-Interpretability-for-SIR/) • [🔍 Step-by-Step Tensor Walkthrough](https://officiallygod.github.io/Mechanistic-Interpretability-for-SIR/pipeline_explained.html) • [📊 Bi-Weekly Slides](https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing) • [🧠 Miro Board](https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076) • [📅 Progress Logs](progress/)
 
 ---
 
@@ -93,6 +93,7 @@ Mechanistic-Interpretability-for-SIR/
 │   └── deploy-pages.yml       # Automated GitHub Pages CI/CD deployment
 ├── docs/                      # Interactive GitHub Pages documentation
 │   ├── index.html             # Academic project portal with interactive diagrams
+│   ├── pipeline_explained.html # Step-by-step tensor walkthrough & vector mappings
 │   ├── .nojekyll              # Disables Jekyll processing on GitHub Pages
 │   └── architecture_deep_dive.md # Detailed tensor dimensions & layer specifications
 ├── papers/                    # Foundational research literature

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MIS: Step-by-Step Architecture & Tensor Walkthrough</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Mermaid.js for diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <!-- KaTeX for Math -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body);"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .math { font-family: 'KaTeX_Math', serif; }
+    .tensor-badge {
+      font-family: monospace;
+      padding: 0.15rem 0.5rem;
+      border-radius: 0.375rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 antialiased selection:bg-sky-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <a href="index.html" class="flex items-center space-x-2 text-slate-400 hover:text-white transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+          <span class="text-xs font-semibold uppercase tracking-wider">Back to Overview</span>
+        </a>
+        <span class="text-slate-600">|</span>
+        <span class="px-2.5 py-0.5 text-xs font-bold bg-sky-500/20 text-sky-400 rounded-full border border-sky-500/30">Deep Dive</span>
+        <h1 class="text-base font-bold text-white hidden sm:inline">Tensor Mappings &amp; Layer Walkthrough</h1>
+      </div>
+      <div class="flex items-center space-x-3 text-sm">
+        <a href="https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing" target="_blank"
+           class="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-medium transition border border-amber-500/30 text-xs flex items-center space-x-1">
+          <span>📊 Slides</span>
+        </a>
+        <a href="https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076" target="_blank"
+           class="px-2.5 py-1 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 font-medium transition border border-indigo-500/30 text-xs flex items-center space-x-1">
+          <span>🧠 Miro</span>
+        </a>
+        <a href="https://github.com/officiallygod/Mechanistic-Interpretability-for-SIR" target="_blank"
+           class="px-2.5 py-1 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-medium transition text-xs flex items-center space-x-1">
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-6 py-12 space-y-16">
+
+    <!-- Title & Purpose -->
+    <section class="space-y-4">
+      <div class="inline-flex items-center space-x-2 text-xs text-sky-400 bg-sky-950/60 border border-sky-800/50 rounded-full px-3 py-1">
+        <span>MIS Architecture Guide</span>
+        <span>•</span>
+        <span>From Raw Pixels to Latent Kept Sets</span>
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+        How Every Vector Maps to Another: Input, Latent Spaces &amp; Action
+      </h2>
+      <p class="text-base text-slate-300 leading-relaxed max-w-4xl">
+        This document explains exactly <strong>what the inputs are</strong>, <strong>where they come from</strong>, <strong>what the vector shapes look like</strong>, how <strong>Global Average Pooling (GAP)</strong> collapses spatial information into a dense latent space, and how a <strong>Sparse Autoencoder (SAE)</strong> untangles that representation into interpretable, groundable object and part-level features.
+      </p>
+    </section>
+
+    <!-- Global Flow Roadmap (Mermaid) -->
+    <section class="bg-slate-950 p-6 rounded-2xl border border-slate-800 space-y-4">
+      <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+        <span>🗺️ End-to-End Vector Transformation Flow</span>
+      </h3>
+      <div class="overflow-x-auto">
+        <pre class="mermaid text-center">
+flowchart LR
+    A["Camera Image\n[3, 224, 224]"] -->|"ResNet-18 Stages 1-4"| B["Layer 4 Grid\n[512, 7, 7]"]
+    B -->|"Global Average Pooling"| C["Dense Visual Token\n[1, 512]"]
+    C -->|"MDT Transformer"| D["Action Chunk\n[10, 12]"]
+
+    B -.->|"Mechanistic Tap\n(49 cells x 512-d)"| E["SAE Encoder\n(Top-K = 32)" ]
+    E -->|"Sparse Decomposition"| F["Sparse Code f\n[4096-d, L0=32]"]
+    F -->|"Spatial IoU Mapping"| G["Latent Kept Set\nK_latent (Objects & Parts)"]
+    F -.->|"SAE Decoder\nReconstruct & Intervene"| B
+        </pre>
+      </div>
+    </section>
+
+    <!-- STEP 1: The Camera Input -->
+    <section class="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-8 space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-700/60 pb-4">
+        <div>
+          <span class="text-xs uppercase font-bold tracking-wider text-sky-400">Stage 01</span>
+          <h3 class="text-2xl font-bold text-white">Visual Observation: Camera Image</h3>
+        </div>
+        <span class="tensor-badge bg-sky-950 text-sky-300 border border-sky-800">Tensor: [B, 3, 224, 224]</span>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 text-sm text-slate-300">
+        <div class="space-y-3">
+          <h4 class="font-semibold text-white">Where does it come from?</h4>
+          <p>
+            From the robot simulator (<strong>RoboCasa</strong> or <strong>CALVIN</strong>). In RoboCasa, these are static external kitchen cameras (left view / right view) or a camera mounted directly on the robot's wrist (in-hand camera).
+          </p>
+          <h4 class="font-semibold text-white">In Easy Terms:</h4>
+          <p>
+            It is a standard color photograph of the tabletop. <code>3</code> channels correspond to Red, Green, and Blue (RGB). The resolution is $224 \times 224$ pixels.
+          </p>
+        </div>
+
+        <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-2 font-mono text-xs">
+          <div class="text-slate-400">// Example Pixel Representation</div>
+          <div class="text-slate-300">Image Shape = [Batch, 3, 224, 224]</div>
+          <div class="text-emerald-400">Pixel at (Row: 112, Col: 140): [R=0.82, G=0.12, B=0.14]</div>
+          <div class="text-slate-400">// Represents a bright red ceramic mug on the kitchen table.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2: ResNet-18 Layer4 Feature Map -->
+    <section class="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-8 space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-700/60 pb-4">
+        <div>
+          <span class="text-xs uppercase font-bold tracking-wider text-purple-400">Stage 02</span>
+          <h3 class="text-2xl font-bold text-white">ResNet-18 Backbone &amp; Layer4 Grid</h3>
+        </div>
+        <span class="tensor-badge bg-purple-950 text-purple-300 border border-purple-800">Tensor: [B, 512, 7, 7]</span>
+      </div>
+
+      <div class="space-y-4 text-sm text-slate-300">
+        <p>
+          As the image passes through the convolutional blocks of ResNet-18, the spatial resolution is repeatedly halved while the channel depth increases:
+        </p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono text-center">
+          <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+            <div class="text-slate-400">Conv1 + Pool</div>
+            <div class="text-white font-bold mt-1">[64, 56, 56]</div>
+          </div>
+          <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+            <div class="text-slate-400">Layer 1 &amp; 2</div>
+            <div class="text-white font-bold mt-1">[128, 28, 28]</div>
+          </div>
+          <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+            <div class="text-slate-400">Layer 3</div>
+            <div class="text-white font-bold mt-1">[256, 14, 14]</div>
+          </div>
+          <div class="p-3 bg-slate-900 rounded-lg border border-purple-500/40 bg-purple-950/20">
+            <div class="text-purple-400 font-bold">Layer 4 (Tap)</div>
+            <div class="text-purple-200 font-bold mt-1">[512, 7, 7]</div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-800 space-y-3">
+          <h4 class="font-semibold text-white">What does the $7 \times 7$ Grid actually mean?</h4>
+          <p>
+            Imagine dividing the entire camera view into a <strong>$7 \times 7$ chessboard of 49 local square patches</strong> ($224 / 7 = 32$ pixels per patch):
+          </p>
+          <ul class="list-disc list-inside space-y-1.5 pl-2 text-slate-300">
+            <li>Each patch contains an exact <strong>512-dimensional vector</strong>: $\mathbf{x}_{(u,v)} \in \mathbb{R}^{512}$.</li>
+            <li>Cell $(u=2, v=3)$ looks at the top-left area where the <strong>mug handle</strong> sits.</li>
+            <li>Cell $(u=5, v=6)$ looks at the bottom-right where the <strong>robot gripper</strong> enters the scene.</li>
+            <li><strong>Why tap here?</strong> This is the <em>last moment in the entire network</em> where spatial geometry is still preserved before pooling destroys it!</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 3: The Global Average Pooling Blender -->
+    <section class="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-8 space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-700/60 pb-4">
+        <div>
+          <span class="text-xs uppercase font-bold tracking-wider text-amber-400">Stage 03</span>
+          <h3 class="text-2xl font-bold text-white">Global Average Pooling (GAP): The "Blender"</h3>
+        </div>
+        <span class="tensor-badge bg-amber-950 text-amber-300 border border-amber-800">Mapping: [B, 512, 7, 7] ➔ [B, 512]</span>
+      </div>
+
+      <div class="space-y-4 text-sm text-slate-300">
+        <p>
+          In the standard baseline policy, how does the model turn 49 spatial vectors into a single vector for the policy? It uses <strong>Global Average Pooling (GAP)</strong>:
+        </p>
+
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center font-mono text-base text-amber-300">
+          $$\mathbf{z}_{\text{pool}} = \frac{1}{49} \sum_{u=1}^7 \sum_{v=1}^7 \mathbf{x}_{(u,v)} \in \mathbb{R}^{512}$$
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 pt-2">
+          <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-2">
+            <h4 class="font-semibold text-white">What it does (Intuition):</h4>
+            <p>
+              GAP acts like a <strong>blender</strong>. It takes the vector from the mug, the vector from the wall, the vector from the gripper, and averages all 49 vectors into one smoothie vector $\mathbf{z}_{\text{pool}}$.
+            </p>
+          </div>
+          <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-2">
+            <h4 class="font-semibold text-white">Why it causes an Interpretability Problem:</h4>
+            <p>
+              The smoothie vector knows <em>"there is coffee and a cup somewhere"</em>, but you can no longer isolate which object caused which action command. The spatial object identity is completely blended!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 4: Sparse Autoencoder (SAE) -->
+    <section class="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-8 space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-700/60 pb-4">
+        <div>
+          <span class="text-xs uppercase font-bold tracking-wider text-emerald-400">Stage 04</span>
+          <h3 class="text-2xl font-bold text-white">Sparse Autoencoder (SAE): Untangling Superposition</h3>
+        </div>
+        <span class="tensor-badge bg-emerald-950 text-emerald-300 border border-emerald-800">Mapping: ℝ⁵¹² ➔ ℝ⁴⁰⁹⁶ (Top-K = 32)</span>
+      </div>
+
+      <div class="space-y-4 text-sm text-slate-300">
+        <h4 class="font-semibold text-white text-base">The Core Problem: Superposition &amp; Polysemantic Neurons</h4>
+        <p>
+          In a 512-d vector, individual neurons are <em>polysemantic</em>. For example, Neuron #87 might fire for <em>"red ceramic mugs"</em>, <em>"wooden cabinet edges"</em>, AND <em>"warning stickers"</em>. Deep networks do this because they must represent tens of thousands of real-world visual concepts inside only 512 numbers.
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-6 pt-2">
+          <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800 space-y-3 font-mono text-xs">
+            <div class="text-emerald-400 font-bold">// 1. SAE Encoder (Overcomplete Expansion)</div>
+            <div class="text-slate-300">Input: x ∈ ℝ⁵¹² (from one spatial cell)</div>
+            <div class="text-slate-300">W_enc ∈ ℝ⁴⁰⁹⁶ × ⁵¹² (8x expansion factor)</div>
+            <div class="text-sky-300">f = TopK( ReLU( W_enc · (x - b_dec) + b_enc ), K=32 )</div>
+            <div class="text-slate-400">// Out of 4096 units, 4064 are strictly 0.0!</div>
+            <div class="text-amber-300">// Only 32 features are active (> 0).</div>
+          </div>
+
+          <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800 space-y-3 font-mono text-xs">
+            <div class="text-emerald-400 font-bold">// 2. SAE Decoder (Faithful Reconstruction)</div>
+            <div class="text-slate-300">Input: Sparse Code f ∈ ℝ⁴⁰⁹⁶</div>
+            <div class="text-slate-300">W_dec ∈ ℝ⁵¹² × ⁴⁰⁹⁶</div>
+            <div class="text-sky-300">x_hat = W_dec · f + b_dec ∈ ℝ⁵¹²</div>
+            <div class="text-slate-400">// Objective: Minimize Reconstruction Error</div>
+            <div class="text-emerald-300">Loss = ||x - x_hat||²</div>
+          </div>
+        </div>
+
+        <div class="bg-emerald-950/20 border border-emerald-800/40 p-4 rounded-xl text-xs space-y-2">
+          <div class="font-bold text-emerald-400 uppercase tracking-wider">Example Monosemantic Units in f:</div>
+          <div class="space-y-1 font-mono text-slate-300">
+            <div>• <strong class="text-white">Feature #142 (Value: 3.84):</strong> Fires ONLY on cylindrical curved rims (Mug Rim).</div>
+            <div>• <strong class="text-white">Feature #418 (Value: 2.15):</strong> Fires ONLY on metallic drawer handles (Grasp Affordance).</div>
+            <div>• <strong class="text-white">Feature #890 (Value: 4.10):</strong> Fires ONLY on the black rubber robot gripper pad.</div>
+            <div>• <strong class="text-slate-500">Feature #0 to #141, #143 to #417... (Value: 0.0):</strong> Completely dormant / silent.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 5: Spatial Heatmap & Bounding Box Grounding -->
+    <section class="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-8 space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-700/60 pb-4">
+        <div>
+          <span class="text-xs uppercase font-bold tracking-wider text-sky-400">Stage 05</span>
+          <h3 class="text-2xl font-bold text-white">Spatial Heatmaps &amp; Bounding Box Grounding</h3>
+        </div>
+        <span class="tensor-badge bg-sky-950 text-sky-300 border border-sky-800">IoU Alignment: Heatmap ⟷ Simulator Boxes</span>
+      </div>
+
+      <div class="space-y-4 text-sm text-slate-300">
+        <p>
+          How do we prove whether Feature #142 belongs to the mug or the drawer? We map where it fires across the 49 spatial cells:
+        </p>
+
+        <div class="grid md:grid-cols-3 gap-4 font-mono text-xs text-center">
+          <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 space-y-2">
+            <div class="text-slate-400 font-bold">1. 7x7 Feature Map</div>
+            <div class="text-slate-300">Check firing value of Feature #142 across all 49 cells:</div>
+            <div class="text-sky-400 font-bold">H_142 ∈ ℝ⁷ ˣ ⁷</div>
+          </div>
+          <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 space-y-2">
+            <div class="text-slate-400 font-bold">2. Bilinear Upsample</div>
+            <div class="text-slate-300">Interpolate from 7x7 to full camera resolution:</div>
+            <div class="text-sky-400 font-bold">Heatmap ∈ ℝ²²⁴ ˣ ²²⁴</div>
+          </div>
+          <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 space-y-2">
+            <div class="text-slate-400 font-bold">3. Simulator BBox IoU</div>
+            <div class="text-slate-300">Intersect with simulator ground-truth boxes:</div>
+            <div class="text-emerald-400 font-bold">IoU(Mug) = 0.82 ➔ Match!</div>
+          </div>
+        </div>
+
+        <!-- Whole Object vs Part Granularity -->
+        <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800 space-y-3">
+          <h4 class="font-bold text-white text-base">Key Research Question: Whole Object vs. Object Parts</h4>
+          <p class="leading-relaxed">
+            In robot manipulation, does the policy care about the <em>whole object</em> or only its <em>functional interaction affordances</em>?
+          </p>
+          <div class="grid sm:grid-cols-2 gap-4 pt-1">
+            <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 space-y-1">
+              <span class="text-xs font-bold text-sky-400 uppercase">Object-Level (Whole)</span>
+              <p class="text-xs text-slate-300">
+                The entire bounding box of the cabinet or drawer $[xmin, ymin, xmax, ymax]$ is considered the target.
+              </p>
+            </div>
+            <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 space-y-1">
+              <span class="text-xs font-bold text-purple-400 uppercase">Part-Level (Affordance)</span>
+              <p class="text-xs text-slate-300">
+                The features fire exclusively on the <strong>handle</strong> or <strong>contact rim</strong>. The robot policy ignores the body of the drawer and attends only to the graspable part!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 6: MDT Action Generator & Causal Intervention -->
+    <section class="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-8 space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-700/60 pb-4">
+        <div>
+          <span class="text-xs uppercase font-bold tracking-wider text-rose-400">Stage 06</span>
+          <h3 class="text-2xl font-bold text-white">Action Generator (MDT) &amp; Causal Feature Ablation</h3>
+        </div>
+        <span class="tensor-badge bg-rose-950 text-rose-300 border border-rose-800">Action Chunk: [B, 10, 12]</span>
+      </div>
+
+      <div class="space-y-4 text-sm text-slate-300">
+        <p>
+          The action generator is a <strong>Multimodal Diffusion Transformer (MDT)</strong>. It takes the observation tokens and predicts a chunk of 10 future robot actions:
+        </p>
+
+        <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 font-mono text-xs space-y-1">
+          <div class="text-slate-400">// Action Tensor Dimensions</div>
+          <div>Predicted Action: <strong class="text-white">a_t ∈ ℝ¹⁰ ˣ ¹²</strong></div>
+          <div class="text-slate-400">• Dimension 10: 10 future timesteps into the future (Action Chunking).</div>
+          <div class="text-slate-400">• Dimension 12: Robot state commands (3 arm position velocity, 3 orientation velocity, 1 gripper jaw width, 5 base mobility).</div>
+        </div>
+
+        <h4 class="font-bold text-white text-base pt-2">How We Perform Causal Interventions:</h4>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-slate-900 p-4 rounded-xl border border-amber-500/30 space-y-2">
+            <div class="text-xs font-bold text-amber-400 uppercase">Removal Condition Test</div>
+            <p class="text-xs text-slate-300">
+              For any object <em>outside</em> the latent kept set (e.g. the microwave in a drawer task), force its SAE features to 0:
+            </p>
+            <div class="font-mono text-xs text-amber-300">f[feat_microwave] = 0.0</div>
+            <p class="text-xs text-slate-400">
+              Reconstruct $\hat{\mathbf{x}}$ and run MDT. If the predicted action chunk remains unchanged ($\Delta a \approx 0$), the excluded object had strictly <strong>zero causal influence</strong>!
+            </p>
+          </div>
+
+          <div class="bg-slate-900 p-4 rounded-xl border border-sky-500/30 space-y-2">
+            <div class="text-xs font-bold text-sky-400 uppercase">Consequence Condition Test</div>
+            <p class="text-xs text-slate-300">
+              Force the task-relevant object features (e.g. drawer handle) to 0:
+            </p>
+            <div class="font-mono text-xs text-sky-300">f[feat_drawer_handle] = 0.0</div>
+            <p class="text-xs text-slate-400">
+              Run closed-loop rollout in the simulator. If the task fails, but ablating a random feature of equal magnitude does NOT fail, the latent kept set is <strong>causally consequential</strong>!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-slate-800 bg-slate-950 py-8 text-center text-xs text-slate-500">
+    <p>MIS: Mechanistic Interpretability for SIR • Seminar &amp; Praktikum (WS 2026/2027)</p>
+    <p class="mt-1">Intuitive Robots Lab, KIT • Group 4: Allen &amp; Luca • Supervised by Paul Mattes</p>
+  </footer>
+
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+  </script>
+</body>
+</html>
