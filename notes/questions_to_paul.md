@@ -25,3 +25,5 @@ In the SIR paper (Section 5.4, Fig. 5c for `CloseDrawer`), the TopK sparsified m
 * The MDT action generator predicts an action chunk of 10 steps ($H = 10$).
 * In the current SIR setup, does the sparsification module recalculate the kept set at every single observation frame $t$, or does it stay invariant?
 * In mechanistic interpretability, as the robot arm approaches the target object vs. when it is moving back, does the latent SAE feature activation shift dynamically from approach targets to gripper state?
+
+- Why are we not combining the camera views beforehand and only combine the embeddings after the GNN passing? one view might be completely wrong, or even both, as they both might miss some important object. What cameras/views are we using? why(did you test the different setups)?
