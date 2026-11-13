@@ -53,6 +53,9 @@ SIR/                                     # Parent workspace directory
     ├── .env                             # Local secrets & API keys (git-ignored)
     ├── .gitignore                       # Ignore weights (*.pth), caches, logs, .env
     ├── README.md                        # Project documentation & roadmap
+    ├── docs/                            # In-depth architectural & theoretical docs
+    │   ├── architecture_deep_dive.md    # Policy & SAE architecture breakdown
+    │   └── assets/                      # Diagrams & visual assets
     ├── configs/                         # Hydra experiment configs
     ├── notebooks/                       # Exploratory analysis & SAE visualizations
     └── src/                             # Mechanistic interpretability & SAE modules
@@ -61,6 +64,8 @@ SIR/                                     # Parent workspace directory
         ├── grounding.py                 # Feature-to-object spatial alignment
         └── causal_eval.py               # Interventions (Discovery, Removal, Consequence)
 ```
+
+See [docs/architecture_deep_dive.md](docs/architecture_deep_dive.md) for full tensor dimensions, layer specifications, and pipeline diagrams.
 
 ---
 
