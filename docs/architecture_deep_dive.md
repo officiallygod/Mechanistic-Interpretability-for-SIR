@@ -1,4 +1,7 @@
-# Policy Architecture & Mechanistic Interpretability Tap
+# MIS: Policy Architecture & Mechanistic Interpretability Tap
+
+> **Project:** MIS (Mechanistic Interpretability for SIR)  
+> **Links:** [🌐 Documentation Portal](index.html) • [📊 Presentation Slides](https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing) • [🧠 Miro Board](https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076)
 
 ```mermaid
 flowchart TD

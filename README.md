@@ -1,15 +1,17 @@
-# Mechanistic Interpretability with Object Sets for Robot Policies
+# MIS: Mechanistic Interpretability for SIR
+### *Uncovering Implicit Object Sets in Robot Policies via Sparse Autoencoders*
 
-[![GitHub Pages](https://img.shields.io/badge/docs-GitHub%20Pages-0284c7?style=flat-square&logo=github)](https://officiallygod.github.io/Mechanistic-Interpretability-for-SIR/)
-[![Python](https://img.shields.io/badge/python-3.10+-blue?style=flat-square&logo=python)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c?style=flat-square&logo=pytorch)](https://pytorch.org/)
-[![Lab](https://img.shields.io/badge/Intuitive%20Robots%20Lab-KIT-009682?style=flat-square)](https://intuitive-robots.net/)
+[![Docs](https://img.shields.io/badge/Docs-GitHub%20Pages-0284c7?style=for-the-badge&logo=github)](https://officiallygod.github.io/Mechanistic-Interpretability-for-SIR/)
+[![Google Slides](https://img.shields.io/badge/Slides-Google%20Slides-FBBC04?style=for-the-badge&logo=googleslides&logoColor=white)](https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing)
+[![Miro Board](https://img.shields.io/badge/Miro-Architecture%20Board-050038?style=for-the-badge&logo=miro&logoColor=yellow)](https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c?style=for-the-badge&logo=pytorch)](https://pytorch.org/)
+[![Lab](https://img.shields.io/badge/Intuitive%20Robots%20Lab-KIT-009682?style=for-the-badge)](https://intuitive-robots.net/)
 
-> **Seminar & Praktikum:** Explainable Object Sets for Robot Policies  
+> **Seminar & Praktikum:** Explainable Object Sets for Robot Policies (WS 2026/2027)  
 > **Topic 2:** Mechanistic Interpretability with Object Sets (Sparse Autoencoders)  
 > **Team (Group 4):** Allen & Luca  
 > **Supervisor:** Paul Mattes  
-> **Documentation Portal:** [https://officiallygod.github.io/Mechanistic-Interpretability-for-SIR/](https://officiallygod.github.io/Mechanistic-Interpretability-for-SIR/)
+> **Quick Links:** [🌐 Interactive Docs](https://officiallygod.github.io/Mechanistic-Interpretability-for-SIR/) • [📊 Bi-Weekly Slides](https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing) • [🧠 Miro Board](https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076) • [📅 Progress Logs](progress/)
 
 ---
 
@@ -97,6 +99,9 @@ Mechanistic-Interpretability-for-SIR/
 │   ├── CVPR_graph_paper_2026.pdf # SIR: Structured Image Representations (CVPR 2026)
 │   ├── Closing_the_loop_SIR_ICLR_2027-1.pdf # Analysis of subset explanations (ICLR 2027)
 │   └── README.md              # Context & literature summaries
+├── progress/                  # Bi-weekly progress updates & logs
+│   ├── README.md              # Progress tracker & meeting cadence
+│   └── cycle_01_kickoff.md    # Kickoff & architecture blueprint notes
 ├── notes/                     # Team meeting logs and discussion points
 │   └── questions_to_paul.md   # Open research questions for supervisor
 ├── src/                       # Core Mechanistic Interpretability implementation
@@ -113,7 +118,20 @@ Mechanistic-Interpretability-for-SIR/
 
 ---
 
-## 5. Development & GitHub Pages Deployment
+## 5. Bi-Weekly Progress & Milestone Tracking
+
+Following the seminar organization (meeting every two weeks with Paul Mattes), each cycle answers:
+1. *What was accomplished in the last two weeks?*
+2. *What are the next concrete steps?*
+3. *Current blockers & hypotheses.*
+
+* Check out [`progress/README.md`](progress/README.md) for the complete timeline.
+* Active slide deck: [Google Slides](https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing)
+* Live concept board: [Miro](https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076)
+
+---
+
+## 6. Development & GitHub Pages Deployment
 
 ### Enabling GitHub Pages:
 The repository includes an automated GitHub Action (`.github/workflows/deploy-pages.yml`) that publishes `docs/` to GitHub Pages on every push to `main`.
