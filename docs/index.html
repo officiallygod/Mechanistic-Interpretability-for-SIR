@@ -87,12 +87,19 @@
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         <span>The Guiding Research Question</span>
       </h3>
-      <blockquote class="text-xl italic text-slate-200 border-l-4 border-sky-500 pl-4 py-1">
-        "Does a robot manipulation policy trained without any explicit object selection form an implicit, latent 'kept set' of objects inside its intermediate representations?"
+      <blockquote class="text-lg italic text-slate-200 border-l-4 border-sky-500 pl-4 py-2 bg-slate-900/40 rounded-r-lg">
+        "Train a sparse autoencoder on the activations of an image policy that has no object selection. Start with the ResNet-18 7×7 feature map before pooling. Label each feature by where it fires (activation map vs. object boxes from the simulator). The objects whose features are active at a step form a 'latent kept set'. Need to see if we take a whole object or only parts of objects (pixel level or object level). Direction: does a policy without explicit selection form an object set internally? Test the latent kept set with Discovery, Removal and Consequence, by switching features off during rollouts, and compare it with SIR's explicit kept set."
       </blockquote>
-      <p class="text-sm text-slate-300 leading-relaxed">
-        While prior methods like <strong>SIR (CVPR 2026)</strong> explicitly prune a scene graph inside the policy, the companion <strong>ICLR 2027</strong> paper revealed that explicit subset bottlenecks often suffer from subtle leakage paths (e.g. graph-level normalizations and survivor score scaling) and struggle to simultaneously satisfy <em>Discovery</em>, <em>Removal</em>, and <em>Consequence</em>. In <strong>Topic 2</strong>, we take an unconstrained vision policy (ResNet-18 + MDT diffusion action generator) and use mechanistic interpretability to determine whether object modularity emerges naturally.
-      </p>
+      <div class="grid sm:grid-cols-2 gap-4 pt-2">
+        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700/40 space-y-1">
+          <div class="text-xs uppercase font-bold text-sky-400">Core Direction</div>
+          <p class="text-sm text-slate-300">Does a vision policy without explicit subset selection form an implicit object set internally? We test this latent kept set under Discovery, Removal, and Consequence by switching features off during rollouts.</p>
+        </div>
+        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700/40 space-y-1">
+          <div class="text-xs uppercase font-bold text-sky-400">Object Granularity Question</div>
+          <p class="text-sm text-slate-300">Do active SAE features capture entire objects (object-level) or isolate localized functional affordances (e.g. drawer handle, mug rim, gripper fingers)? We evaluate pixel-level vs part-level vs whole-object bounds.</p>
+        </div>
+      </div>
     </section>
 
     <!-- Complete Pipeline Diagram (Mermaid) -->

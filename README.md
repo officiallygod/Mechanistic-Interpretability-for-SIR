@@ -19,10 +19,14 @@ In robot imitation learning, two paradigms currently exist:
 1. **Explicit Object-Centric Policies (e.g. [SIR](https://github.com/intuitive-robots/SIR_Model)):** The visual scene is parsed into an explicit scene graph of objects. A selector prunes the graph down to an explicit "kept set" $K$ and claims intrinsic explainability. However, the companion ICLR 2027 analysis shows that explicit in-loop subset selections suffer from subtle leakage paths (e.g., softmax denominators normalizing over all nodes, survivor score weighting, presence counts) and often fail to simultaneously satisfy *Discovery*, *Removal*, and *Consequence*.
 2. **End-to-End Image Policies (Pixel Baselines):** An image encoder (ResNet-18) processes the entire visual frame directly into a diffusion action generator (MDT). These policies achieve strong performance but remain opaque black boxes.
 
-### The Central Question:
-> **"Does a robot policy trained purely on pixels (without any explicit object selection) form an implicit, latent 'kept set' of objects inside its intermediate representations?"**
+> **Official Topic Description:**  
+> *"Train a sparse autoencoder on the activations of an image policy that has no object selection. Start with the ResNet-18 7×7 feature map before pooling. Label each feature by where it fires (activation map vs. object boxes from the simulator). The objects whose features are active at a step form a 'latent kept set'. Need to see if we take a whole object or only parts of objects (pixel level or object level). Direction: does a policy without explicit selection form an object set internally? Test the latent kept set with Discovery, Removal and Consequence, by switching features off during rollouts, and compare it with SIR's explicit kept set."*
 
-Instead of enforcing an artificial graph bottleneck, we inspect the untouched ResNet-18 representations using **Sparse Autoencoders (SAEs)** from mechanistic interpretability, ground the active features to physical objects in the simulator, and test the emergent latent set against the three foundational criteria.
+### Key Research Dimensions:
+1. **Implicit Object Set Discovery:** Does an end-to-end vision policy form an internal representation of objects without explicit supervisory selection?
+2. **Object Granularity (Whole Objects vs. Parts vs. Pixels):** Do active SAE features correlate with entire object volumes (e.g., `drawer`, `mug`), functional interaction parts (e.g., `drawer handle`, `mug rim`, `gripper contact pads`), or localized pixel-level visual primitives?
+3. **Causal Faithfulness (Discovery, Removal, Consequence):** When we switch features off during closed-loop execution, do excluded objects strictly cease to affect the robot's actions, and does performance drop predictably?
+4. **Comparison with SIR:** Contrast this latent kept set with SIR's explicit, learned kept set to see if both approaches isolate the same objects or reveal similar dataset biases.
 
 ---
 
