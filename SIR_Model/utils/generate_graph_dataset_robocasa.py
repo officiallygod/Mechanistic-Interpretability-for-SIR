@@ -53,6 +53,7 @@ def create_graphs_and_save(dataset_path: str,
                            task_name: str,
                            graph_modality: str,
                            encoder_model: torch.nn.Module = None,
+                           text_encoder: torch.nn.Module = None,
                         ):
     full_dataset_path = os.path.join(dataset_path, task_name, "dataset_raw.hdf5")
     
@@ -97,7 +98,7 @@ def create_graphs_and_save(dataset_path: str,
         inner_permutation = np.argsort(np.array([int(i) for i in inner_raw_list]))
         
         for j in tqdm(range(int(list(inner_raw_list[inner_permutation])[-1]) + 1)):
-            left_object_names, left_objects, right_object_names, right_objects = extract_graph_objects(dataset, key, j, graph_modality, left_image[j], right_image[j], encoder_model)
+            left_object_names, left_objects, right_object_names, right_objects = extract_graph_objects(dataset, key, j, graph_modality, left_image[j], right_image[j], encoder_model, text_encoder)
                 
             left_data_point = create_graph_datapoint(left_graph, left_object_names, left_objects)
             temp_data_left.append(left_data_point)
@@ -116,7 +117,7 @@ def create_graphs_and_save(dataset_path: str,
     torch.save(all_data_left, dataset_path + task_name + "/" + graph_modality + "_left_image.pth")
     torch.save(all_data_right, dataset_path + task_name + "/" + graph_modality + "_right_image.pth")
 
-def extract_graph_objects(dataset, key, j, graph_modality: str, left_img, right_img, encoder_model: torch.nn.Module = None):
+def extract_graph_objects(dataset, key, j, graph_modality: str, left_img, right_img, encoder_model: torch.nn.Module = None, text_encoder: tuple = None):
     left_object_names: list = list(dataset[key][str(j)]["left_image"].keys())
     left_objects = dataset[key][str(j)]["left_image"]
     right_object_names: list = list(dataset[key][str(j)]["right_image"].keys())
@@ -124,7 +125,7 @@ def extract_graph_objects(dataset, key, j, graph_modality: str, left_img, right_
     
     if graph_modality == "one_hot_labels":
         object_representation = "bb" # Just a placeholder, because one hot labels do not have extra representation
-    elif graph_modality == "bb_coordinates":
+    elif graph_modality == "bb_coordinates" or graph_modality == "siglip_text_emb":
         object_representation = "bb"
     elif graph_modality == "cropped_image_feature":
         object_representation = "MorphMask"
@@ -132,7 +133,7 @@ def extract_graph_objects(dataset, key, j, graph_modality: str, left_img, right_
     left_objects, left_object_names = get_adjusted_objects_and_names(left_object_names, left_objects, object_representation)
     right_objects, right_object_names = get_adjusted_objects_and_names(right_object_names, right_objects, object_representation)
     
-    left_objects, right_objects = get_node_features(left_objects, right_objects, left_object_names, right_object_names, left_img, right_img, graph_modality, encoder_model)
+    left_objects, right_objects = get_node_features(left_objects, right_objects, left_object_names, right_object_names, left_img, right_img, graph_modality, encoder_model, text_encoder)
     
     left_objects = torch.stack(left_objects)
     right_objects = torch.stack(right_objects)
@@ -157,7 +158,7 @@ def get_node_features(objects_left,
                       img_right,
                       graph_modality: str, 
                       encoder_model: torch.nn.Module = None,
-                    ):
+                      text_encoder: tuple = None):
     mean = torch.tensor([0.485, 0.456, 0.406]).view(3,1,1)
     std = torch.tensor([0.229, 0.224, 0.225]).view(3,1,1)
     
@@ -170,6 +171,12 @@ def get_node_features(objects_left,
             obj_feature = torch.zeros((len(OBJECT_NAMES_IMAGES)))
             obj_feature[OBJECT_NAMES_IMAGES.index(object_names_left[i])] = 1
             feature_vec_left.append(obj_feature)
+        elif graph_modality == "siglip_text_emb":
+            inputs = text_encoder[1](text=f"The current observed object in the image is {object_names_left[i]}", padding="max_length", return_tensors="pt")
+            with torch.no_grad():
+                text_features = text_encoder[0].text_model(**inputs)
+                pooled_txt_feat = text_features.pooler_output
+            feature_vec_left.append(pooled_txt_feat.squeeze(0))
         elif graph_modality == "bb_coordinates":
             bbox = objects_left[i]
             pos_feature = torch.tensor(get_bb_pos(bbox)) / 127
@@ -197,6 +204,12 @@ def get_node_features(objects_left,
             obj_feature = torch.zeros((len(OBJECT_NAMES_IMAGES)))
             obj_feature[OBJECT_NAMES_IMAGES.index(object_names_right[i])] = 1
             feature_vec_right.append(obj_feature)
+        elif graph_modality == "siglip_text_emb":
+            inputs = text_encoder[1](text=f"The current observed object in the image is {object_names_right[i]}", padding="max_length", return_tensors="pt")
+            with torch.no_grad():
+                text_features = text_encoder[0].text_model(**inputs)
+                pooled_txt_feat = text_features.pooler_output
+            feature_vec_right.append(pooled_txt_feat.squeeze(0))
         elif graph_modality == "bb_coordinates":
             bbox = objects_right[i]
             pos_feature = torch.tensor(get_bb_pos(bbox)) / 127
@@ -284,17 +297,73 @@ RELEVENT_NODES = {
     "CoffeeSetupMug":    {'PandaMobile', 'PandaGripper', 'Counter', 'CoffeeMachine', 'obj'},
 }
 
+# A scene instantiates the stove as either a `Stove` or a `Stovetop` fixture —
+# the two are perfectly complementary across demos (~56%/44%). RELEVENT_NODES
+# names only `Stove`, so without this alias the real target node was scored as
+# irrelevant in the ~44% of stove-task demos that carry a `Stovetop`, and every
+# stove-task faithfulness number was computed against an unreachable target.
+# Aliasing here rather than widening RELEVENT_NODES keeps
+# get_num_relevant_nodes_per_task (and therefore the top-k budget) unchanged.
+NODE_ALIASES = {
+    "Stove": {"Stovetop"},
+}
+
+
 def is_node_relevant_for_task(node_name, task_name, lang_goal):
     is_relevant = False
     if node_name in RELEVENT_NODES[task_name]:
         is_relevant = True
+    elif any(node_name in NODE_ALIASES.get(declared, ())
+             for declared in RELEVENT_NODES[task_name]):
+        is_relevant = True
     else:
         if task_name in ["CloseSingleDoor", "OpenSingleDoor", "CloseDoubleDoor", "OpenDoubleDoor"]:
-            obj_door_to_close = lang_goal.split(" ")[-2].lower()
-            if obj_door_to_close in node_name.lower():
-                is_relevant = True
+            # The door node is named by the language goal. At rollout the goal is
+            # always present, but the training-time CBM path may pass "" / None.
+            tokens = (lang_goal or "").split(" ")
+            if len(tokens) >= 2:
+                obj_door_to_close = tokens[-2].lower()
+                if obj_door_to_close in node_name.lower():
+                    is_relevant = True
 
     return is_relevant
+
+FAITHFULNESS_METRICS = ("precision", "recall", "f1", "jaccard")
+
+def score_subgraph_faithfulness(selected_names, all_node_names, task_name, lang_goal):
+    """Set overlap of a kept sub-graph against the task's relevant nodes.
+
+    Returns a dict with FAITHFULNESS_METRICS, or None when there is nothing to
+    score against (unknown task, or no relevant node present in the graph).
+
+    The recall denominator is the relevant nodes *actually present* in the
+    graph, not len(RELEVENT_NODES[task]) — the model cannot select a node it
+    never observed. This matches how `_compute_cbm_loss` builds its mask.
+
+    Unlike the CBM loss, this runs at rollout time where the raw `lang_goal` is
+    available, so the language-resolved door node of the Open/Close*Door tasks
+    is scored correctly.
+    """
+    if task_name not in RELEVENT_NODES:
+        return None
+
+    lang_goal = lang_goal or ""
+    rel = {n for n in set(all_node_names)
+           if is_node_relevant_for_task(n, task_name, lang_goal)}
+    if not rel:
+        return None
+
+    sel = set(selected_names)
+    inter = len(sel & rel)
+    precision = inter / len(sel) if sel else 0.0
+    recall = inter / len(rel)
+    denom = precision + recall
+    return {
+        "precision": precision,
+        "recall": recall,
+        "f1": (2 * precision * recall / denom) if denom > 0 else 0.0,
+        "jaccard": inter / len(sel | rel),
+    }
 
 def get_num_relevant_nodes_per_task(task_name):
     if task_name in ["CloseSingleDoor", "OpenSingleDoor", "CloseDoubleDoor", "OpenDoubleDoor"]:

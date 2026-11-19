@@ -81,11 +81,13 @@ class Attention(nn.Module):
             y = torch.nn.functional.scaled_dot_product_attention(q, k, v, attn_mask=custom_attn_mask, dropout_p=self.attn_dropout.p if self.training else 0, is_causal=self.causal)
         else:
             att = (q @ k.transpose(-2, -1)) * (1.0 / math.sqrt(k.size(-1)))
-            if self.causal:
-                if custom_attn_mask is not None:
-                    att = att.masked_fill(custom_attn_mask == 0, float('-inf'))
-                else:
-                    att = att.masked_fill(self.bias[:, :, :T, :T] == 0, float('-inf'))
+            # An explicit mask must be honoured whether or not this attention is
+            # causal — otherwise the slow path silently ignores key padding.
+            if custom_attn_mask is not None:
+                att = att.masked_fill(custom_attn_mask == 0, float('-inf'))
+            elif self.causal:
+                causal_mask = torch.ones(T, T, dtype=torch.bool, device=att.device).tril()
+                att = att.masked_fill(~causal_mask, float('-inf'))
             att = F.softmax(att, dim=-1)
             att = self.attn_dropout(att)
             y = att @ v
@@ -144,18 +146,33 @@ class Block(nn.Module):
         ):
         super().__init__()
         self.ln_1 = RMSNorm(n_embd) if use_rms_norm else LayerNorm(n_embd, bias=bias)
-        self.attn = Attention(n_embd, n_heads, attn_pdrop, resid_pdrop, causal, bias, use_rot_embed, rotary_xpos)
+        self.attn = Attention(
+            n_embd,
+            n_heads,
+            attn_pdrop,
+            resid_pdrop,
+            causal=causal,
+            bias=bias,
+            use_rot_embed=use_rot_embed,
+            use_relative_pos=use_relative_pos,
+            rotary_xpos=rotary_xpos,
+        )
         self.use_cross_attention = use_cross_attention
         # cross attention is only used in the decoder blocks
         if self.use_cross_attention:
+            # Cross attention is never causal: queries are action tokens and keys are
+            # the state context, so the two axes are unrelated and a triangular mask
+            # over them is meaningless (it would let action query i see only the first
+            # i state tokens). It also lets us pass an explicit key-padding mask, which
+            # SDPA refuses to combine with is_causal=True.
             self.cross_att = Attention(
-                n_embd, 
-                n_heads, 
-                attn_pdrop, 
-                resid_pdrop, 
-                causal, 
-                bias, 
-                use_rot_embed, 
+                n_embd,
+                n_heads,
+                attn_pdrop,
+                resid_pdrop,
+                False,
+                bias,
+                use_rot_embed,
                 use_relative_pos,
                 rotary_xpos
             )
@@ -163,10 +180,13 @@ class Block(nn.Module):
         self.ln_2 = RMSNorm(n_embd) if use_rms_norm else LayerNorm(n_embd, bias=bias)
         self.mlp = MLP(n_embd, bias, mlp_pdrop)
 
-    def forward(self, x, context=None, custom_attn_mask=None):
+    def forward(self, x, context=None, custom_attn_mask=None, cross_attn_mask=None):
+        # custom_attn_mask masks self attention (keys are x); cross_attn_mask masks
+        # cross attention (keys are context). Different key axes, so they cannot share
+        # a mask.
         x = x + self.attn(self.ln_1(x), custom_attn_mask=custom_attn_mask)
         if self.use_cross_attention and context is not None:
-            x = x + self.cross_att(self.ln_3(x), context, custom_attn_mask=custom_attn_mask)
+            x = x + self.cross_att(self.ln_3(x), context, custom_attn_mask=cross_attn_mask)
         x = x + self.mlp(self.ln_2(x))
         return x
     
@@ -207,33 +227,35 @@ class ConditionedBlock(Block):
             attn_pdrop, 
             resid_pdrop, 
             mlp_pdrop, 
-            causal, 
+            causal,
             film_cond_dim,
-            use_cross_attention=False, 
-            use_rot_embed=False, 
+            use_rms_norm=False,
+            use_cross_attention=False,
+            use_rot_embed=False,
             use_relative_pos=False,
-            rotary_xpos=False, 
+            rotary_xpos=False,
             bias=False # and any other arguments from the Block class
         ):
         super().__init__(n_embd, n_heads, attn_pdrop, resid_pdrop, mlp_pdrop, causal,
-                         use_cross_attention=use_cross_attention, 
+                         use_rms_norm=use_rms_norm,
+                         use_cross_attention=use_cross_attention,
                          use_rot_embed=use_rot_embed, 
                          use_relative_pos=use_relative_pos,
                          rotary_xpos=rotary_xpos, 
                          bias=bias)
         self.adaLN_zero = AdaLNZero(film_cond_dim)
 
-    def forward(self, x, c, context=None, custom_attn_mask=None):
+    def forward(self, x, c, context=None, custom_attn_mask=None, cross_attn_mask=None):
         shift_msa, scale_msa, gate_msa, shift_mlp, scale_mlp, gate_mlp = self.adaLN_zero(c)
-        
+
         # Attention with modulation
         x_attn = self.ln_1(x)
         x_attn = modulate(x_attn, shift_msa, scale_msa)
         x = x + gate_msa * self.attn(x_attn, custom_attn_mask=custom_attn_mask)
-        
+
         # Cross attention if used
         if self.use_cross_attention and context is not None:
-            x = x + self.cross_att(self.ln_3(x), context, custom_attn_mask=custom_attn_mask)
+            x = x + self.cross_att(self.ln_3(x), context, custom_attn_mask=cross_attn_mask)
         
         # MLP with modulation
         x_mlp = self.ln_2(x)
@@ -268,11 +290,11 @@ class NoiseBlock(Block):
                          rotary_xpos=rotary_xpos, 
                          bias=bias)
 
-    def forward(self, x, c, context=None, custom_attn_mask=None):
-        
+    def forward(self, x, c, context=None, custom_attn_mask=None, cross_attn_mask=None):
+
         x = x + self.attn(self.ln_1(x) + c, custom_attn_mask=custom_attn_mask)
         if self.use_cross_attention and context is not None:
-            x = x + self.cross_att(self.ln3(x) + c, context, custom_attn_mask=custom_attn_mask)
+            x = x + self.cross_att(self.ln_3(x) + c, context, custom_attn_mask=cross_attn_mask)
         x = x + self.mlp(self.ln_2(x))
         return x
     

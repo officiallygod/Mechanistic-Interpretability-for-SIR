@@ -1,9 +1,13 @@
+import logging
+
 import h5py
 import numpy as np
 from torch.utils.data import ConcatDataset
 from torch_geometric.loader import DataLoader
 from dataloader.datasets import RoboCasaDataset
 from envs.robocasa.utils import TASK_LIST
+
+log = logging.getLogger(__name__)
 
 def dataset_split_robocasa(
     data_directory: str,
@@ -20,6 +24,7 @@ def dataset_split_robocasa(
     use_splitted_modalities: bool = False,
     cropped_img_dim: int = 256,
     cropped_model_name: str = None,
+    num_train_demos: int = None,
 ):
     train_dataset_list = []
     val_dataset_list = []
@@ -36,35 +41,46 @@ def dataset_split_robocasa(
         sorted_keys = raw_list[permutation]
         
         train_split = int(len(raw_list) * split)
-        
+
         offset = int(sorted_keys[0].split('_')[-1])
-        
+
+        # Low-data regime: keep the first `num_train_demos` demos of the train split and
+        # leave the validation tail untouched, so runs with different amounts of training
+        # data are still validated on exactly the same held-out demos.
+        train_keys = sorted_keys[:train_split]
+        if num_train_demos is not None:
+            train_keys = train_keys[:num_train_demos]
+            log.info(f"[{task_name}] using {len(train_keys)}/{train_split} train demos "
+                     f"(num_train_demos={num_train_demos}), {len(sorted_keys) - train_split} val demos")
+
         train_dataset_list.append(RoboCasaDataset(data,
-                                                sorted_keys[:train_split],
+                                                train_keys,
                                                 offset,
                                                 data_directory + task_name,
-                                                obs_window, 
+                                                obs_window,
                                                 act_window,
-                                                prop_mod, 
-                                                img_mod, 
-                                                graph_mod, 
+                                                prop_mod,
+                                                img_mod,
+                                                graph_mod,
                                                 use_graph_fusion,
                                                 use_splitted_modalities,
                                                 cropped_img_dim,
-                                                cropped_model_name))
+                                                cropped_model_name,
+                                                task_name=task_name))
         val_dataset_list.append(RoboCasaDataset(data,
                                         sorted_keys[train_split:],
                                         offset,
                                         data_directory + task_name,
-                                        obs_window, 
+                                        obs_window,
                                         act_window,
-                                        prop_mod, 
-                                        img_mod, 
-                                        graph_mod, 
+                                        prop_mod,
+                                        img_mod,
+                                        graph_mod,
                                         use_graph_fusion,
                                         use_splitted_modalities,
                                         cropped_img_dim,
-                                        cropped_model_name))
+                                        cropped_model_name,
+                                        task_name=task_name))
     
     # ConcatDataset creates a single dataset from the list of datasets
     train_dataset = ConcatDataset(train_dataset_list)

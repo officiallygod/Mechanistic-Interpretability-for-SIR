@@ -1,19 +1,24 @@
 _target_: manager.robocasa_manager.RoboCasa_Manager
 _recursive_: false
 
-data_path: "TODO"
+data_path: "/DATA/dataset/"
 load_dataset: True
 
-batch_size: 16 # For single tasks 16, for ALL 512 (or lower)
+batch_size: 128 # For single tasks 16; 128 for ALL (fits alongside eval on a 32 GB card)
 train_per: 0.95
+# Cap on how many demos per task end up in the TRAIN split (null = all of them, ~51
+# after train_per). Only the train split is subsampled — validation stays the full
+# `1 - train_per` tail so a low-data run and a full-data run are compared on the same
+# held-out demos. Demos are taken in sorted order, so the subset is deterministic.
+num_train_demos: null
 num_workers: 0 # keep it zero, only increase if you read through https://github.com/pytorch/pytorch/issues/13246#issuecomment-905703662
 
 obs_window: 1
 act_window: 10
 action_dim: 12
-times_repeat: 5
+times_repeat: 1
 
-task_names: ["CloseDrawer"] # Either ALL       Drawer: OpenDrawer, CloseDrawer
+task_names: ["ALL"] # Either ALL       Drawer: OpenDrawer, CloseDrawer
                             # or list of       Doors: CloseDoubleDoor, CloseSingleDoor, OpenDoubleDoor, OpenSingleDoor
                             # tasks            Microwave: TurnOffMicrowave, TurnOnMicrowave
                             #                  Sink: TurnOnSinkFaucet, TurnOffSinkFaucet, TurnSinkSpout
@@ -29,7 +34,41 @@ prop_modalities: [] #["robot0_gripper_qpos", "robot0_joint_pos", "robot0_eef_pos
 image_modalities: [] #["inhand", "left", "right"]
 
 # Graph-Based Modality
-graph_modalities: ["one_hot_labels", "bb_coordinates"] #["one_hot_labels", "bb_coordinates", "cropped_image_feature"]
+graph_modalities: ["cropped_image_feature", "bb_coordinates"] #["one_hot_labels", "siglip_text_emb", "bb_coordinates", "cropped_image_feature"]
 pretrained_img_encoder_name: "cropped_image_feature_encoder_fusion_dim_37" # cropped_image_feature_encoder_dim_256, cropped_image_feature_encoder_dim_37
 use_graph_fusion: True
 use_splitted_modalities: False
+
+# ──────────────── Parallel evaluation ────────────────
+# Opt-in policy-server pattern (multiprocessing.Queue, in-process). When
+# `parallel_eval` is True and `num_envs > 1`, `test_method` spawns `num_envs`
+# MuJoCo env worker processes (one CPU core each) and a GPU policy-server
+# thread in the main process; observations are batched per forward pass.
+# Falls back to the sequential tester otherwise. Single-machine only.
+parallel_eval: True
+# 10 on the 32 GB RTX 5090. Each MuJoCo worker's EGL context takes ~2.0 GB of VRAM and
+# that varies ~25% between workers (measured 1.99 / 2.05 / 2.52 GB), so budget ~2.5 GB
+# each: 10 workers is ~25 GB plus the policy server. On an 8 GB card this must drop to 2
+# -- 3 peaked at 7598/8192 MiB = 93% there and the server OOMed mid-evaluation. That
+# failure is quiet: the server answers with zero actions, the affected rollouts still
+# count as failures, and the run just comes back understated. RoboCasaKitchenParallelTester
+# now logs a DEGRADED EVALUATION line when it happens, so check for it before trusting a
+# number.
+num_envs: 10             # >1 triggers parallel path
+batch_timeout_ms: 20     # how long the server waits to accumulate a batch
+max_eval_batch: 16       # hard cap on per-forward batch size (GPU safety)
+worker_seed_base: 42     # per-worker seed = base + env_id*100003 + hash(task)
+# Start each eval prediction's diffusion from noise keyed on (task, rollout_idx, step)
+# instead of the global RNG, so re-running an evaluation reproduces it rollout-for-rollout
+# rather than depending on the order workers' requests reached the policy server. Same
+# distribution, fixed realisation. Results record it as `sampler: seeded`; older results
+# (no field) are `legacy` and not comparable rollout-for-rollout. Checkpoints trained
+# before this key existed keep the legacy sampler on eval-only runs unless overridden
+# with manager.deterministic_eval_noise=true.
+deterministic_eval_noise: True
+eval_noise_seed: null    # null = worker_seed_base; vary alone to test noise sensitivity
+# Per-rollout node-selection diagnostic plots (one PNG per rollout per graph modality).
+# Off by default: nothing reads them back, and a 24-task x 4-seed sweep wrote 359,376
+# of them (72.9 GB). Set True for a run whose rollout selections you want to look at.
+store_sparsification_plots: False
+# ─────────────────────────────────────────────────────

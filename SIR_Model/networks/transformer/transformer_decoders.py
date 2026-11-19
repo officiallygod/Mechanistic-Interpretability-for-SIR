@@ -31,8 +31,7 @@ class TransformerDecoder(nn.Module):
             n_heads: int, 
             attn_pdrop: float,  
             resid_pdrop: float, 
-            n_layers: int, 
-            block_size: int,
+            n_layers: int,
             bias: bool = False,
             use_rms_norm: bool = False,
             use_rot_embed: bool = False,
@@ -49,8 +48,8 @@ class TransformerDecoder(nn.Module):
             attn_pdrop, 
             resid_pdrop, 
             mlp_pdrop,
-            block_size,
-            causal=True, 
+            causal=True,
+            use_rms_norm=use_rms_norm,
             use_cross_attention=use_cross_attention,
             use_rot_embed=use_rot_embed,
             use_relative_pos=use_relative_pos,
@@ -61,9 +60,9 @@ class TransformerDecoder(nn.Module):
         )
         self.ln = RMSNorm(embed_dim) if use_rms_norm else LayerNorm(embed_dim, bias) 
 
-    def forward(self, x, cond=None, custom_attn_mask=None):
+    def forward(self, x, cond=None, custom_attn_mask=None, cross_attn_mask=None):
         for layer in self.blocks:
-            x = layer(x, cond, custom_attn_mask=custom_attn_mask)
+            x = layer(x, cond, custom_attn_mask=custom_attn_mask, cross_attn_mask=cross_attn_mask)
         x = self.ln(x)
         return x
 
@@ -86,6 +85,7 @@ class TransformerFiLMDecoder(nn.Module):
             mlp_pdrop: float = 0,
             use_cross_attention: bool = True,
             use_noise_encoder: bool = False,
+            causal: bool = True,
             kwargs: Optional[DictConfig] = None,
         ):
         super().__init__()
@@ -97,7 +97,7 @@ class TransformerFiLMDecoder(nn.Module):
                 attn_pdrop, 
                 resid_pdrop, 
                 mlp_pdrop,
-                causal=True, 
+                causal=causal, 
                 use_rms_norm=use_rms_norm,
                 use_cross_attention=use_cross_attention,
                 use_rot_embed=use_rot_embed,
@@ -115,7 +115,8 @@ class TransformerFiLMDecoder(nn.Module):
                 attn_pdrop, 
                 resid_pdrop, 
                 mlp_pdrop,
-                causal=True, 
+                causal=causal,
+                use_rms_norm=use_rms_norm,
                 use_cross_attention=use_cross_attention,
                 use_rot_embed=use_rot_embed,
                 use_relative_pos=use_relative_pos,
@@ -127,8 +128,8 @@ class TransformerFiLMDecoder(nn.Module):
             )
         self.ln = RMSNorm(embed_dim) if use_rms_norm else LayerNorm(embed_dim, bias) 
 
-    def forward(self, x, c, cond=None, custom_attn_mask=None):
+    def forward(self, x, c, cond=None, custom_attn_mask=None, cross_attn_mask=None):
         for layer in self.blocks:
-            x = layer(x, c, cond, custom_attn_mask=custom_attn_mask)
+            x = layer(x, c, cond, custom_attn_mask=custom_attn_mask, cross_attn_mask=cross_attn_mask)
         x = self.ln(x)
         return x

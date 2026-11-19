@@ -4,40 +4,74 @@ _recursive_: false
 sparsification_layer:
   _target_: networks.graph_encoder.gnn.Sparsification_Module
   _recursive_: false
-  in_dim: {}
-  hidden_dim: 512 # ${manager.agent.graph_encoder.hidden_dim} 
-  num_heads: 4 # number of heads for TransformerCoarsening
-  num_layers: 2 # number of layers for TransformerCoarsening
+  in_dim: {}  # overridden per modality inside Multi_XAI_GNN.__init__
+  hidden_dim: 512
+  num_heads: 4
+  num_layers: 2
   dropout_prob: 0.3
-  coars_type: TransformerFiLMDecoder
-  sampling_strategy: "topk_PerTask"
-  differentiable_dropping_nodes: True
-  scoring_strategy: sigmoid 
 
-  l0_reg_weight: 0.0
-  variance_weight: 0.0 #10e-3
+  # TRUE REMOVAL (fixed / topk / topk_PerTask / threshold): zero the pruned nodes'
+  # features AND drop every edge touching them, so a removed node is absent from the
+  # attention softmax instead of merely down-weighted in it. false = shipped behaviour
+  # (soft selection: pruned features still reach the kept nodes). Exact only together
+  # with norm_mode: node. Raises under vgib.
+  true_removal: false
+  sampling_strategy: topk_PerTask  # topk_PerTask | topk | threshold | vgib | fixed
+  sample_abs: 5                     # used by topk; also scores_in_upper fallback for uniform_except_middle
+  threshold: 0.5                    # only used when sampling_strategy == threshold
+  threshold_sum_weight: 0.0         # only computed/logged in threshold mode
+
+  # Inert here — every one of these belongs to the VGIB / stage-2 paths and is read only
+  # inside their branches. They are listed anyway because this is the config the defaults
+  # list composes, and Hydra rejects an override of a key that is not in the composed
+  # struct. Without them, re-evaluating a VGIB checkpoint (`trainer.train_bool=false`,
+  # which reloads the checkpoint's own method config afterwards) fails at composition
+  # time with "Key 'eval_prune_mode' is not in struct" unless the encoder group is
+  # re-specified on the command line as well. Keeping the default config a superset is
+  # what makes "train once, evaluate many ways" work without that dance.
+  eval_prune_mode: soft
+  vgib_noise_kl_weight: 0.0
+  vgib_noise_kl_mode: truncated
+  node_whitelist: null
+  # Swap the CBM target and per-task k from RELEVENT_NODES to a discovered list
+  # (a utils.select_subgraph output). null keeps the hand-written table.
+  relevance_whitelist: null
+  whitelist_bce_weight: 0.0
+  whitelist_pos_weight: null
+
+  variance_weight: 0.0
   sum_mask_weight: 0.0
-  target_sum_node_probs: 6 # per graph; only relevant if sum_mask_weight != 0
-  uniform_dist_weight: 1e-1 # 16e-2 #5e-3
-  uniform_except_middle_weight: 0.0 # 10e-2
+  target_sum_node_probs: 6  # per graph; only relevant if sum_mask_weight != 0
+  entropy_reg_weight: 0.0
+  uniform_dist_weight: 1e-1
+  uniform_except_middle_weight: 0.0
   uniform_except_middle_offset: 0.15
-  threshold_sum_weight: 0.0
-
-  # for l0-reg
-  gamma: -0.1
-  zeta: 1.1
-  beta: 0.66
-
-  # topk
-  sample_abs: 5
 
 input_dim: {}
 hidden_dim: 512
 output_dim: 512
-edge_dim: 1
+edge_dim: null  # no additive edge features; edge weights enter multiplicatively via WeightedGATv2Conv
 num_layer: 2
-layer_name: "GATv2"
-pool_name: "mean" # mean, max, sum
+layer_name: "WeightedGATv2"
+# mean, add, max pool the graph to one embedding. "none" returns one embedding per
+# node plus a validity mask, so MDT attends to each object as its own token.
+# Requires method.action_generator.max_graph_nodes >= the largest graph.
+pool_name: "mean"
 heads: 4
 dropout: 0.3
 modalities: ${manager.graph_modalities}
+
+use_cbm_loss: "nodes_att"  # push scores of task-relevant nodes UP, irrelevant DOWN; null to disable
+lcbm_weight: 1e-1
+multiplicative_pooling: true  # scale GNN node outputs by probs before pooling (prune_removed_nodes_multiplicative)
+
+# LayerNorm statistics. 'graph' (PyG's default, under which every earlier checkpoint was
+# trained) reduces mean/std across ALL nodes of the whole batch tensor, so pruned nodes
+# enter the survivors' normalisation and a graph's embedding depends on its batch-mates.
+# 'node' normalises each node over its own features (= torch.nn.LayerNorm). Old
+# checkpoints keep 'graph': an eval run reloads their saved config, which has no key.
+norm_mode: "node"   # graph | node
+# Renormalise attention AFTER the edge weight gates it (WeightedGATv2 only). Closes the
+# softmax-before-gating leak at evaluation time.
+# !! NOT TRAINABLE -- ANALYSIS AND EVALUATION ONLY, see WeightedGATv2Conv.__init__ !!
+attn_renorm: false

@@ -1,14 +1,52 @@
 import json
 import clip
+import numpy as np
 import torch
 from torch.utils.data import Dataset
 from tqdm import tqdm
 from einops import einops
 import logging
 
-from dataloader.utils import combine_graph_modalities, fuse_graphs, pad_sequence, convert_weight_to_dim_distance
+from dataloader.utils import combine_graph_modalities, fuse_graphs, pad_sequence
 
 log = logging.getLogger(__name__)
+
+# Fixed width the variable-length `object` observation is padded to; must match
+# RoboCasa_Manager.OBJECT_OBS_DIM.
+OBJECT_OBS_DIM = 56
+
+# The normalisation that was applied when the image tensors were written. It has to be
+# reproduced exactly to invert it — including the 0.255 blue-channel std, which differs
+# from the 0.225 used to denormalise graph crops in
+# `utils/generate_graph_dataset_robocasa.py` and `envs/robocasa/kitchen.py:424`. That
+# inconsistency is pre-existing and baked into every img_tensor on disk; matching it here
+# is what makes the round trip below exact, so do not "fix" it to 0.225. The rollout
+# transform at `envs/robocasa/kitchen.py:49` uses 0.255 too, which is what makes training
+# and rollout see the same pixels.
+_IMG_NORM_MEAN = torch.tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1)
+_IMG_NORM_STD = torch.tensor([0.229, 0.224, 0.255]).view(1, 3, 1, 1)
+
+
+def _to_uint8_pixels(normalised: torch.Tensor) -> torch.Tensor:
+    """Invert the export normalisation and store 8-bit pixels.
+
+    Float32 costs 0.59 MB per frame per camera. Across the 24 tasks that is 211 GB
+    resident on a 123 GB machine — the image baseline simply cannot be built. uint8
+    brings it to 53 GB.
+
+    Lossless here, not merely cheap: these tensors are the original natively-128
+    recording, so inverting the normalisation lands them exactly on the 8-bit grid
+    (measured max off-grid error 2e-5, round-trip error 0.0 on all 24 tasks). fp16 would
+    have been the lossy option at twice the size.
+    """
+    pixels = normalised * _IMG_NORM_STD + _IMG_NORM_MEAN
+    return pixels.mul_(255.0).round_().clamp_(0.0, 255.0).to(torch.uint8)
+
+
+def _from_uint8_pixels(pixels: torch.Tensor) -> torch.Tensor:
+    """Re-apply the export normalisation to what `_to_uint8_pixels` stored."""
+    return (pixels.to(torch.float32).div_(255.0) - _IMG_NORM_MEAN) / _IMG_NORM_STD
+
 
 class RoboCasaDataset(Dataset):
     def __init__(self,
@@ -24,7 +62,8 @@ class RoboCasaDataset(Dataset):
                  use_graph_fusion: bool,
                  use_splitted_modalities: bool,
                  cropped_img_dim: int,
-                 model_name: str = None
+                 model_name: str = None,
+                 task_name: str = None
     ):
         self.data_directory = data_directory
         
@@ -33,7 +72,21 @@ class RoboCasaDataset(Dataset):
         self.use_graph = True if len(graph_mod) > 0 else False
         
         self.use_graph_fusion = use_graph_fusion
-        
+        self.task_name = task_name
+
+        # `__getitem__` takes `raw_graph[0]` regardless of the window, and
+        # `TransformerCoarsening` indexes `lang_emb` by *graph* index — which equals the
+        # batch index only while one sample contributes one graph. Both are correct at
+        # obs_window == 1 and silently wrong above it (the policy would see the window's
+        # first frame repeated, with FiLM conditioning drawn from the wrong sample), so
+        # fail here rather than train something that looks fine.
+        if self.use_graph and obs_window > 1:
+            raise NotImplementedError(
+                f"obs_window={obs_window} is not supported with graph modalities: the "
+                f"dataset serves only the window's first graph and the scorer's language "
+                f"conditioning assumes one graph per sample. Use obs_window=1, or "
+                f"implement per-frame graph batching first.")
+
         self.obs_window = obs_window
         self.action_window = action_window
         self.prop_mod = prop_mod
@@ -50,6 +103,7 @@ class RoboCasaDataset(Dataset):
         
         self.actions = []
         self.lang_goals = []
+        self.lang_goals_text = []
         
         self.dataset_length = 0
         self.demo_lengths = []
@@ -57,6 +111,7 @@ class RoboCasaDataset(Dataset):
         language_encoder, _ = clip.load("ViT-B/32", device='cpu')
         
         self.is_cropped_fusion = False
+        self.merged_mod_name = None
 
         if self.use_graph:
             self.graph_data_left = {}
@@ -104,7 +159,9 @@ class RoboCasaDataset(Dataset):
             action = torch.tensor(data['data'][key]['actions'][()])
             self.actions.append(action)
                         
-            self.lang_goals.append(json.loads(data['data'][key].attrs.get("ep_meta", None))['lang'])
+            lang_text = json.loads(data['data'][key].attrs.get("ep_meta", None))['lang']
+            self.lang_goals.append(lang_text)
+            self.lang_goals_text.append(lang_text)
 
         with torch.no_grad():
             lang_goal_tokenized = clip.tokenize(self.lang_goals)
@@ -114,17 +171,21 @@ class RoboCasaDataset(Dataset):
             # Update the class attribute so __getitem__ knows the new key
             self.graph_mod = [self.merged_mod_name]
 
-    def get_proprioceptive_obs(demo_data, mod):
+    def get_proprioceptive_obs(self, demo_data, mod):
         modalities = []
         for m in mod:
-            modalities.append(demo_data[m][()])
+            values = torch.as_tensor(np.asarray(demo_data[m][()]))
             if m == 'object':
-                temp_objects = torch.tensor(demo_data[m][()])
-                objects = torch.zeros((temp_objects.shape[0], 56))
-                objects[:,:temp_objects.shape[1]] = temp_objects
-                modalities.append(objects)
-        
-        observation = torch.concatenate((modalities), dim=-1).type(torch.float32)
+                # Variable width per task (14 per sampled object); pad to the fixed
+                # budget the manager assumes. Only the padded tensor is appended —
+                # appending the raw one as well silently doubled the feature width
+                # and broke the dim the manager had computed.
+                padded = torch.zeros((values.shape[0], OBJECT_OBS_DIM))
+                padded[:, :values.shape[1]] = values
+                values = padded
+            modalities.append(values.to(torch.float32))
+
+        observation = torch.concatenate(modalities, dim=-1).type(torch.float32)
         return observation
     
     def get_image_obs(self, mod, idx):
@@ -132,24 +193,22 @@ class RoboCasaDataset(Dataset):
         img_tensor = einops.rearrange(img_tensor, "step (num c h w) -> step num c h w", num=3, c=3, h=128, w=128)
         
         img_obs = {}
-        
+
+        # `img_tensor[:, k]` is a *view*, so keeping one pins the storage of all three
+        # cameras — asking for a single camera used to cost exactly as much RAM as asking
+        # for three. `_to_uint8_pixels` materialises a new tensor, which drops the parent.
+        camera_index = {'inhand': 0, 'left': 1, 'right': 2}
         for m in mod:
-            if m == 'inhand':
-                img_obs['inhand'] = img_tensor[:,0]
-            elif m == 'left':
-                img_obs['left'] = img_tensor[:,1]
-            elif m == 'right':
-                img_obs['right'] = img_tensor[:,2]
-        
+            if m in camera_index:
+                img_obs[m] = _to_uint8_pixels(img_tensor[:, camera_index[m]])
+
         return img_obs
     
     def get_graph_obs(self, idx, use_splitted_modalities):
         local_graph_mod = self.graph_mod
-        
-        # if "bb_coordinates" in self.graph_mod:
-        #     self.graph_data_left = convert_weight_to_dim_distance(self.graph_data_left, self.graph_mod)
-        #     self.graph_data_right = convert_weight_to_dim_distance(self.graph_data_right, self.graph_mod)
-        
+        # Which modalities each key is built from, in concatenation order.
+        mod_order_map = {mod: [mod] for mod in self.graph_mod}
+
         # Handle merging modalities if required
         if not use_splitted_modalities and len(self.graph_mod) > 1:
             new_data_left = []
@@ -165,6 +224,7 @@ class RoboCasaDataset(Dataset):
             graph_data_right = {self.merged_mod_name: new_data_right}
             
             local_graph_mod = [self.merged_mod_name]
+            mod_order_map = {self.merged_mod_name: list(self.graph_mod)}
         else:
             graph_data_left = {}
             graph_data_right = {}
@@ -179,7 +239,7 @@ class RoboCasaDataset(Dataset):
                 fused_graph_data[mod] = []
                 
                 for step_idx in range(len(graph_data_left[mod])):
-                    fused_graph_data[mod].append(fuse_graphs(graph_data_left, graph_data_right, mod, step_idx, self.is_cropped_fusion))                    
+                    fused_graph_data[mod].append(fuse_graphs(graph_data_left, graph_data_right, mod, mod_order_map[mod], step_idx, self.is_cropped_fusion))
             return fused_graph_data
         else:
             return graph_data_left, graph_data_right
@@ -230,7 +290,7 @@ class RoboCasaDataset(Dataset):
         if self.use_img:
             item['observation']['obs_img'] = {}
             for m in self.img_mod:
-                raw_img = self.img_obs[demo_idx][m][obs_start:obs_end]
+                raw_img = _from_uint8_pixels(self.img_obs[demo_idx][m][obs_start:obs_end])
                 item['observation']['obs_img'][m] = pad_sequence(raw_img, self.obs_window)
                 
         if self.use_graph:
@@ -260,7 +320,10 @@ class RoboCasaDataset(Dataset):
         # --- GOALS ---
         # Language goal is static per demonstration
         item['goal']['lang'] = self.lang_goals[demo_idx]
-        
+        item['goal']['lang_text'] = self.lang_goals_text[demo_idx]
+
+        item['task_name'] = self.task_name
+
         return item
             
     def __len__(self):

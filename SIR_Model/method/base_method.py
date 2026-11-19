@@ -72,7 +72,7 @@ class Base_Method(abc.ABC):
     def save_models(self, dir, add_name):
         for model, name in zip(self.models, self.model_names):
             torch.save(model.state_dict(), f"{dir}/{name}{add_name}.pth")
-            log.info(f"Model saved to {dir}/{name}_{add_name}.pth")
+            log.info(f"Model saved to {dir}/{name}{add_name}.pth")
     
     def load_models(self, dir, add_name):
         for model, name in zip(self.models, self.model_names):

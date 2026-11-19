@@ -1,3 +1,4 @@
+import logging
 import math
 import clip
 from einops import einops
@@ -8,6 +9,8 @@ from functools import partial
 
 from method import utils
 from method.base_method import Base_Method
+
+log = logging.getLogger(__name__)
 
 class Diffusion(Base_Method):
     def __init__(self,
@@ -47,6 +50,31 @@ class Diffusion(Base_Method):
         self.sigma_max = sigma_max
         self.sigma_sample_density_type = sigma_sample_density_type
         
+    def set_graph_eval_mode(self, mode):
+        """none | zero | full | random. `zero` blanks the graph embedding after the
+        encoder (token-level, and therefore out of distribution); `full`/`random` act on
+        the node selection inside the sparsifier and stay in distribution."""
+        self.graph_eval_mode = mode
+        if mode in ('full', 'random'):
+            # `graph_encoder` only exists once instantiate_graph_encoder has run, i.e.
+            # never on an image-only or proprio-only run. getattr, not attribute access,
+            # or setting this knob on the image baseline raises AttributeError instead of
+            # saying it does not apply.
+            encoder = getattr(self, 'graph_encoder', None)
+            if hasattr(encoder, 'set_graph_swap'):
+                encoder.set_graph_swap(mode)
+            else:
+                log.warning(f"graph_eval_mode='{mode}' needs a sparsifying graph encoder "
+                            f"(Multi_XAI_GNN); this run has no node selection — ignored.")
+
+    def set_task_thresholds(self, thresholds):
+        encoder = getattr(self, 'graph_encoder', None)
+        if hasattr(encoder, 'set_task_thresholds'):
+            encoder.set_task_thresholds(thresholds)
+        else:
+            log.warning("task_thresholds needs a sparsifying graph encoder "
+                        "(Multi_XAI_GNN); this run has no node selection — ignored.")
+
     def preprocess_batch(self, batch):
         
         goal = {}
@@ -60,24 +88,55 @@ class Diffusion(Base_Method):
         goal['lang'] = lang_goal.to(self.device)
         
         for key in batch['observation']:
-            for k in batch["observation"][key]:
-                if key == "obs_graph":
-                    batch["observation"][key][k] = batch["observation"][key][k].to(self.device)
-                else:
-                    batch["observation"][key][k] = batch["observation"][key][k].to(self.device).float()
-                    batch["observation"][key][k] = einops.rearrange(batch["observation"][key][k], "b w ... -> (b w) ...")
             if key == "obs_prop":
                 state[key] = batch["observation"][key].to(self.device).float()
             elif key == "obs_img":
-                state[key] = self.vision_encoder(batch["observation"][key])
+                # The encoders run per frame, so the observation window is folded into
+                # the batch axis and unfolded again afterwards.
+                img_input = {
+                    k: einops.rearrange(v.to(self.device).float(), "b w ... -> (b w) ...")
+                    for k, v in batch["observation"][key].items()
+                }
+                img_out = self.vision_encoder(img_input)
+                state[key] = {
+                    k: einops.rearrange(v, "(b w) ... -> b w ...", w=self.obs_window_size)
+                    for k, v in img_out.items()
+                }
             elif key == "obs_graph":
-                state[key] = self.graph_encoder(batch["observation"][key])
+                graph_input = {k: v.to(self.device) for k, v in batch["observation"][key].items()}
+                if hasattr(self.graph_encoder, 'aux_losses'):
+                    # Multi_XAI_GNN: pass language embedding, task names, and raw text for CBM loss
+                    lang_goal_texts = batch.get('goal', {}).get('lang_text', None)
+                    graph_out = self.graph_encoder(
+                        graph_input,
+                        lang_emb=goal['lang'],
+                        task_names=batch.get('task_name', None),
+                        lang_goal_texts=lang_goal_texts,
+                    )
+                else:
+                    graph_out = self.graph_encoder(graph_input, lang_emb=goal['lang'])
+
+                # Normalize both readouts to (tokens, mask): pooled graph encoders emit a
+                # single [B, output_dim] vector, per-node ones emit [B, N_max, output_dim]
+                # plus the mask marking the real nodes.
+                state[key] = {}
+                for m, (tensor, mask) in graph_out.items():
+                    if tensor.dim() == 2:
+                        tensor = tensor.unsqueeze(1)
+                        mask = torch.ones(tensor.shape[0], 1, dtype=torch.bool, device=tensor.device)
+                    state[key][m] = (tensor, mask)
             else:
                 raise NotImplementedError(f"Modality {key} not implemented in diffusion method.")
-        
-            for k in batch["observation"][key]:
-                batch["observation"][key][k] = einops.rearrange(batch["observation"][key][k], "(b w) ... -> b w ...", w=self.obs_window_size)
-            
+
+
+        # Zero ablation: blank the graph embedding so the MDT's graph token carries no
+        # scene information at all.
+        if getattr(self, 'graph_eval_mode', 'none') == 'zero' and "obs_graph" in state:
+            state["obs_graph"] = {
+                m: (torch.zeros_like(v[0]), v[1]) if isinstance(v, tuple) else torch.zeros_like(v)
+                for m, v in state["obs_graph"].items()
+            }
+
         if "action" not in list(batch.keys()):
             action['action'] = None
         else:  
@@ -87,28 +146,44 @@ class Diffusion(Base_Method):
     
     def compute_training_loss(self, state, action, goal):
         loss_dict = {}
-        
+
         loss_dict['diffusion_loss'] = self.diffusion_loss(perceptual_emb=state, latent_goal=goal, actions=action)
-        
+
         loss_dict['total_loss'] = loss_dict['diffusion_loss']
-        
+
+        # Aggregate sparsification auxiliary losses when using Multi_XAI_GNN
+        if hasattr(self, 'graph_encoder') and hasattr(self.graph_encoder, 'aux_losses') and self.graph_encoder.aux_losses:
+            sparsification_loss = torch.tensor(0.0, device=self.device)
+            for key, entry in self.graph_encoder.aux_losses.items():
+                weighted = entry['value'] * entry['weight']
+                loss_dict[f'spars/{key}'] = weighted
+                sparsification_loss = sparsification_loss + weighted
+            loss_dict['sparsification_loss'] = sparsification_loss
+            loss_dict['total_loss'] = loss_dict['total_loss'] + sparsification_loss
+
         return loss_dict
     
     def compute_validation_loss(self, state, action, goal):
         loss_dict = {}
-        
+
         action_pred = self.denoise_actions(perceptual_emb=state, latent_goal=goal)
-        
+
         mse_loss = nn.functional.mse_loss(action_pred, action)
-        
+
         loss_dict['mse_loss'] = mse_loss
         loss_dict['total_loss'] = loss_dict['mse_loss']
-        
+
+        # Log sparsification aux losses during validation (not added to total_loss, monitoring only)
+        if hasattr(self, 'graph_encoder') and hasattr(self.graph_encoder, 'aux_losses') and self.graph_encoder.aux_losses:
+            for key, entry in self.graph_encoder.aux_losses.items():
+                loss_dict[f'spars/{key}'] = entry['value'] * entry['weight']
+
         return loss_dict
     
-    def predict(self, state, goal):
-        action_pred = self.denoise_actions(perceptual_emb=state, latent_goal=goal)
-            
+    def predict(self, state, goal, noise=None):
+        action_pred = self.denoise_actions(perceptual_emb=state, latent_goal=goal,
+                                           noise=noise)
+
         return action_pred
     
     def diffusion_loss(
@@ -129,13 +204,23 @@ class Diffusion(Base_Method):
         self,
         perceptual_emb: torch.Tensor,
         latent_goal: torch.Tensor,
+        noise: torch.Tensor = None,
     ):
         """
-        Denoise the next sequence of actions 
-        """        
+        Denoise the next sequence of actions
+
+        `noise`, when given, replaces the starting-noise draw below. It must already be
+        scaled by sigma_max and shaped [B, act_window_size, action_dim]. It lets the eval
+        harness make the starting noise a deterministic function of the rollout instead
+        of whatever the global RNG happens to hold (see envs.robocasa.utils.eval_noise).
+        The distribution is unchanged; only its reproducibility is.
+        """
         input_state = perceptual_emb
         sigmas = self.get_noise_schedule(self.num_sampling_steps, self.noise_scheduler)
-        x = torch.randn((latent_goal['lang'].shape[0], self.act_window_size, self.action_dim), device=self.device) * self.sigma_max
+        if noise is not None:
+            x = noise.to(self.device)
+        else:
+            x = torch.randn((latent_goal['lang'].shape[0], self.act_window_size, self.action_dim), device=self.device) * self.sigma_max
 
         actions = self.sample_loop(sigmas, x, input_state, latent_goal, self.sampler_type)
 

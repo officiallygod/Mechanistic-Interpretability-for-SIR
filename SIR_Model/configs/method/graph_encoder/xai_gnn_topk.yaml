@@ -1,0 +1,59 @@
+_target_: networks.graph_encoder.gnn.Multi_XAI_GNN
+_recursive_: false
+
+sparsification_layer:
+  _target_: networks.graph_encoder.gnn.Sparsification_Module
+  _recursive_: false
+  in_dim: {}  # overridden per modality inside Multi_XAI_GNN.__init__
+  hidden_dim: 512
+  num_heads: 4
+  num_layers: 2
+  dropout_prob: 0.3
+
+  # TRUE REMOVAL (fixed / topk / topk_PerTask / threshold): zero the pruned nodes'
+  # features AND drop every edge touching them, so a removed node is absent from the
+  # attention softmax instead of merely down-weighted in it. false = shipped behaviour
+  # (soft selection: pruned features still reach the kept nodes). Exact only together
+  # with norm_mode: node. Raises under vgib.
+  true_removal: false
+  sampling_strategy: topk   # task-agnostic fixed-k
+  sample_abs: 5
+  threshold: 0.5            # unused in this mode
+  threshold_sum_weight: 0.0
+
+  variance_weight: 0.0
+  sum_mask_weight: 0.0
+  target_sum_node_probs: 6
+  entropy_reg_weight: 0.0
+  uniform_dist_weight: 1e-1
+  uniform_except_middle_weight: 0.0
+  uniform_except_middle_offset: 0.15
+
+input_dim: {}
+hidden_dim: 512
+output_dim: 512
+edge_dim: null
+num_layer: 2
+layer_name: "WeightedGATv2"
+# mean, add, max pool the graph to one embedding. "none" returns one embedding per
+# node plus a validity mask, so MDT attends to each object as its own token.
+# Requires method.action_generator.max_graph_nodes >= the largest graph.
+pool_name: "mean"
+heads: 4
+dropout: 0.3
+modalities: ${manager.graph_modalities}
+
+use_cbm_loss: null  # task-agnostic: no relevance dict lookup possible
+lcbm_weight: 0.0
+multiplicative_pooling: true
+
+# LayerNorm statistics. 'graph' (PyG's default, under which every earlier checkpoint was
+# trained) reduces mean/std across ALL nodes of the whole batch tensor, so pruned nodes
+# enter the survivors' normalisation and a graph's embedding depends on its batch-mates.
+# 'node' normalises each node over its own features (= torch.nn.LayerNorm). Old
+# checkpoints keep 'graph': an eval run reloads their saved config, which has no key.
+norm_mode: "node"   # graph | node
+# Renormalise attention AFTER the edge weight gates it (WeightedGATv2 only). Closes the
+# softmax-before-gating leak at evaluation time.
+# !! NOT TRAINABLE -- ANALYSIS AND EVALUATION ONLY, see WeightedGATv2Conv.__init__ !!
+attn_renorm: false

@@ -22,3 +22,7 @@ n_enc_layers: 4
 n_heads: 16
 bias: false
 use_noise_encoder: False
+# Upper bound on the number of tokens one graph modality can contribute. Only matters
+# when the graph encoder uses pool_name: "none" (one token per object node instead of
+# one pooled token); it sizes the position embedding for the worst case.
+max_graph_nodes: 32

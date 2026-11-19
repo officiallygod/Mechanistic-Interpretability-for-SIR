@@ -1,0 +1,242 @@
+{
+ "CloseDrawer": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 45,
+  "demo_assets": 127,
+  "unseen_pairs": 10,
+  "unseen_assets": 39,
+  "total_assets": 63,
+  "exact_config_repeats": 0
+ },
+ "OpenDrawer": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 43,
+  "demo_assets": 140,
+  "unseen_pairs": 10,
+  "unseen_assets": 40,
+  "total_assets": 63,
+  "exact_config_repeats": 0
+ },
+ "CloseDoubleDoor": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 39,
+  "demo_assets": 130,
+  "unseen_pairs": 15,
+  "unseen_assets": 39,
+  "total_assets": 54,
+  "exact_config_repeats": 0
+ },
+ "CloseSingleDoor": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 44,
+  "demo_assets": 137,
+  "unseen_pairs": 7,
+  "unseen_assets": 45,
+  "total_assets": 61,
+  "exact_config_repeats": 0
+ },
+ "OpenDoubleDoor": {
+  "n": 20,
+  "demos": 53,
+  "demo_pairs": 39,
+  "demo_assets": 130,
+  "unseen_pairs": 14,
+  "unseen_assets": 38,
+  "total_assets": 57,
+  "exact_config_repeats": 0
+ },
+ "OpenSingleDoor": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 42,
+  "demo_assets": 129,
+  "unseen_pairs": 11,
+  "unseen_assets": 44,
+  "total_assets": 56,
+  "exact_config_repeats": 0
+ },
+ "TurnOffMicrowave": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 41,
+  "demo_assets": 63,
+  "unseen_pairs": 16,
+  "unseen_assets": 17,
+  "total_assets": 30,
+  "exact_config_repeats": 0
+ },
+ "TurnOnMicrowave": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 40,
+  "demo_assets": 67,
+  "unseen_pairs": 12,
+  "unseen_assets": 15,
+  "total_assets": 31,
+  "exact_config_repeats": 0
+ },
+ "TurnOnSinkFaucet": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 42,
+  "demo_assets": 123,
+  "unseen_pairs": 14,
+  "unseen_assets": 45,
+  "total_assets": 59,
+  "exact_config_repeats": 0
+ },
+ "TurnOffSinkFaucet": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 41,
+  "demo_assets": 137,
+  "unseen_pairs": 14,
+  "unseen_assets": 34,
+  "total_assets": 54,
+  "exact_config_repeats": 0
+ },
+ "TurnSinkSpout": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 38,
+  "demo_assets": 131,
+  "unseen_pairs": 12,
+  "unseen_assets": 34,
+  "total_assets": 56,
+  "exact_config_repeats": 0
+ },
+ "TurnOnStove": {
+  "n": 20,
+  "demos": 53,
+  "demo_pairs": 39,
+  "demo_assets": 20,
+  "unseen_pairs": 13,
+  "unseen_assets": 6,
+  "total_assets": 20,
+  "exact_config_repeats": 1
+ },
+ "TurnOffStove": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 38,
+  "demo_assets": 20,
+  "unseen_pairs": 7,
+  "unseen_assets": 4,
+  "total_assets": 20,
+  "exact_config_repeats": 0
+ },
+ "CoffeePressButton": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 46,
+  "demo_assets": 15,
+  "unseen_pairs": 13,
+  "unseen_assets": 0,
+  "total_assets": 20,
+  "exact_config_repeats": 3
+ },
+ "CoffeeServeMug": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 40,
+  "demo_assets": 14,
+  "unseen_pairs": 14,
+  "unseen_assets": 2,
+  "total_assets": 20,
+  "exact_config_repeats": 1
+ },
+ "CoffeeSetupMug": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 42,
+  "demo_assets": 15,
+  "unseen_pairs": 12,
+  "unseen_assets": 0,
+  "total_assets": 20,
+  "exact_config_repeats": 2
+ },
+ "PnPCabToCounter": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 40,
+  "demo_assets": 134,
+  "unseen_pairs": 17,
+  "unseen_assets": 40,
+  "total_assets": 60,
+  "exact_config_repeats": 0
+ },
+ "PnPCounterToCab": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 44,
+  "demo_assets": 136,
+  "unseen_pairs": 13,
+  "unseen_assets": 46,
+  "total_assets": 60,
+  "exact_config_repeats": 0
+ },
+ "PnPCounterToMicrowave": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 40,
+  "demo_assets": 97,
+  "unseen_pairs": 9,
+  "unseen_assets": 23,
+  "total_assets": 80,
+  "exact_config_repeats": 0
+ },
+ "PnPCounterToSink": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 45,
+  "demo_assets": 127,
+  "unseen_pairs": 11,
+  "unseen_assets": 40,
+  "total_assets": 60,
+  "exact_config_repeats": 0
+ },
+ "PnPCounterToStove": {
+  "n": 20,
+  "demos": 53,
+  "demo_pairs": 44,
+  "demo_assets": 68,
+  "unseen_pairs": 7,
+  "unseen_assets": 13,
+  "total_assets": 60,
+  "exact_config_repeats": 0
+ },
+ "PnPMicrowaveToCounter": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 39,
+  "demo_assets": 104,
+  "unseen_pairs": 13,
+  "unseen_assets": 22,
+  "total_assets": 80,
+  "exact_config_repeats": 0
+ },
+ "PnPSinkToCounter": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 38,
+  "demo_assets": 113,
+  "unseen_pairs": 13,
+  "unseen_assets": 32,
+  "total_assets": 60,
+  "exact_config_repeats": 0
+ },
+ "PnPStoveToCounter": {
+  "n": 20,
+  "demos": 54,
+  "demo_pairs": 43,
+  "demo_assets": 84,
+  "unseen_pairs": 10,
+  "unseen_assets": 17,
+  "total_assets": 60,
+  "exact_config_repeats": 0
+ }
+}

@@ -1,0 +1,131 @@
+# Variational Graph Information Bottleneck (Yu et al., CVPR 2022) as the sparsifier.
+#
+# Swap in with: method/graph_encoder=xai_gnn_vgib
+#
+# The difference from xai_gnn.yaml is not the loss shape, it is what supervises the
+# selection. `xai_gnn` learns which nodes matter from `RELEVENT_NODES` via the CBM loss,
+# so its explanations cannot be evidence for the relevance table they were trained on.
+# Here `use_cbm_loss` is null and nothing in the VGIB path reads that table: pressure to
+# drop a node comes only from the compression KL, and pressure to keep one only from the
+# prediction loss. That is the point of the variant — leave `use_cbm_loss` null, or it
+# stops being one.
+#
+# During training nodes are never pruned. Node v's features are blended into its graph's
+# own Gaussian N(mu_G, sigma_G^2) with weight (1 - p_v) — discarding by dissolving into
+# noise, which is what makes it differentiable. At eval the noise is gone and the
+# subgraph is whatever scores above `threshold`.
+_target_: networks.graph_encoder.gnn.Multi_XAI_GNN
+_recursive_: false
+
+sparsification_layer:
+  _target_: networks.graph_encoder.gnn.Sparsification_Module
+  _recursive_: false
+  in_dim: {}  # overridden per modality inside Multi_XAI_GNN.__init__
+  hidden_dim: 512
+  num_heads: 4
+  num_layers: 2
+  dropout_prob: 0.3
+
+  # TRUE REMOVAL (fixed / topk / topk_PerTask / threshold): zero the pruned nodes'
+  # features AND drop every edge touching them, so a removed node is absent from the
+  # attention softmax instead of merely down-weighted in it. false = shipped behaviour
+  # (soft selection: pruned features still reach the kept nodes). Exact only together
+  # with norm_mode: node. Raises under vgib.
+  true_removal: false
+  sampling_strategy: vgib
+  sample_abs: 5     # unused here — VGIB has no k budget, which is why `threshold` matters
+  # Eval cutoff, and the only thing that decides subgraph size. There is no top-k to fall
+  # back on, so do not guess it: train once, then read the score distribution off a
+  # NodeScoreTracker snapshot and pick the cut from the actual bimodality.
+  threshold: 0.6
+  # What eval does with the learned scores:
+  #   soft  — no threshold at all; every node is attenuated toward the graph mean in
+  #           proportion to (1 - p), exactly as in training (using the expectation, the
+  #           way eval-time dropout works). The only mode whose number reflects the
+  #           scores alone rather than the scores plus a threshold picked afterwards, so
+  #           this is the right setting for a KL-weight sweep.
+  #   noise — threshold, but sub-threshold nodes become graph-mean noise instead of being
+  #           removed; the graph keeps its shape.
+  #   hard  — threshold, zero the score, cut the edges. The subgraph you would ship as
+  #           the explanation, and the furthest from anything training ever showed the
+  #           policy: on the first sweep it cost CloseDrawer 0.600 -> 0.185 on the very
+  #           same checkpoint, purely from the cut. Report it, but do not tune on it.
+  eval_prune_mode: soft
+
+  # Linear rent on scores above `threshold`. 0.0 = plain VGIB (the paper's formulation).
+  # Raise it (~1e-2) if the scorer learns to park everything just above the bar, which
+  # costs nothing once the KL has been paid and makes `threshold` meaningless.
+  threshold_sum_weight: 0.0
+
+  # The compression term. Zero at p=0 and strictly increasing in p, so it is pure
+  # down-pressure that only the prediction loss can hold a node against.
+  #   truncated — each node has a stable interior optimum at p* = 1/(1+d^2), where d is
+  #               how far its features sit from the graph mean. The score therefore
+  #               becomes a *readout of distinctiveness*: graded, rankable, and still
+  #               there to be thresholded afterwards. This is what stage 2 needs.
+  #   full      — the complete Gaussian KL. More principled as a bound, and wrong here:
+  #               its optimum is p -> 0 for EVERY node regardless of d, so nothing
+  #               survives except what the prediction loss actively holds up — and that
+  #               loss is nearly blind to sparsification (val MSE moved 0.058 -> 0.078
+  #               while rollout success moved 0.720 -> 0.185). Measured: at 1e-3 it
+  #               evicted everything but PandaMobile, and at 1e-4 it left a shapeless
+  #               0.36-0.67 band with no gap to cut at.
+  #   eq10      — the paper's graph-level bound (Prop. 4.1). Different scale entirely,
+  #               needs its own weight sweep.
+  vgib_noise_kl_mode: truncated
+  # Note this does NOT behave like a normal regularisation weight in `truncated` mode:
+  # raising it pulls scores harder toward p* = 1/(1+d^2), an interior point, rather than
+  # evicting more. That is why 1e-2 is stable here while the same value under `full`
+  # would flatten the graph.
+  vgib_noise_kl_weight: 1e-2
+
+  # Superseded by the VGIB KL — these are the xai_gnn sparsity heuristics, all off by
+  # default. Four of the five are usable here: they read only the scores. The exception is
+  # `uniform_except_middle`, which sizes itself from `get_num_relevant_nodes_per_task` and
+  # would smuggle the relevance table back into an unsupervised path — the code forces its
+  # weight to 0 under vgib whatever is set here, so setting it is not an error, it is a
+  # silent no-op.
+  #
+  # `uniform_dist_weight` is the soft histogram loss (SIR runs it at 1e-1). It pushes each
+  # graph's scores toward the ends of [0,1] without saying WHICH nodes go where, so it
+  # shapes the distribution without supervising the selection. Reach for it when the
+  # learned scores are separated in rank but bunched in value — the measured failure here
+  # is task objects missing the cut by <0.10 on a non-robot spread of only 0.2-0.4.
+  variance_weight: 0.0
+  sum_mask_weight: 0.0
+  target_sum_node_probs: 6
+  entropy_reg_weight: 0.0
+  uniform_dist_weight: 0.0
+  uniform_except_middle_weight: 0.0
+  uniform_except_middle_offset: 0.15
+
+input_dim: {}
+hidden_dim: 512
+output_dim: 512
+edge_dim: null  # no additive edge features; edge weights enter multiplicatively via WeightedGATv2Conv
+num_layer: 2
+layer_name: "WeightedGATv2"
+# mean, add, max pool the graph to one embedding. "none" returns one embedding per
+# node plus a validity mask, so MDT attends to each object as its own token.
+# Requires method.action_generator.max_graph_nodes >= the largest graph.
+pool_name: "mean"
+heads: 4
+dropout: 0.3
+modalities: ${manager.graph_modalities}
+
+# Must stay null. See the header — with the CBM loss on, the relevance table picks the
+# nodes and VGIB is reduced to an expensive way of agreeing with it.
+use_cbm_loss: null
+lcbm_weight: 0.0
+multiplicative_pooling: true  # scale GNN node outputs by probs before pooling
+
+# LayerNorm statistics. 'graph' (PyG's default, under which every earlier checkpoint was
+# trained) reduces mean/std across ALL nodes of the whole batch tensor, so pruned nodes
+# enter the survivors' normalisation and a graph's embedding depends on its batch-mates.
+# 'node' normalises each node over its own features (= torch.nn.LayerNorm). Old
+# checkpoints keep 'graph': an eval run reloads their saved config, which has no key.
+norm_mode: "node"   # graph | node
+# Renormalise attention AFTER the edge weight gates it (WeightedGATv2 only). Closes the
+# softmax-before-gating leak at evaluation time.
+# !! NOT TRAINABLE -- ANALYSIS AND EVALUATION ONLY, see WeightedGATv2Conv.__init__ !!
+attn_renorm: false

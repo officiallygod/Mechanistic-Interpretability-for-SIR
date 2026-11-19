@@ -10,19 +10,54 @@ hydra:
     subdir: ${hydra.job.override_dirname}
 
 wandb:
-  entity: TODO # rename to own username
-  project: robocasa # rename to project (if project does not exist in wandb, will create it)
-  run_name: "test"
+  entity: layen # rename to own username
+  project: robocasa_vgib # rename to project (if project does not exist in wandb, will create it)
+  # null derives the name from the config: "<Variant>_s<seed>", e.g. TopK_s43, GNN_s43,
+  # SIR_s43, Image_s43 (utils/run_naming.py). Set a string to override.
+  run_name: null
+  # "online" | "offline" | "disabled" — a run without a wandb login no longer needs a
+  # source edit.
+  mode: online
 
 trainer:
   device: 'cuda'
   seed: 42
   epochs: 50
-  train_bool: True # if false, will only test model on environment
+  train_bool: False # if false, will only test model on environment
   test_during_training_bool: False # tests the model every epoch
   test_bool: True # if false, will not test the model after training
-  eval_n_times: 20 # number of random scenarios
+  eval_n_times: 200 # number of random scenarios
   store_videos: True
-  use_ema: False
-  log_dir: "TODO/logs/${wandb.project}"
-  model_path: "TODO"
+  use_ema: True   # every newSparsificationLoss result was measured under EMA, and
+                  # stage 2 warm-starts from the EMA shadow by default
+  log_dir: "/home/mattes/repos/sir/logs/${wandb.project}"
+  model_path: "/home/mattes/repos/sir/logs/robocasa_eval_new/2026-04-18/19-37-57"
+  # Warm start a TRAINING run from another run's weights (VGIB stage 2: point this at the
+  # stage-1 run dir). Weights only — this run keeps its own config, optimizer and LR
+  # schedule. Ignored when train_bool=false; evaluation uses model_path. MUST stay null
+  # for stage 1, or every run silently continues someone else's checkpoint.
+  init_from: null
+  init_from_suffix: '_final'
+  init_from_ema: true
+  # Which checkpoint an eval-only run loads. Every training run writes both:
+  #   _final — the last epoch
+  #   _best  — the epoch with the lowest val_total_loss (measured under EMA, which is
+  #            also what `test()` applies, so the pair matches)
+  # Worth having because the two can differ a lot: the 24-task image baseline reached its
+  # best val at epoch 9 and then overfitted for 40 more epochs while train loss kept
+  # falling, so '_final' scores a model that validation had already given up on.
+  eval_checkpoint: '_final'
+  # Eval-only ablations of the graph, read from THIS config so a checkpoint can be
+  # re-examined without retraining:
+  #   none   — normal evaluation
+  #   full   — keep every node (no sparsification); the in-distribution upper bound
+  #   random — keep a RANDOM subgraph of the same size the model selected. The control
+  #            that separates "the policy needs this subgraph" from "the policy needs a
+  #            subgraph of this size".
+  #   zero   — blank the graph embedding entirely (token-level, out of distribution)
+  graph_eval_mode: none
+  # Per-task eval cutoff, e.g. {CloseDrawer: 0.878, CoffeePressButton: 0.797}. Tasks not
+  # listed fall back to the encoder's scalar `threshold`. The gap in the score
+  # distribution sits in a different place per task, so one global bar necessarily
+  # over-prunes one and under-prunes another.
+  task_thresholds: null

@@ -41,6 +41,7 @@ class MDT(nn.Module):
                 n_heads: int,
                 bias: bool = False,
                 use_noise_encoder: bool = False,
+                max_graph_nodes: int = 32,
                 ):
         super().__init__()
         self.model = MDT_Transformer(
@@ -63,6 +64,7 @@ class MDT(nn.Module):
             n_heads=n_heads,
             bias=bias,
             use_noise_encoder=use_noise_encoder,
+            max_graph_nodes=max_graph_nodes,
         )
         self.sigma_data = sigma_data
 
@@ -142,18 +144,24 @@ class MDT_Transformer(nn.Module):
         n_heads: int,
         bias: bool = False,
         use_noise_encoder: bool = False,
+        max_graph_nodes: int = 32,
     ):
         super().__init__()
-        
+
         self.use_proprioceptive = True if proprio_dim > 0 else False
         self.proprio_dim = proprio_dim
-        
+
         self.use_image = True if len(img_mod) > 0 else False
         self.image_modalities = img_mod
-        
+
         self.use_graph = True if len(graph_mod) > 0 else False
         self.graph_modalities = graph_mod
-        
+
+        # Upper bound on the tokens one graph modality can contribute, i.e. the largest
+        # node count a per-node readout is expected to produce. Only used for sizing
+        # the position embedding, see get_seq_length.
+        self.max_graph_nodes = max_graph_nodes
+
         seq_size = self.get_seq_length(obs_seq_len)
         
         if self.use_proprioceptive: # Bigger MLP, because it functions as embedding network
@@ -237,28 +245,39 @@ class MDT_Transformer(nn.Module):
             torch.nn.init.normal_(module.pos_emb, mean=0.0, std=0.02)
 
     def forward(self, states, actions, goals, sigma):
-        context = self.enc_only_forward(states, goals)
-        pred_actions = self.dec_only_forward(context, actions, sigma)
+        context, context_mask = self.enc_only_forward(states, goals)
+        pred_actions = self.dec_only_forward(context, actions, sigma, cross_attn_mask=context_mask)
         return pred_actions
 
     def enc_only_forward(self, states, goals):
-        obs_embeddings = self.process_state_embeddings(states)
+        # state_mask is [B, L_state] and marks real tokens. With a pooled graph readout
+        # every position is real; with a per-node readout it marks the padded node slots.
+        obs_embeddings, state_mask = self.process_state_embeddings(states)
         goal_embed = self.goal_emb(torch.unsqueeze(goals['lang'], dim=1))
-                
-        goal_x, obs_x = self.apply_position_embeddings(goal_embed, obs_embeddings)
-        
-        input_seq = torch.concatenate((goal_x, obs_x), dim=1)
-        
-        context = self.encoder(input_seq)
-        
-        return context
 
-    def dec_only_forward(self, context, actions, sigma):
+        goal_x, obs_x = self.apply_position_embeddings(goal_embed, obs_embeddings)
+
+        input_seq = torch.concatenate((goal_x, obs_x), dim=1)
+
+        # Key-padding mask over [goal | state]; the goal token is always valid. Shaped
+        # [B, 1, 1, L] so it broadcasts against SDPA's (B, heads, L_q, L_k).
+        B = state_mask.shape[0]
+        goal_valid = torch.ones(B, 1, dtype=torch.bool, device=state_mask.device)
+        attn_mask = torch.cat([goal_valid, state_mask], dim=1).view(B, 1, 1, -1)
+
+        context = self.encoder(input_seq, custom_attn_mask=attn_mask)
+
+        # Returned so the decoder can reuse it as the cross-attention key-padding mask.
+        return context, attn_mask
+
+    def dec_only_forward(self, context, actions, sigma, cross_attn_mask=None):
         emb_t = self.process_sigma_embeddings(sigma)
         action_embed = self.action_emb(actions)
         action_x = self.drop(action_embed)
 
-        x = self.decoder(action_x, emb_t, context)
+        # Decoder self-attention over action tokens stays unmasked (every action
+        # position is real); cross_attn_mask only excludes padded state tokens.
+        x = self.decoder(action_x, emb_t, context, cross_attn_mask=cross_attn_mask)
 
         pred_actions = self.action_pred(x)
         return pred_actions
@@ -268,11 +287,17 @@ class MDT_Transformer(nn.Module):
 
     def get_seq_length(self, obs_length):
         seq_len = 1 # the one is necessary, because of the goal
-        for _ in self.image_modalities + self.graph_modalities:
+        for _ in self.image_modalities:
             seq_len += obs_length
         if self.use_proprioceptive:
             seq_len += obs_length
-            
+        # A graph modality contributes 1 token when the encoder pools, and up to
+        # max_graph_nodes tokens when it reads out per node. Size the position
+        # embedding for the worst case so one model handles both; the extra slots are
+        # a handful of parameters and are simply never indexed in pooled mode.
+        for _ in self.graph_modalities:
+            seq_len += max(obs_length, self.max_graph_nodes)
+
         return seq_len
 
     def process_sigma_embeddings(self, sigma):
@@ -284,25 +309,43 @@ class MDT_Transformer(nn.Module):
         return emb_t
 
     def process_state_embeddings(self, states):
+        """Build the state token sequence together with a validity mask.
+
+        Every modality contributes a [B, T, embed_dim] chunk. Non-graph modalities are
+        entirely valid. Graph modalities arrive as a (tensor, mask) pair from
+        Diffusion.preprocess_batch, where T is 1 in pooled mode or up to max_graph_nodes
+        in per-node mode and the mask is False on padded node slots.
+
+        Returns:
+            state_embeddings: [B, L_state, embed_dim]
+            state_mask:       [B, L_state] bool, True for real tokens
+        """
         processed_states = []
-        
+        masks = []
+
+        def append(embed, mask=None):
+            processed_states.append(embed)
+            masks.append(
+                torch.ones(embed.shape[:2], dtype=torch.bool, device=embed.device)
+                if mask is None else mask.to(embed.device)
+            )
+
         if self.use_proprioceptive:
-            proprio_embed = self.proprio_emb(states['obs_prop'])
-            processed_states.append(proprio_embed)
-        
+            append(self.proprio_emb(states['obs_prop']))
+
         if self.use_image:
             for m in self.image_modalities:
-                img_embed = self.img_emb_dict[m](states['obs_img'][m])
-                processed_states.append(img_embed)
-                
+                append(self.img_emb_dict[m](states['obs_img'][m]))
+
         if self.use_graph:
             for m in self.graph_modalities:
-                graph_embed = self.graph_emb_dict[m](states['obs_graph'][m])
-                processed_states.append(graph_embed)
-                
+                tensor, mask = states['obs_graph'][m]
+                append(self.graph_emb_dict[m](tensor), mask)
+
         state_embeddings = torch.concatenate(processed_states, dim=1)
-        
-        return state_embeddings
+        state_mask = torch.concatenate(masks, dim=1)
+
+        return state_embeddings, state_mask
 
     def apply_position_embeddings(self, goal_embed, state_embed):
         goal_x = self.drop(goal_embed + self.pos_emb[:, :1, :])

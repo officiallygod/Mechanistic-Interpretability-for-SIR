@@ -1,6 +1,26 @@
 import torch
 
-GRAPH_MODALITY_LIST = ["one_hot_labels", "bb_coordinates", "cropped_image_feature"]
+from utils.point_geom import (POINT_GEOM_CENTROID_OFFSET, POINT_GEOM_DIM,
+                              POINT_GEOM_VISIBILITY_OFFSET)
+
+GRAPH_MODALITY_LIST = ["one_hot_labels", "bb_coordinates", "cropped_image_feature",
+                       "siglip_text_emb", "point_geom"]
+
+# Per-modality width of one view's slice, and how the two views are combined.
+#   "concat"    -> both views are kept side by side, so the fused width is 2x
+#   "left_only" -> the feature is view invariant, so one copy is enough
+# `cropped_image_feature` has no fixed width (it depends on the pretrained encoder)
+# and its rule depends on whether the encoder already fused both views, so it is
+# resolved at call time; None marks "resolve dynamically".
+GRAPH_MODALITY_SPEC = {
+    "one_hot_labels":       {"width": 37,   "fusion": "left_only"},
+    "bb_coordinates":       {"width": 10,   "fusion": "concat"},
+    "cropped_image_feature": {"width": None, "fusion": None},
+    "siglip_text_emb":      {"width": 768,  "fusion": "left_only"},
+    # Reconstructed from both views jointly and expressed in the robot-base frame, so
+    # the two view files hold the same value for a node and one copy is enough.
+    "point_geom":           {"width": POINT_GEOM_DIM, "fusion": "left_only"},
+}
 
 def combine_graph_modalities(graph_data, graph_mod, idx=None, j=None):
     if idx is None and j is None:
@@ -13,7 +33,41 @@ def combine_graph_modalities(graph_data, graph_mod, idx=None, j=None):
     
     return base_graph
 
-def fuse_graphs(graph_data_left, graph_data_right, mod, step_idx=None, is_cropped_fusion=False):
+def build_edge_weights(fused_x, offsets, src, dst):
+    """Per-edge weight for a fully connected graph.
+
+    Without 3D geometry every edge weighs 1, which gives the GNN no spatial structure at
+    all. When `point_geom` is present the weight becomes 1 / (1 + ||Δcentroid||), so
+    nearby objects attend to each other more strongly than distant ones.
+    WeightedGATv2Conv already multiplies attention coefficients by this, and the
+    sparsification module multiplies its own node gates on top, so the two compose.
+
+    Edges touching a node whose geometry was never observed fall back to 1, because a
+    zeroed centroid would otherwise fabricate a distance.
+    """
+    device = fused_x.device
+    weights = torch.ones(src.shape[0], device=device, dtype=torch.float32)
+    if "point_geom" not in offsets:
+        return weights
+
+    start, _ = offsets["point_geom"]
+    centroids = fused_x[:, start + POINT_GEOM_CENTROID_OFFSET:
+                           start + POINT_GEOM_CENTROID_OFFSET + 3]
+    observed = fused_x[:, start + POINT_GEOM_VISIBILITY_OFFSET] > 0
+
+    dist = torch.linalg.norm(centroids[dst] - centroids[src], dim=-1)
+    valid = observed[src] & observed[dst]
+    return torch.where(valid, 1.0 / (1.0 + dist), weights)
+
+
+def fuse_graphs(graph_data_left, graph_data_right, mod, mod_order, step_idx=None, is_cropped_fusion=False):
+    """Fuse the left/right view graphs for one modality key.
+
+    `mod` is the dict key (a single modality name, or the joined name of several).
+    `mod_order` is the ordered list of the modalities `mod` is built from — the same
+    order `combine_graph_modalities` concatenated them in. It is passed explicitly
+    rather than parsed back out of `mod`, because the joined name is ambiguous.
+    """
     if step_idx is None:
         left_graph = graph_data_left[mod]
         right_graph = graph_data_right[mod]
@@ -37,17 +91,25 @@ def fuse_graphs(graph_data_left, graph_data_right, mod, step_idx=None, is_croppe
     # Shape: [Total_Unique_Nodes, Right_Dim]
     x_r_mapped = torch.zeros((num_nodes, feat_dim_r), device=right_graph.x.device, dtype=right_graph.x.dtype)
     
+    # Track which view saw which node, so a view-invariant feature can be read from
+    # whichever view actually observed it rather than defaulting to an empty left row.
+    present_l = torch.zeros(num_nodes, dtype=torch.bool, device=left_graph.x.device)
+    present_r = torch.zeros(num_nodes, dtype=torch.bool, device=right_graph.x.device)
+
     # Map Left Features
     for src_i, name in enumerate(left_names):
         target_i = name_to_idx[name]
         x_l_mapped[target_i] = left_graph.x[src_i]
-        
+        present_l[target_i] = True
+
     # Map Right Features
     for src_i, name in enumerate(right_names):
         target_i = name_to_idx[name]
         x_r_mapped[target_i] = right_graph.x[src_i]
+        present_r[target_i] = True
 
-    fused_x, bb_index = handle_fusing(x_l_mapped, x_r_mapped, mod, is_cropped_fusion)
+    fused_x, offsets = handle_fusing(x_l_mapped, x_r_mapped, mod_order, is_cropped_fusion,
+                                     present_left=present_l, present_right=present_r)
 
     src, dst = torch.meshgrid(
         torch.arange(num_nodes, device=left_graph.x.device),
@@ -65,10 +127,7 @@ def fuse_graphs(graph_data_left, graph_data_right, mod, step_idx=None, is_croppe
     
     fused_edge_index = torch.stack((src, dst), dim=0)
     
-    # if "bb_coordinates" in mod:
-    #     fused_edge_attr = calculate_weight_dim_distance(fused_x, bb_index, src, dst)
-    # else:
-    fused_edge_attr = torch.ones(fused_edge_index.shape[1], device=left_graph.x.device, dtype=torch.float32)
+    fused_edge_attr = build_edge_weights(fused_x, offsets, src, dst)
 
     fused_graph = type(left_graph)(
         x=fused_x,
@@ -79,61 +138,78 @@ def fuse_graphs(graph_data_left, graph_data_right, mod, step_idx=None, is_croppe
     
     return fused_graph
 
-def handle_fusing(left, right, mod, cropped_fusion):
-    active_mods = []
-    
-    if GRAPH_MODALITY_LIST[0] in mod:
-        ohl_index = mod.split(GRAPH_MODALITY_LIST[0]).index('')
-        ohl_length = 37
-        active_mods.append((ohl_index, 'ohl', ohl_length))
-    if GRAPH_MODALITY_LIST[1] in mod:
-        bb_index = mod.split(GRAPH_MODALITY_LIST[1]).index('')
-        bb_length = 10
-        active_mods.append((bb_index, 'bb', bb_length))
-    if GRAPH_MODALITY_LIST[2] in mod:
-        cropped_index = mod.split(GRAPH_MODALITY_LIST[2]).index('')
-        # We use -1 as placeholder for dynamic length
-        active_mods.append((cropped_index, 'crop', -1))
-    
-    # 2. Sort by rank (position in the tensor)
-    active_mods.sort(key=lambda x: x[0])
-    
-    # 3. Calculate the dynamic length of 'cropped_image_feature'
-    total_input_len = left.shape[-1]
-    known_len = sum(m[2] for m in active_mods if m[2] != -1)
-    crop_len = total_input_len - known_len
-    
-    # 4. Iterate, slice, and process
+def handle_fusing(left, right, mod_order, cropped_fusion, present_left=None, present_right=None):
+    """Combine the per-view feature blocks of every modality in `mod_order`.
+
+    `left`/`right` are [N, F] with the modalities concatenated along the last axis in
+    exactly `mod_order`, so slicing walks the list in order rather than trying to
+    recover positions from a joined modality name. `cropped_image_feature` is the one
+    modality whose width is not known statically (it depends on the pretrained
+    encoder), so it absorbs whatever width the other modalities do not account for.
+
+    `present_left`/`present_right` are optional [N] boolean masks marking which nodes
+    each view actually saw. A view-invariant ("left_only") modality is normally read
+    from the left view, but a node that only the right camera saw has an all-zero left
+    row; the masks let it fall back to the right view instead of emitting zeros.
+
+    Returns:
+        fused:   [N, F_out]
+        offsets: {modality: (start, width)} into `fused`, so callers can slice a
+                 specific modality back out without recomputing the layout.
+    """
+    unknown = [m for m in mod_order if m not in GRAPH_MODALITY_SPEC]
+    if unknown:
+        raise ValueError(f"Unknown graph modality/modalities: {unknown}. "
+                         f"Known: {list(GRAPH_MODALITY_SPEC)}")
+
+    # `cropped_image_feature` has no static width — it takes up whatever is left over.
+    dynamic = [m for m in mod_order if GRAPH_MODALITY_SPEC[m]["width"] is None]
+    if len(dynamic) > 1:
+        raise ValueError(f"At most one modality may have a dynamic width, got {dynamic}")
+    known_len = sum(GRAPH_MODALITY_SPEC[m]["width"] for m in mod_order
+                    if GRAPH_MODALITY_SPEC[m]["width"] is not None)
+    dynamic_len = left.shape[-1] - known_len
+    if dynamic and dynamic_len <= 0:
+        raise ValueError(f"Feature width {left.shape[-1]} is too small for modalities "
+                         f"{mod_order} (fixed-width part alone needs {known_len})")
+    if not dynamic and dynamic_len != 0:
+        raise ValueError(f"Feature width {left.shape[-1]} does not match modalities "
+                         f"{mod_order} (expected {known_len})")
+
     fused_parts = []
+    offsets = {}
     current_ptr = 0
-    
-    bb_index = -1
-    
-    for rank, name, length in active_mods:
-        # Resolve actual length if dynamic
-        eff_len = crop_len if length == -1 else length
-        
-        # Slice the current modality from both views
-        l_slice = left[..., current_ptr : current_ptr + eff_len]
-        r_slice = right[..., current_ptr : current_ptr + eff_len]
-        
-        if name == 'bb':
-            # BB: User wants BOTH values included -> Concatenate (Length becomes 2x)
-            fused_parts.append(torch.cat((l_slice, r_slice), dim=-1))
-            bb_index = current_ptr
-        elif name == 'crop':
-            if cropped_fusion:
-                fused_parts.append(l_slice)
-            else:
-                fused_parts.append(torch.cat((l_slice, r_slice), dim=-1))
+    out_ptr = 0
+    for m in mod_order:
+        spec = GRAPH_MODALITY_SPEC[m]
+        eff_len = dynamic_len if spec["width"] is None else spec["width"]
+
+        l_slice = left[..., current_ptr: current_ptr + eff_len]
+        r_slice = right[..., current_ptr: current_ptr + eff_len]
+
+        fusion = spec["fusion"]
+        if fusion is None:
+            # cropped_image_feature: the 6-channel fusion encoder has already merged
+            # both views into one feature, so only take it once in that case.
+            fusion = "left_only" if cropped_fusion else "concat"
+
+        if fusion == "concat":
+            part = torch.cat((l_slice, r_slice), dim=-1)
         else:
-            # OHL: ONE value (identical) -> Take Left
-            fused_parts.append(l_slice)
-            
+            # View-invariant feature: both views hold the same value, so one copy is
+            # enough — but prefer whichever view actually observed the node.
+            if present_left is not None and present_right is not None:
+                take_left = (present_left | ~present_right).unsqueeze(-1)
+                part = torch.where(take_left, l_slice, r_slice)
+            else:
+                part = l_slice
+
+        fused_parts.append(part)
+        offsets[m] = (out_ptr, part.shape[-1])
+        out_ptr += part.shape[-1]
         current_ptr += eff_len
-    
-    # 5. Reassemble the fused features
-    return torch.cat(fused_parts, dim=-1), bb_index
+
+    return torch.cat(fused_parts, dim=-1), offsets
 
 
 def pad_sequence(sequence, target_length):
@@ -145,37 +221,3 @@ def pad_sequence(sequence, target_length):
         padding = last_frame.repeat(pad_qty, *([1]*(len(sequence.shape)-1)))
         return torch.cat((sequence, padding), dim=0)
     return sequence
-
-def convert_weight_to_dim_distance(graph_data, graph_mod):
-    for i in range(len(graph_data['bb_coordinates'])):
-        for j in range(len(graph_data['bb_coordinates'][i])):
-            middle_points = graph_data['bb_coordinates'][i][j].x[:,8:]
-            
-            row, col = graph_data['bb_coordinates'][i][j].edge_index
-            
-            source_points = middle_points[row] 
-            target_points = middle_points[col]
-            
-            distance = torch.abs(source_points - target_points)
-            
-            for mod in graph_mod:
-                graph_data[mod][i][j].edge_attr = distance
-    return graph_data
-
-def calculate_weight_dim_distance(graph_data, start_index, row, col):
-    # TODO fix for all possible combinations
-    middle_points_left = graph_data[:,start_index+8:start_index+10]
-    middle_points_right = graph_data[:,start_index+18:start_index+20]
-    
-    source_points_left = middle_points_left[row]
-    target_points_left = middle_points_left[col]
-    
-    source_points_right = middle_points_right[row]
-    target_points_right = middle_points_right[col]
-    
-    distance_left = torch.abs(source_points_left - target_points_left)
-    distance_right = torch.abs(source_points_right - target_points_right)
-    
-    distance = torch.concat((distance_left, distance_right), dim=-1)
-    
-    return distance

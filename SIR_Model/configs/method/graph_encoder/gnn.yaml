@@ -7,7 +7,22 @@ output_dim: 512
 edge_dim: 0 # Set during runtime
 num_layer: 2
 layer_name: "GATv2"
-pool_name: "mean" # mean, max, sum
+# mean, add, max collapse the graph into one embedding per sample.
+# "none" instead returns one embedding per node plus a validity mask, so the action
+# generator cross-attends to each object separately and the language goal can route to a
+# specific node. Requires method.action_generator.max_graph_nodes >= the largest graph.
+pool_name: "mean"
 heads: 4
 dropout: 0.3
 modalities: ${manager.graph_modalities}
+
+# LayerNorm statistics. 'graph' (PyG's default, under which every earlier checkpoint was
+# trained) reduces mean/std across ALL nodes of the whole batch tensor, so pruned nodes
+# enter the survivors' normalisation and a graph's embedding depends on its batch-mates.
+# 'node' normalises each node over its own features (= torch.nn.LayerNorm). Old
+# checkpoints keep 'graph': an eval run reloads their saved config, which has no key.
+norm_mode: "node"   # graph | node
+# Renormalise attention AFTER the edge weight gates it (WeightedGATv2 only). Closes the
+# softmax-before-gating leak at evaluation time.
+# !! NOT TRAINABLE -- ANALYSIS AND EVALUATION ONLY, see WeightedGATv2Conv.__init__ !!
+attn_renorm: false

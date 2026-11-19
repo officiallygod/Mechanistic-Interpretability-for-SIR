@@ -1,0 +1,90 @@
+# VGIB stage 2 — burn stage 1's discovered subgraph into the scorer.
+#
+#   python main.py method/graph_encoder=xai_gnn_vgib_stage2 \
+#     method.graph_encoder.sparsification_layer.node_whitelist=/abs/path/subgraph.yaml \
+#     trainer.init_from=/abs/path/to/stage1_run_dir
+#
+# Stage 1 scores nodes softly, which means the selection flickers from timestep to
+# timestep. Stage 2 fixes that: the scorer still runs and its own `probs > threshold`
+# still decides, but a BCE term pulls the scores apart onto the subgraph stage 1 chose,
+# so selection becomes stable and the thing running at inference is the scorer rather
+# than a lookup table.
+#
+# The whitelist comes from `utils.select_subgraph` applied to stage 1's OWN node scores.
+# It is not RELEVENT_NODES and must never be built from it — that is the whole difference
+# between distilling an unsupervised discovery and importing the answer key.
+_target_: networks.graph_encoder.gnn.Multi_XAI_GNN
+_recursive_: false
+
+sparsification_layer:
+  _target_: networks.graph_encoder.gnn.Sparsification_Module
+  _recursive_: false
+  in_dim: {}  # overridden per modality inside Multi_XAI_GNN.__init__
+  hidden_dim: 512
+  num_heads: 4
+  num_layers: 2
+  dropout_prob: 0.3
+
+  # The scorer runs and decides; the whitelist only supervises it. `fixed` is the other
+  # option — the whitelist becomes the mask outright and the scorer never runs, which is
+  # simpler but leaves nothing learnable at inference.
+  # TRUE REMOVAL (fixed / topk / topk_PerTask / threshold): zero the pruned nodes'
+  # features AND drop every edge touching them, so a removed node is absent from the
+  # attention softmax instead of merely down-weighted in it. false = shipped behaviour
+  # (soft selection: pruned features still reach the kept nodes). Exact only together
+  # with norm_mode: node. Raises under vgib.
+  true_removal: false
+  sampling_strategy: threshold
+  threshold: 0.5          # the bar training uses, so eval must use it too
+  node_whitelist: ???     # absolute path to a utils.select_subgraph output
+
+  # Weight calibration — read before changing. `train_diffusion_loss` here is ~0.055, NOT
+  # O(1), so a weight eyeballed for "loss ~ 1" is about 20x too big. At 10.0 the BCE was
+  # 99.3% of total_loss and flattened the scorer into an input-independent constant ~0.6
+  # for every node by epoch 10. `sparsification/{train,val}_score_std_*` is the canary:
+  # it collapses toward 0 an epoch or two before the means visibly move.
+  whitelist_bce_weight: 0.1
+  # Graphs carry 18-27 node types while a whitelist keeps 1-5 (~19% positives), so
+  # unweighted BCE is mostly "push everything down" and a constant output is attractive.
+  whitelist_pos_weight: 4.3
+
+  # No compression in stage 2: the subgraph is already chosen.
+  vgib_noise_kl_weight: 0.0
+  vgib_noise_kl_mode: truncated
+  eval_prune_mode: hard   # inert under `threshold`; read only inside the vgib branch
+  threshold_sum_weight: 0.0
+
+  sample_abs: 5
+  variance_weight: 0.0
+  sum_mask_weight: 0.0
+  target_sum_node_probs: 6
+  entropy_reg_weight: 0.0
+  uniform_dist_weight: 0.0
+  uniform_except_middle_weight: 0.0
+  uniform_except_middle_offset: 0.15
+
+input_dim: {}
+hidden_dim: 512
+output_dim: 512
+edge_dim: null
+num_layer: 2
+layer_name: "WeightedGATv2"
+pool_name: "mean"
+heads: 4
+dropout: 0.3
+modalities: ${manager.graph_modalities}
+
+use_cbm_loss: null   # must stay null — see the header
+lcbm_weight: 0.0
+multiplicative_pooling: true
+
+# LayerNorm statistics. 'graph' (PyG's default, under which every earlier checkpoint was
+# trained) reduces mean/std across ALL nodes of the whole batch tensor, so pruned nodes
+# enter the survivors' normalisation and a graph's embedding depends on its batch-mates.
+# 'node' normalises each node over its own features (= torch.nn.LayerNorm). Old
+# checkpoints keep 'graph': an eval run reloads their saved config, which has no key.
+norm_mode: "node"   # graph | node
+# Renormalise attention AFTER the edge weight gates it (WeightedGATv2 only). Closes the
+# softmax-before-gating leak at evaluation time.
+# !! NOT TRAINABLE -- ANALYSIS AND EVALUATION ONLY, see WeightedGATv2Conv.__init__ !!
+attn_renorm: false
