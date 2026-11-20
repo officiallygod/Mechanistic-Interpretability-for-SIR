@@ -18,11 +18,13 @@
 ## 1. Project Motivation & Research Question
 
 In robot imitation learning, two paradigms currently exist:
-1. **Explicit Object-Centric Policies (e.g. [SIR](https://github.com/intuitive-robots/SIR_Model)):** The visual scene is parsed into an explicit scene graph of objects. A selector prunes the graph down to an explicit "kept set" $K$ and claims intrinsic explainability. However, the companion ICLR 2027 analysis shows that explicit in-loop subset selections suffer from subtle leakage paths (e.g., softmax denominators normalizing over all nodes, survivor score weighting, presence counts) and often fail to simultaneously satisfy *Discovery*, *Removal*, and *Consequence*.
-2. **End-to-End Image Policies (Pixel Baselines):** An image encoder (ResNet-18) processes the entire visual frame directly into a diffusion action generator (MDT). These policies achieve strong performance but remain opaque black boxes.
+1. **Explicit Object-Centric Policies (e.g. [SIR](https://github.com/intuitive-robots/sir)):** The visual scene is parsed into an explicit scene graph of objects. A selector prunes the graph down to an explicit "kept set" $K$ and claims intrinsic explainability. However, the companion ICLR 2027 analysis shows that explicit in-loop subset selections suffer from subtle leakage paths (e.g., softmax denominators normalizing over all nodes, survivor score weighting, presence counts) and often fail to simultaneously satisfy *Discovery*, *Removal*, and *Consequence*.
+2. **End-to-End Image Policies (Pixel Baselines):** An image encoder (one ResNet-18 per camera) processes the entire visual frame directly into a diffusion action generator (MDT). These policies run without any object selection and remain opaque black boxes. In upstream SIR's 24-task RoboCasa benchmark, the image-only baseline reaches 12.93 % mean success vs. 16.60 % for SIR (`SIR_Model/robocasa_results.md`).
 
 > **Official Topic Description:**  
 > *"Train a sparse autoencoder on the activations of an image policy that has no object selection. Start with the ResNet-18 7×7 feature map before pooling. Label each feature by where it fires (activation map vs. object boxes from the simulator). The objects whose features are active at a step form a 'latent kept set'. Need to see if we take a whole object or only parts of objects (pixel level or object level). Direction: does a policy without explicit selection form an object set internally? Test the latent kept set with Discovery, Removal and Consequence, by switching features off during rollouts, and compare it with SIR's explicit kept set."*
+>
+> **Note on shapes:** "7×7" assumes 224 × 224 inputs. SIR's RoboCasa cameras are **128 × 128** (`SIR_Model/envs/robocasa/utils.py`), so in this codebase the pre-pooling `layer4` map is **4 × 4 × 512** (16 cells of 32 × 32 px).
 
 ### Key Research Dimensions:
 1. **Implicit Object Set Discovery:** Does an end-to-end vision policy form an internal representation of objects without explicit supervisory selection?
@@ -34,42 +36,44 @@ In robot imitation learning, two paradigms currently exist:
 
 ## 2. Methodology & Architecture
 
+> 🗺️ **New to the SIR code?** Start with the [SIR Code Mind Map](docs/sir_code_mindmap.md). It covers every component of `SIR_Model/` and marks where our SAE pipeline plugs in.
+
 ```mermaid
 flowchart TD
-    subgraph S1["1. Visual Observation & Backbone (ResNet-18)"]
-        Cam["Static / In-Hand Camera\nRGB: 224 x 224 x 3"] --> Conv1["Conv1 + MaxPool\n56 x 56 x 64"]
-        Conv1 --> L1["Layer 1 (BasicBlock)\n56 x 56 x 64"]
-        L1 --> L2["Layer 2 (BasicBlock)\n28 x 28 x 128"]
-        L2 --> L3["Layer 3 (BasicBlock)\n14 x 14 x 256"]
-        L3 --> L4["Layer 4 (BasicBlock)\n7 x 7 x 512"]
-        L4 --> Pool["Global Average Pooling\nVector: 512-d"]
+    subgraph S1["1. Visual Observation & Backbone (ResNet-18, one per camera)"]
+        Cam["Agentview left / right camera\nRGB: 128 x 128 x 3"] --> Conv1["Conv1 + MaxPool\n32 x 32 x 64"]
+        Conv1 --> L1["Layer 1 (BasicBlock)\n32 x 32 x 64"]
+        L1 --> L2["Layer 2 (BasicBlock)\n16 x 16 x 128"]
+        L2 --> L3["Layer 3 (BasicBlock)\n8 x 8 x 256"]
+        L3 --> L4["Layer 4 (BasicBlock)\n4 x 4 x 512"]
+        L4 --> Pool["Global Average Pooling + fc\nVector: 512-d"]
     end
 
     subgraph S2["2. Mechanistic Interpretability: Sparse Autoencoder (SAE)"]
-        L4 -.->|"Tap 49 Spatial Cells (x_i in R^512)"| SAE_Enc["SAE Encoder: ReLU(W_enc · x + b)\nTop-K / L1 Sparsity"]
+        L4 -.->|"Tap 16 Spatial Cells (x_i in R^512)"| SAE_Enc["SAE Encoder: ReLU(W_enc · x + b)\nTop-K / L1 Sparsity"]
         SAE_Enc --> SparseF["Overcomplete Sparse Code\nf in R^4096 (L0 ≪ 4096)"]
         SparseF --> SAE_Dec["SAE Decoder: W_dec · f + b\nx_hat in R^512"]
-        SparseF --> Grounding["Spatial Receptive Field Heatmaps\nIoU overlap with Simulator Bounding Boxes"]
+        SparseF --> Grounding["Spatial Feature Heatmaps\nOverlap with Simulator Segmentation Masks"]
         Grounding --> LatentSet["Emergent Latent Kept Set K_latent\n(Mug, Drawer Handle, Gripper)"]
     end
 
     subgraph S3["3. Action Generator: MDT Diffusion Transformer"]
-        Pool --> MDT_Enc["4-layer Transformer Encoder\n(Dim: 512, 16 Attention Heads)"]
+        Pool --> MDT_Enc["4-layer Transformer Encoder\n(Dim: 512, 16 Attention Heads)\nTokens: goal + left + right"]
         Goal["Language Instruction (CLIP)\n512-d Embedding"] --> MDT_Enc
         Noise["Noisy Action Chunk a_t^(k)\n[10 x 12] + Step k"] --> MDT_Dec["6-layer Transformer Decoder\n(Cross-Attention over Observations)"]
         MDT_Enc --> MDT_Dec
         MDT_Dec --> DDIM["10-Step DDIM Denoising"]
-        DDIM --> Action["10-Step Action Chunk\n[10 x 12] (Arm Velocity, Gripper Pose)"]
+        DDIM --> Action["10-Step Action Chunk\n[10 x 12] end-effector actions"]
     end
 
     SAE_Dec -.->|"Causal Ablation / Activation Steering"| Pool
 ```
 
 ### The 6-Step Protocol:
-1. **Run Rollouts with Trained Image Policy:** Execute an untouched ResNet-18 + MDT policy and record the $7 \times 7 \times 512$ feature map at `layer4` before global average pooling.
+1. **Run Rollouts with Trained Image Policy:** Execute an untouched ResNet-18 + MDT policy (`manager.image_modalities=[left,right]`, `manager.graph_modalities=[]`) and record the $4 \times 4 \times 512$ feature map at `layer4` before global average pooling. The cameras are 128 × 128 px, so each of the 16 cells covers a 32 × 32 px patch.
 2. **Train a Sparse Autoencoder (SAE):** Train an overcomplete dictionary ($M = 4096$, $8\times$ expansion) with Top-K or $L_1$ sparsity on these activation vectors to disentangle polysemantic superposition into monosemantic features.
-3. **Label Features via Spatial Grounding:** Map active features across the $7 \times 7$ grid into 2D heatmaps and compute IoU against simulator ground-truth object bounding boxes.
-4. **Form the Latent Kept Set ($K_{latent}$):** Identify the specific set of objects whose grounded features are actively firing at each step.
+3. **Label Features via Spatial Grounding:** Map active features across the $4 \times 4$ grid into 2D heatmaps and compare them with the simulator's per-pixel segmentation masks (`robot0_agentview_*_segmentation_class`), which SIR already uses to build its scene graphs.
+4. **Form the Latent Kept Set ($K_{latent}$):** Identify the set of objects whose grounded features are firing at each policy call (once per 10-step action chunk).
 5. **Causal Intervention & Condition Testing:** Clamping or zeroing out features during rollout to test *Discovery*, *Removal*, and *Consequence*.
 6. **Benchmark Against SIR:** Contrast $K_{latent}$ with SIR's explicit kept set to verify whether the policy learns human-expected objects or exploits dataset biases (e.g., positional biases, background shortcuts).
 
@@ -95,7 +99,8 @@ Mechanistic-Interpretability-for-SIR/
 │   ├── index.html             # Academic project portal with interactive diagrams
 │   ├── pipeline_explained.html # Step-by-step tensor walkthrough & vector mappings
 │   ├── .nojekyll              # Disables Jekyll processing on GitHub Pages
-│   └── architecture_deep_dive.md # Detailed tensor dimensions & layer specifications
+│   ├── architecture_deep_dive.md # Detailed tensor dimensions & layer specifications
+│   └── sir_code_mindmap.md    # Mind map of the SIR codebase + MIS integration placeholders
 ├── papers/                    # Foundational research literature
 │   ├── CVPR_graph_paper_2026.pdf # SIR: Structured Image Representations (CVPR 2026)
 │   ├── Closing_the_loop_SIR_ICLR_2027-1.pdf # Analysis of subset explanations (ICLR 2027)
@@ -111,7 +116,9 @@ Mechanistic-Interpretability-for-SIR/
 │   ├── sae.py                 # Top-K / L1 Sparse Autoencoder model
 │   ├── grounding.py           # Spatial heatmap projection & bounding-box IoU
 │   └── causal_intervention.py # Feature clamping & closed-loop ablation hooks
-├── SIR_Model/                 # Upstream SIR model & environment benchmarks
+├── SIR_Model/                 # Vendored upstream SIR (intuitive-robots/sir @ 49321d0)
+│   ├── overview.md            # Upstream design notes (sparsification, VGIB, eval knobs)
+│   └── robocasa_results.md    # Upstream results: SIR vs. VGIB vs. Image-only
 ├── .env                       # Local environment variables & API keys (git-ignored)
 ├── .gitignore                 # Exclusion rules for weights (*.pth), caches, and data
 └── README.md                  # Project overview & roadmap (this file)

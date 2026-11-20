@@ -23,7 +23,14 @@
 ---
 
 ## 2. Next Steps (Upcoming 2 Weeks):
-1. **Activation Recording Pipeline:** Run evaluation rollouts on RoboCasa (`CloseDrawer`, `CloseSingleDoor`) with the image policy and dump the $7 \times 7 \times 512$ activations.
+1. **Activation Recording Pipeline:** Run evaluation rollouts on RoboCasa (`CloseDrawer`, `CloseSingleDoor`) with the image policy and dump the `layer4` activations ($4 \times 4 \times 512$ per camera, see the addendum below).
 2. **SAE Training & Tuning:** Train an initial overcomplete SAE ($M = 4096$) with Top-K sparsity ($K = 32$) on the collected activations and measure reconstruction MSE vs. $L_0$ sparsity.
 3. **Heatmap Generation:** Visualize the spatial activation heatmaps of the top active SAE features across the camera frames.
 4. **Questions for Paul:** Discuss questions in `notes/questions_to_paul.md` regarding static vs. dynamic object grounding and temporal attention dynamics.
+
+---
+
+## Addendum (Nov 19, 2026): upstream update and shape correction
+- `SIR_Model/` was replaced with the current upstream [intuitive-robots/sir](https://github.com/intuitive-robots/sir) (commit `49321d0`). It adds VGIB sparsification, parallel evaluation, node-score tooling and a test suite.
+- **Correction:** the $7 \times 7 \times 512$ map above assumed 224 × 224 inputs. SIR's RoboCasa cameras are 128 × 128, so `layer4` is **$4 \times 4 \times 512$** (16 cells of 32 × 32 px). The 49-cell SAE tap is therefore a 16-cell tap.
+- New orientation doc: [SIR Code Mind Map](../docs/sir_code_mindmap.md).

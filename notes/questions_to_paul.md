@@ -27,3 +27,13 @@ In the SIR paper (Section 5.4, Fig. 5c for `CloseDrawer`), the TopK sparsified m
 * In mechanistic interpretability, as the robot arm approaches the target object vs. when it is moving back, does the latent SAE feature activation shift dynamically from approach targets to gripper state?
 
 - Why are we not combining the camera views beforehand and only combine the embeddings after the GNN passing? one view might be completely wrong, or even both, as they both might miss some important object. What cameras/views are we using? why(did you test the different setups)?
+
+---
+
+## 3. Image Policy Checkpoint & Setup (MIS-specific)
+**Question:**
+> Is there a trained image-only checkpoint (`image_modalities=[left,right]`, the 12.93 % baseline in `SIR_Model/robocasa_results.md`) we can use, or should we train our own? Which tasks should we focus on?
+
+**Context & Background:**
+* Our SAE taps ResNet-18 `layer4`. With 128 × 128 cameras this is only a $4 \times 4$ grid. Is that resolution enough for object-level grounding, or should we also look at `layer3` ($8 \times 8 \times 256$)?
+* Should we also use the `inhand` camera, or only `left` / `right` like the baseline?
