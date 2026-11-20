@@ -110,43 +110,59 @@
 <body class="bg-ios-bg dark:bg-ios-darkBg text-ios-text dark:text-ios-darkText antialiased selection:bg-ios-blue selection:text-white min-h-screen flex flex-col justify-between">
 
   <!-- ============================================================ -->
-  <!-- TOP iOS HEADER & TAB ROUTER (ARCHITECTURE HIDDEN AS REQUESTED) -->
+  <!-- TOP iOS HEADER & TAB ROUTER -->
   <!-- ============================================================ -->
   <header class="border-b border-ios-border dark:border-ios-darkBorder bg-ios-card/85 dark:bg-ios-darkCard/85 ios-glass sticky top-0 z-50 transition-colors">
-    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2">
       
       <!-- Brand Logo -->
-      <div class="flex items-center space-x-3 cursor-pointer" onclick="navigate('tensor-studio')">
+      <div class="flex items-center space-x-2.5 cursor-pointer flex-shrink-0" onclick="navigate('overview')">
         <span class="px-2.5 py-1 text-xs font-mono font-bold bg-ios-blue/10 text-ios-blue dark:bg-ios-blue/20 rounded-full">MIS</span>
         <span class="text-sm font-semibold tracking-tight hover:opacity-80 transition hidden sm:inline">Mechanistic Interpretability</span>
       </div>
 
-      <!-- Segmented Navigation Tabs (Architecture removed / kept separate) -->
-      <nav class="flex items-center bg-black/5 dark:bg-white/10 p-1 rounded-full text-xs font-medium space-x-1">
-        <button onclick="navigate('tensor-studio')" id="tab-tensor-studio" class="spa-tab btn-ios px-4 py-1.5 rounded-full transition font-semibold bg-ios-card dark:bg-ios-darkCard text-ios-blue shadow-ios">
+      <!-- Segmented Navigation Tabs -->
+      <nav class="flex items-center bg-black/5 dark:bg-white/10 p-1 rounded-full text-xs font-medium space-x-0.5 sm:space-x-1 overflow-x-auto no-scrollbar">
+        <button onclick="navigate('overview')" id="tab-overview" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition font-semibold bg-ios-card dark:bg-ios-darkCard text-ios-blue shadow-ios">
+          Overview
+        </button>
+        <button onclick="navigate('tensor-studio')" id="tab-tensor-studio" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
           Interactive Lab
         </button>
-        <button onclick="navigate('core-theory')" id="tab-core-theory" class="spa-tab btn-ios px-4 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
+        <button onclick="navigate('core-theory')" id="tab-core-theory" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text hidden md:inline">
           Core Theory
         </button>
-        <button onclick="navigate('causal-lab')" id="tab-causal-lab" class="spa-tab btn-ios px-4 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
+        <button onclick="navigate('causal-lab')" id="tab-causal-lab" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text hidden lg:inline">
           Verification Suite
         </button>
-        <button onclick="navigate('roadmap')" id="tab-roadmap" class="spa-tab btn-ios px-4 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text hidden sm:inline">
+        <button onclick="navigate('roadmap')" id="tab-roadmap" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text hidden sm:inline">
           Roadmap
         </button>
       </nav>
 
       <!-- External Links & Theme Toggle -->
-      <div class="flex items-center space-x-2 text-xs">
-        <button id="themeToggle" onclick="toggleTheme()" class="btn-ios p-2 rounded-full bg-black/5 dark:bg-white/10 text-ios-text dark:text-ios-darkText hover:bg-black/10 dark:hover:bg-white/20 transition">
+      <div class="flex items-center space-x-1.5 sm:space-x-2 text-xs flex-shrink-0">
+        <a href="https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing" target="_blank"
+           class="btn-ios px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 text-ios-text dark:text-ios-darkText font-medium transition flex items-center space-x-1.5"
+           title="Bi-Weekly Presentation Slides">
+          <svg class="w-3.5 h-3.5 text-ios-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+          <span class="hidden md:inline">Slides</span>
+        </a>
+        <a href="https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076" target="_blank"
+           class="btn-ios px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 text-ios-text dark:text-ios-darkText font-medium transition flex items-center space-x-1.5"
+           title="Miro Ideation &amp; Architecture Canvas">
+          <svg class="w-3.5 h-3.5 text-ios-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
+          <span class="hidden md:inline">Miro</span>
+        </a>
+        <button id="themeToggle" onclick="toggleTheme()" class="btn-ios p-2 rounded-full bg-black/5 dark:bg-white/10 text-ios-text dark:text-ios-darkText hover:bg-black/10 dark:hover:bg-white/20 transition" title="Toggle Light/Dark Theme">
           <svg id="sunIcon" class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
           <svg id="moonIcon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
         </button>
         <a href="https://github.com/officiallygod/Mechanistic-Interpretability-for-SIR" target="_blank"
-           class="btn-ios px-3.5 py-1.5 rounded-full bg-ios-blue hover:bg-ios-blueHover text-white font-medium transition shadow-ios-button hidden sm:flex items-center space-x-1">
+           class="btn-ios px-3.5 py-1.5 rounded-full bg-ios-blue hover:bg-ios-blueHover text-white font-medium transition shadow-ios-button flex items-center space-x-1.5"
+           title="GitHub Repository">
           <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-          <span>GitHub</span>
+          <span class="hidden sm:inline">GitHub</span>
         </a>
       </div>
     </div>
@@ -158,9 +174,237 @@
   <main class="max-w-6xl mx-auto px-6 py-8 md:py-12 flex-1 w-full">
 
     <!-- ======================================================== -->
+    <!-- VIEW 0: GRAND LANDING PAGE & PROJECT OVERVIEW -->
+    <!-- ======================================================== -->
+    <div id="view-overview" class="spa-view space-y-16">
+      
+      <!-- Hero Section (Symmetric, Centered, Apple Aesthetic) -->
+      <section class="text-center space-y-6 max-w-4xl mx-auto pt-6 pb-2">
+        <div class="inline-flex items-center space-x-2 text-xs font-semibold px-4 py-1.5 rounded-full bg-ios-blue/10 text-ios-blue dark:bg-ios-blue/20 tracking-wide font-mono uppercase">
+          <span>Seminar &amp; Praktikum</span>
+          <span>•</span>
+          <span>Intuitive Robots Lab, KIT</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-ios-text dark:text-ios-darkText leading-[1.08]">
+          Mechanistic Interpretability <br/>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-ios-blue via-ios-cyan to-ios-purple">
+            with Implicit Object Sets
+          </span>
+        </h1>
+
+        <p class="text-base sm:text-lg text-ios-secondary dark:text-ios-darkSecondary max-w-2xl mx-auto font-normal leading-relaxed">
+          Does an end-to-end vision policy form an internal representation of objects without explicit supervision? Uncovering emergent latent kept sets via Sparse Autoencoders on robot manipulation.
+        </p>
+
+        <!-- Primary Action Buttons (Large iOS Style) -->
+        <div class="pt-2 flex flex-wrap justify-center items-center gap-3 sm:gap-4">
+          <button onclick="navigate('tensor-studio')"
+             class="btn-ios px-6 py-3.5 rounded-full bg-ios-blue hover:bg-ios-blueHover text-white font-semibold text-sm transition shadow-ios-button flex items-center space-x-2">
+            <span>Explore Interactive Lab</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </button>
+          <a href="https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing" target="_blank"
+             class="btn-ios px-6 py-3.5 rounded-full bg-ios-card dark:bg-ios-darkCard hover:bg-ios-cardHover border border-ios-border dark:border-ios-darkBorder text-ios-text dark:text-ios-darkText font-semibold text-sm transition shadow-ios flex items-center space-x-2">
+            <svg class="w-4 h-4 text-ios-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+            <span>Google Slides</span>
+          </a>
+          <a href="https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076" target="_blank"
+             class="btn-ios px-6 py-3.5 rounded-full bg-ios-card dark:bg-ios-darkCard hover:bg-ios-cardHover border border-ios-border dark:border-ios-darkBorder text-ios-text dark:text-ios-darkText font-semibold text-sm transition shadow-ios flex items-center space-x-2">
+            <svg class="w-4 h-4 text-ios-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
+            <span>Miro Canvas</span>
+          </a>
+          <a href="sir_code_mindmap.md"
+             class="btn-ios px-6 py-3.5 rounded-full bg-ios-purple/10 hover:bg-ios-purple/20 text-ios-purple font-semibold text-sm transition border border-ios-purple/30 flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+            <span>Code Mind Map</span>
+          </a>
+        </div>
+
+        <!-- Symmetrical Metadata Strip -->
+        <div class="pt-3 flex flex-wrap justify-center items-center gap-4 sm:gap-6 text-xs text-ios-secondary dark:text-ios-darkSecondary font-mono">
+          <div>Authors: <strong class="text-ios-text dark:text-ios-darkText font-sans">Allen &amp; Luca (Group 4)</strong></div>
+          <div class="opacity-40">•</div>
+          <div>Supervisor: <strong class="text-ios-text dark:text-ios-darkText font-sans">Paul Mattes</strong></div>
+          <div class="opacity-40">•</div>
+          <div>Lab: <strong class="text-ios-text dark:text-ios-darkText font-sans">Intuitive Robots Lab</strong></div>
+          <div class="opacity-40">•</div>
+          <div>Platform: <strong class="text-ios-text dark:text-ios-darkText font-sans">RoboCasa / SIR_Model</strong></div>
+        </div>
+      </section>
+
+      <!-- 3 Research Pillars (Symmetric 3-Column Grid) -->
+      <section class="space-y-4">
+        <div class="text-center max-w-xl mx-auto space-y-1">
+          <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-blue">Research Paradigm</span>
+          <h2 class="text-2xl font-bold text-ios-text dark:text-ios-darkText tracking-tight">Core Methodological Pillars</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 sm:p-8 shadow-ios space-y-3">
+            <div class="w-10 h-10 rounded-2xl bg-ios-blue/10 text-ios-blue flex items-center justify-center font-mono font-bold text-sm">01</div>
+            <h3 class="text-lg font-bold text-ios-text dark:text-ios-darkText">The Superposition Problem</h3>
+            <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+              Standard ResNet backbones possess only 512 channels at layer4 before pooling. When encoding rich manipulation environments, individual neurons exhibit polysemantic superposition: a single channel fires for multiple unrelated features.
+            </p>
+          </div>
+
+          <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 sm:p-8 shadow-ios space-y-3">
+            <div class="w-10 h-10 rounded-2xl bg-ios-purple/10 text-ios-purple flex items-center justify-center font-mono font-bold text-sm">02</div>
+            <h3 class="text-lg font-bold text-ios-text dark:text-ios-darkText">Unsupervised Sparse Dictionary</h3>
+            <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+              We tap spatial activations before pooling and train an overcomplete Top-K Sparse Autoencoder (M=4096, K=32). Training is completely offline and unsupervised, reconstructing vectors without reward or simulator feedback.
+            </p>
+          </div>
+
+          <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 sm:p-8 shadow-ios space-y-3">
+            <div class="w-10 h-10 rounded-2xl bg-ios-green/10 text-ios-green flex items-center justify-center font-mono font-bold text-sm">03</div>
+            <h3 class="text-lg font-bold text-ios-text dark:text-ios-darkText">Causal Closed-Loop Proof</h3>
+            <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+              Active features are projected to heatmaps and matched with simulator object masks to form a latent kept set. Closed-loop rollouts under feature ablation verify Discovery, Removal (invariance), and Consequence.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Launchpad Navigation Hub (Symmetric 4-Card Grid) -->
+      <section class="space-y-4">
+        <div class="text-center max-w-xl mx-auto space-y-1">
+          <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-purple">Interactive Sections</span>
+          <h2 class="text-2xl font-bold text-ios-text dark:text-ios-darkText tracking-tight">Explore the Portal</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div onclick="navigate('tensor-studio')" class="group cursor-pointer bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios hover:shadow-ios-lg transition flex flex-col justify-between">
+            <div class="space-y-2">
+              <span class="text-[10px] font-mono uppercase tracking-wider text-ios-blue font-bold">Interactive Lab</span>
+              <h4 class="text-base font-bold text-ios-text dark:text-ios-darkText group-hover:text-ios-blue transition">Tensor Studio</h4>
+              <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+                Step-by-step interactive stages from input pixels and spatial grids to Top-K SAE and DDIM action rollout.
+              </p>
+            </div>
+            <div class="pt-4 flex items-center text-xs font-semibold text-ios-blue">
+              <span>Launch Studio</span>
+              <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </div>
+          </div>
+
+          <div onclick="navigate('core-theory')" class="group cursor-pointer bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios hover:shadow-ios-lg transition flex flex-col justify-between">
+            <div class="space-y-2">
+              <span class="text-[10px] font-mono uppercase tracking-wider text-ios-purple font-bold">Foundations</span>
+              <h4 class="text-base font-bold text-ios-text dark:text-ios-darkText group-hover:text-ios-purple transition">Core Theory</h4>
+              <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+                8 comprehensive cards deconstructing superposition, affordance activations, distractor controls, and leakage.
+              </p>
+            </div>
+            <div class="pt-4 flex items-center text-xs font-semibold text-ios-purple">
+              <span>Read Theory</span>
+              <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </div>
+          </div>
+
+          <div onclick="navigate('causal-lab')" class="group cursor-pointer bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios hover:shadow-ios-lg transition flex flex-col justify-between">
+            <div class="space-y-2">
+              <span class="text-[10px] font-mono uppercase tracking-wider text-ios-green font-bold">Evaluation</span>
+              <h4 class="text-base font-bold text-ios-text dark:text-ios-darkText group-hover:text-ios-green transition">Verification Suite</h4>
+              <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+                Formal criteria for Discovery (D-C), Removal (R-C), and Consequence (C-C) under causal ablation.
+              </p>
+            </div>
+            <div class="pt-4 flex items-center text-xs font-semibold text-ios-green">
+              <span>View Criteria</span>
+              <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </div>
+          </div>
+
+          <div onclick="navigate('roadmap')" class="group cursor-pointer bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios hover:shadow-ios-lg transition flex flex-col justify-between">
+            <div class="space-y-2">
+              <span class="text-[10px] font-mono uppercase tracking-wider text-ios-orange font-bold">Timeline</span>
+              <h4 class="text-base font-bold text-ios-text dark:text-ios-darkText group-hover:text-ios-orange transition">Roadmap</h4>
+              <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+                Bi-weekly meeting milestones, research cadence, and delivery schedule with supervisor Paul Mattes.
+              </p>
+            </div>
+            <div class="pt-4 flex items-center text-xs font-semibold text-ios-orange">
+              <span>View Roadmap</span>
+              <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Key Resources & External Tools Bar (Symmetric 4 Cards) -->
+      <section class="space-y-4">
+        <div class="text-center max-w-xl mx-auto space-y-1">
+          <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-secondary">Documentation &amp; Artifacts</span>
+          <h2 class="text-2xl font-bold text-ios-text dark:text-ios-darkText tracking-tight">Project Resources</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-mono">
+          <a href="https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing" target="_blank"
+             class="btn-ios p-5 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-2xl shadow-ios flex items-center justify-between hover:border-ios-orange transition group">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 rounded-xl bg-ios-orange/10 text-ios-orange flex items-center justify-center font-bold">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+              </div>
+              <div>
+                <div class="font-bold text-ios-text dark:text-ios-darkText font-sans group-hover:text-ios-orange transition">Google Slides</div>
+                <div class="text-ios-secondary text-[10px]">Bi-Weekly Presentation</div>
+              </div>
+            </div>
+            <span class="text-ios-secondary group-hover:text-ios-orange transition">↗</span>
+          </a>
+
+          <a href="https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076" target="_blank"
+             class="btn-ios p-5 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-2xl shadow-ios flex items-center justify-between hover:border-ios-purple transition group">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 rounded-xl bg-ios-purple/10 text-ios-purple flex items-center justify-center font-bold">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
+              </div>
+              <div>
+                <div class="font-bold text-ios-text dark:text-ios-darkText font-sans group-hover:text-ios-purple transition">Miro Board</div>
+                <div class="text-ios-secondary text-[10px]">Ideation &amp; Architecture</div>
+              </div>
+            </div>
+            <span class="text-ios-secondary group-hover:text-ios-purple transition">↗</span>
+          </a>
+
+          <a href="pipeline_explained.html"
+             class="btn-ios p-5 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-2xl shadow-ios flex items-center justify-between hover:border-ios-blue transition group">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 rounded-xl bg-ios-blue/10 text-ios-blue flex items-center justify-center font-bold">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+              </div>
+              <div>
+                <div class="font-bold text-ios-text dark:text-ios-darkText font-sans group-hover:text-ios-blue transition">Tensor Walkthrough</div>
+                <div class="text-ios-secondary text-[10px]">Step-by-Step Dimensions</div>
+              </div>
+            </div>
+            <span class="text-ios-secondary group-hover:text-ios-blue transition">➔</span>
+          </a>
+
+          <a href="sir_code_mindmap.md"
+             class="btn-ios p-5 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-2xl shadow-ios flex items-center justify-between hover:border-ios-green transition group">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 rounded-xl bg-ios-green/10 text-ios-green flex items-center justify-center font-bold">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+              </div>
+              <div>
+                <div class="font-bold text-ios-text dark:text-ios-darkText font-sans group-hover:text-ios-green transition">SIR Code Mind Map</div>
+                <div class="text-ios-secondary text-[10px]">Repository Architecture</div>
+              </div>
+            </div>
+            <span class="text-ios-secondary group-hover:text-ios-green transition">➔</span>
+          </a>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ======================================================== -->
     <!-- VIEW 1: INTERACTIVE TENSOR STUDIO -->
     <!-- ======================================================== -->
-    <div id="view-tensor-studio" class="spa-view space-y-6">
+    <div id="view-tensor-studio" class="spa-view hidden space-y-6">
       
       <!-- Top Overview Bar -->
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 sm:p-8 shadow-ios">
@@ -189,7 +433,7 @@
       </div>
 
       <!-- Stage Navigation Pills -->
-      <div class="flex items-center space-x-2 overflow-x-auto no-scrollbar py-1 text-xs font-medium">
+      <div class="flex items-center justify-start sm:justify-center space-x-2 overflow-x-auto no-scrollbar py-1 text-xs font-medium">
         <button onclick="goToStep(0)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-blue text-white shadow-ios font-semibold" data-index="0">1. Pixels [3, 128, 128]</button>
         <button onclick="goToStep(1)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary" data-index="1">2. Grid [512, 4, 4] / [512, 7, 7]</button>
         <button onclick="goToStep(2)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary" data-index="2">3. The GAP Collapse</button>
@@ -448,19 +692,19 @@
   <!-- JAVASCRIPT: ADVANCED INTERACTIVE ENGINE -->
   <!-- ============================================================ -->
   <script>
-    const routes = ['tensor-studio', 'core-theory', 'causal-lab', 'roadmap'];
+    const routes = ['overview', 'tensor-studio', 'core-theory', 'causal-lab', 'roadmap'];
 
     function navigate(viewId) {
       routes.forEach(id => {
         const viewEl = document.getElementById(`view-${id}`);
         const tabEl = document.getElementById(`tab-${id}`);
         if (id === viewId) {
-          viewEl.classList.remove('hidden');
+          if (viewEl) viewEl.classList.remove('hidden');
           if (tabEl) {
             tabEl.className = "spa-tab btn-ios px-4 py-1.5 rounded-full transition font-semibold bg-ios-card dark:bg-ios-darkCard text-ios-blue shadow-ios";
           }
         } else {
-          viewEl.classList.add('hidden');
+          if (viewEl) viewEl.classList.add('hidden');
           if (tabEl) {
             tabEl.className = "spa-tab btn-ios px-4 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text";
           }
@@ -1081,7 +1325,7 @@
       renderStep(0);
       const initialHash = window.location.hash.replace('#', '');
       if (routes.includes(initialHash)) navigate(initialHash);
-      else navigate('tensor-studio');
+      else navigate('overview');
 
       if (typeof renderMathInElement === 'function') {
         renderMathInElement(document.body, {
