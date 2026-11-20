@@ -74,19 +74,34 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Modern Apple Slider */
+    /* Modern Apple Slider with Full Cross-Browser Support */
     input[type=range] {
       -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
       width: 100%;
-      background: transparent;
+      height: 8px;
+      background: rgba(0, 113, 227, 0.22);
+      border-radius: 9999px;
+      outline: none;
+      cursor: pointer;
+      margin: 10px 0;
     }
     input[type=range]:focus { outline: none; }
     input[type=range]::-webkit-slider-runnable-track {
       width: 100%;
       height: 8px;
       cursor: pointer;
-      background: rgba(0, 113, 227, 0.2);
+      background: rgba(0, 113, 227, 0.25);
       border-radius: 9999px;
+    }
+    input[type=range]::-moz-range-track {
+      width: 100%;
+      height: 8px;
+      cursor: pointer;
+      background: rgba(0, 113, 227, 0.25);
+      border-radius: 9999px;
+      border: none;
     }
     input[type=range]::-webkit-slider-thumb {
       height: 22px;
@@ -96,11 +111,27 @@
       cursor: pointer;
       -webkit-appearance: none;
       margin-top: -7px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-      transition: transform 0.15s ease;
+      border: 2.5px solid #FFFFFF;
+      box-shadow: 0 2px 8px rgba(0, 113, 227, 0.4);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
     input[type=range]::-webkit-slider-thumb:hover {
-      transform: scale(1.15);
+      transform: scale(1.18);
+      box-shadow: 0 4px 12px rgba(0, 113, 227, 0.6);
+    }
+    input[type=range]::-moz-range-thumb {
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+      background: #0071E3;
+      cursor: pointer;
+      border: 2.5px solid #FFFFFF;
+      box-shadow: 0 2px 8px rgba(0, 113, 227, 0.4);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    input[type=range]::-moz-range-thumb:hover {
+      transform: scale(1.18);
+      box-shadow: 0 4px 12px rgba(0, 113, 227, 0.6);
     }
 
     .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -432,22 +463,23 @@
         </div>
       </div>
 
-      <!-- Stage Navigation Pills -->
+      <!-- Stage Navigation Pills (9 Verified Stages) -->
       <div class="flex items-center justify-start sm:justify-center space-x-2 overflow-x-auto no-scrollbar py-1 text-xs font-medium">
-        <button onclick="goToStep(0)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-blue text-white shadow-ios font-semibold" data-index="0">1. Pixels [3, 128, 128]</button>
-        <button onclick="goToStep(1)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary" data-index="1">2. Grid [512, 4, 4] / [512, 7, 7]</button>
-        <button onclick="goToStep(2)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary" data-index="2">3. The GAP Collapse</button>
-        <button onclick="goToStep(3)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary" data-index="3">4. SAE Sparse Code [4096]</button>
-        <button onclick="goToStep(4)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary" data-index="4">5. Heatmap Upsampling</button>
-        <button onclick="goToStep(5)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary" data-index="5">6. Simulator IoU Grounding</button>
-        <button onclick="goToStep(6)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary" data-index="6">7. MDT Diffusion [10, 12]</button>
-        <button onclick="goToStep(7)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary" data-index="7">8. Causal Surgery Lab</button>
+        <button onclick="goToStep(0)" class="step-pill btn-ios px-3.5 py-2 rounded-full whitespace-nowrap transition bg-ios-blue text-white shadow-ios font-semibold" data-index="0">1. Pixels [3, 128, 128]</button>
+        <button onclick="goToStep(1)" class="step-pill btn-ios px-3.5 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary" data-index="1">2. ResNet Grid [512, 4, 4]</button>
+        <button onclick="goToStep(2)" class="step-pill btn-ios px-3.5 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary" data-index="2">3. GAP Bottleneck</button>
+        <button onclick="goToStep(3)" class="step-pill btn-ios px-3.5 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary" data-index="3">4. SAE Top-K Code [4096]</button>
+        <button onclick="goToStep(4)" class="step-pill btn-ios px-3.5 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary" data-index="4">5. Spatial Heatmap</button>
+        <button onclick="goToStep(5)" class="step-pill btn-ios px-3.5 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary" data-index="5">6. Simulator IoU Grounding</button>
+        <button onclick="goToStep(6)" class="step-pill btn-ios px-3.5 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary" data-index="6">7. Latent vs. SIR Kept Set</button>
+        <button onclick="goToStep(7)" class="step-pill btn-ios px-3.5 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary" data-index="7">8. Causal Suite (D-C, R-C, C-C)</button>
+        <button onclick="goToStep(8)" class="step-pill btn-ios px-3.5 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary" data-index="8">9. MDT Action Chunk [10, 12]</button>
       </div>
 
-      <!-- Main Stage Interactive Showcase Box -->
-      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 sm:p-10 shadow-ios-lg min-h-[520px] flex flex-col justify-between">
-        <div id="slideContent"></div>
-        <div class="border-t border-ios-border dark:border-ios-darkBorder pt-4 mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-ios-secondary dark:text-ios-darkSecondary">
+      <!-- Main Stage Interactive Showcase Box (Fixed Height to Prevent Layout Jitter) -->
+      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 sm:p-8 shadow-ios-lg min-h-[660px] md:h-[660px] flex flex-col justify-between">
+        <div id="slideContent" class="flex-1 overflow-y-auto pr-1"></div>
+        <div class="border-t border-ios-border dark:border-ios-darkBorder pt-4 mt-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-ios-secondary dark:text-ios-darkSecondary flex-shrink-0">
           <div id="slideFormula" class="font-mono"></div>
           <div class="flex items-center space-x-2">
             <button onclick="prevStep()" class="btn-ios px-4 py-1.5 rounded-full bg-black/5 dark:bg-white/10 text-ios-text dark:text-ios-darkText font-medium">Previous</button>
@@ -758,126 +790,263 @@
     });
 
     // -------------------------------------------------------------
-    // Gallery Data & Interactive Stage Definitions
+    // RoboCasa Kitchen Scene SVG Generator
+    // -------------------------------------------------------------
+    function getRoboCasaSvg({ showGrid = false, showHeatmap = false, heatmapTarget = 0, showBoxes = false, activeCell = [1, 2], iouThreshold = 0.5 } = {}) {
+      const isMicrowaveIn = 0.04 >= iouThreshold;
+      const isHandleIn = 0.78 >= iouThreshold;
+      const isGripperIn = 0.62 >= iouThreshold;
+
+      return `
+        <div class="relative w-full h-52 sm:h-56 rounded-2xl overflow-hidden border border-ios-border dark:border-ios-darkBorder shadow-inner bg-slate-950 select-none">
+          <svg id="robocasaViewSvg" viewBox="0 0 400 220" class="w-full h-full">
+            <defs>
+              <linearGradient id="rcWallGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#1E293B"/>
+                <stop offset="100%" stop-color="#0F172A"/>
+              </linearGradient>
+              <linearGradient id="rcCounterGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#475569"/>
+                <stop offset="100%" stop-color="#334155"/>
+              </linearGradient>
+              <linearGradient id="rcDrawerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#1E293B"/>
+                <stop offset="100%" stop-color="#0F172A"/>
+              </linearGradient>
+              <linearGradient id="rcHandleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#E2E8F0"/>
+                <stop offset="50%" stop-color="#94A3B8"/>
+                <stop offset="100%" stop-color="#CBD5E1"/>
+              </linearGradient>
+              <radialGradient id="rcHeatmapGradHandle" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#FF9500" stop-opacity="0.85"/>
+                <stop offset="50%" stop-color="#FF3B30" stop-opacity="0.45"/>
+                <stop offset="100%" stop-color="#FF9500" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="rcHeatmapGradMicrowave" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#0071E3" stop-opacity="0.85"/>
+                <stop offset="50%" stop-color="#7952DE" stop-opacity="0.45"/>
+                <stop offset="100%" stop-color="#0071E3" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+
+            <!-- Wall tiles -->
+            <rect x="0" y="0" width="400" height="110" fill="url(#rcWallGrad)"/>
+            <line x1="0" y1="55" x2="400" y2="55" stroke="#334155" stroke-width="0.5" stroke-opacity="0.4"/>
+            <line x1="130" y1="0" x2="130" y2="110" stroke="#334155" stroke-width="0.5" stroke-opacity="0.4"/>
+            <line x1="260" y1="0" x2="260" y2="110" stroke="#334155" stroke-width="0.5" stroke-opacity="0.4"/>
+
+            <!-- Microwave fixture (Top Left) -->
+            <g id="svgMicrowave">
+              <rect x="25" y="24" width="95" height="60" rx="4" fill="#0F172A" stroke="#475569" stroke-width="1.5"/>
+              <rect x="33" y="32" width="58" height="44" rx="2" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+              <circle cx="104" cy="44" r="4" fill="#64748B"/>
+              <rect x="99" y="56" width="10" height="12" rx="1" fill="#334155"/>
+            </g>
+
+            <!-- Countertop Surface -->
+            <polygon points="0,105 400,105 400,128 0,128" fill="url(#rcCounterGrad)"/>
+            <line x1="0" y1="105" x2="400" y2="105" stroke="#94A3B8" stroke-width="1.5" stroke-opacity="0.6"/>
+
+            <!-- Lower Cabinet & Drawer -->
+            <rect x="0" y="128" width="400" height="92" fill="url(#rcDrawerGrad)"/>
+            <rect x="40" y="136" width="320" height="65" rx="4" fill="#1E293B" stroke="#334155" stroke-width="1.5"/>
+            
+            <!-- Drawer Handle (Task Target) -->
+            <g id="svgHandle">
+              <rect x="145" y="156" width="110" height="12" rx="3" fill="url(#rcHandleGrad)" stroke="#64748B" stroke-width="1"/>
+              <rect x="155" y="168" width="8" height="6" fill="#475569"/>
+              <rect x="237" y="168" width="8" height="6" fill="#475569"/>
+            </g>
+
+            <!-- Franka Panda Robot Gripper -->
+            <g id="svgGripper">
+              <path d="M 330 0 L 290 85" stroke="#64748B" stroke-width="12" stroke-linecap="round"/>
+              <circle cx="290" cy="85" r="9" fill="#334155" stroke="#0071E3" stroke-width="2"/>
+              <rect x="268" y="94" width="44" height="12" rx="2" fill="#1E293B" stroke="#0071E3" stroke-width="1.5"/>
+              <rect x="262" y="106" width="6" height="26" rx="2" fill="#94A3B8"/>
+              <rect x="262" y="128" width="10" height="6" rx="1" fill="#CBD5E1"/>
+              <rect x="312" y="106" width="6" height="26" rx="2" fill="#94A3B8"/>
+              <rect x="308" y="128" width="10" height="6" rx="1" fill="#CBD5E1"/>
+            </g>
+
+            <!-- Dynamic Heatmap Overlay Layer -->
+            <g id="svgHeatmapLayer" class="${showHeatmap ? '' : 'hidden'}">
+              <ellipse id="svgHeatmapGlow" cx="${heatmapTarget === 0 ? 200 : 72}" cy="${heatmapTarget === 0 ? 162 : 54}" rx="${heatmapTarget === 0 ? 75 : 60}" ry="${heatmapTarget === 0 ? 45 : 35}" fill="${heatmapTarget === 0 ? 'url(#rcHeatmapGradHandle)' : 'url(#rcHeatmapGradMicrowave)'}" class="transition-all duration-300"/>
+              <circle id="svgHeatmapPeak" cx="${heatmapTarget === 0 ? 200 : 72}" cy="${heatmapTarget === 0 ? 162 : 54}" r="5" fill="#FFFFFF" class="transition-all duration-300 pointer-events-none"/>
+            </g>
+
+            <!-- Dynamic 3D Bounding Boxes Layer -->
+            <g id="svgBoxesLayer" class="${showBoxes ? '' : 'hidden'}">
+              <!-- Drawer Handle Bounding Box -->
+              <g id="svgBoxHandle" class="transition-opacity duration-200 ${isHandleIn ? 'opacity-100' : 'opacity-25'}">
+                <rect x="135" y="146" width="130" height="34" rx="4" fill="#34C759" fill-opacity="0.15" stroke="#34C759" stroke-width="2" stroke-dasharray="4,2"/>
+                <rect x="135" y="130" width="118" height="16" rx="3" fill="#34C759"/>
+                <text x="140" y="142" fill="#FFFFFF" font-size="9" font-family="monospace" font-weight="bold">drawer_handle • 0.78</text>
+              </g>
+
+              <!-- Robot Gripper Bounding Box -->
+              <g id="svgBoxGripper" class="transition-opacity duration-200 ${isGripperIn ? 'opacity-100' : 'opacity-25'}">
+                <rect x="252" y="82" width="76" height="58" rx="4" fill="#0071E3" fill-opacity="0.15" stroke="#0071E3" stroke-width="2" stroke-dasharray="4,2"/>
+                <rect x="252" y="66" width="112" height="16" rx="3" fill="#0071E3"/>
+                <text x="256" y="78" fill="#FFFFFF" font-size="9" font-family="monospace" font-weight="bold">robot0_gripper • 0.62</text>
+              </g>
+
+              <!-- Microwave Bounding Box -->
+              <g id="svgBoxMicrowave" class="transition-opacity duration-200 ${isMicrowaveIn ? 'opacity-100' : 'opacity-25'}">
+                <rect x="20" y="20" width="105" height="68" rx="4" fill="#FF3B30" fill-opacity="0.1" stroke="#FF3B30" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <rect x="20" y="6" width="94" height="14" rx="3" fill="#FF3B30"/>
+                <text x="24" y="17" fill="#FFFFFF" font-size="8.5" font-family="monospace" font-weight="bold">microwave • 0.04</text>
+              </g>
+            </g>
+
+            <!-- 4x4 Spatial Receptive Field Grid Layer (Stage 2) -->
+            <g id="svgGridLayer" class="${showGrid ? '' : 'hidden'}">
+              <line x1="100" y1="0" x2="100" y2="220" stroke="#38BDF8" stroke-width="1" stroke-dasharray="3,3" stroke-opacity="0.6"/>
+              <line x1="200" y1="0" x2="200" y2="220" stroke="#38BDF8" stroke-width="1" stroke-dasharray="3,3" stroke-opacity="0.6"/>
+              <line x1="300" y1="0" x2="300" y2="220" stroke="#38BDF8" stroke-width="1" stroke-dasharray="3,3" stroke-opacity="0.6"/>
+              <line x1="0" y1="55" x2="400" y2="55" stroke="#38BDF8" stroke-width="1" stroke-dasharray="3,3" stroke-opacity="0.6"/>
+              <line x1="0" y1="110" x2="400" y2="110" stroke="#38BDF8" stroke-width="1" stroke-dasharray="3,3" stroke-opacity="0.6"/>
+              <line x1="0" y1="165" x2="400" y2="165" stroke="#38BDF8" stroke-width="1" stroke-dasharray="3,3" stroke-opacity="0.6"/>
+              <rect id="svgHighlightCell" x="${activeCell[1] * 100}" y="${activeCell[0] * 55}" width="100" height="55" rx="3" fill="#FF9500" fill-opacity="0.32" stroke="#FF9500" stroke-width="2.5" class="transition-all duration-150"/>
+            </g>
+
+            <!-- Camera HUD Watermark -->
+            <text x="12" y="210" fill="#94A3B8" font-size="8.5" font-family="monospace" opacity="0.65">ROBOCASA • CAMERA: robot0_agentview_left [128x128]</text>
+          </svg>
+        </div>
+      `;
+    }
+
+    // -------------------------------------------------------------
+    // Gallery Data: The 9 Verified Interactive Stages
     // -------------------------------------------------------------
     const galleryData = [
       {
         badge: "STAGE 01 • INPUT",
         title: "Camera RGB Observation",
         tensorIn: "Raw Photons",
-        tensorOut: "Image Tensor: [B, 3, 128, 128] or [B, 3, 224, 224]",
-        desc: "The sensory input begins as standard RGB frames from RoboCasa's static kitchen camera or wrist in-hand camera. Normalized to ImageNet mean and std.",
-        details: "Implementation detail: In SIR_Model/dataloader/datasets.py line 132, images are loaded natively at 128x128. For canonical ResNet-18, frames can be bilinearly resized to 224x224.",
+        tensorOut: "Image Tensor: [B, 3, 128, 128]",
+        desc: "Sensory input originates as standard RGB frames from RoboCasa kitchen camera streams (robot0_agentview_left). Normalized using standard ImageNet mean and variance.",
+        details: "RoboCasa cameras operate natively at 128x128 resolution in SIR_Model/dataloader/datasets.py. Move your cursor across the simulator frame to inspect normalized color channels.",
         interactiveWidget: `
           <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-4">
             <div class="flex items-center justify-between text-xs">
-              <span class="font-bold text-ios-blue">Interactive Pixel &amp; Channel Inspector</span>
+              <span class="font-bold text-ios-blue">RoboCasa Kitchen Observation</span>
               <div class="flex space-x-1.5">
                 <button onclick="setResolution(128)" id="btnRes128" class="btn-ios px-3 py-1 rounded-full text-xs font-mono bg-ios-blue text-white font-bold shadow-ios">128x128 (Native)</button>
                 <button onclick="setResolution(224)" id="btnRes224" class="btn-ios px-3 py-1 rounded-full text-xs font-mono bg-black/10 dark:bg-white/10 text-ios-secondary">224x224 (Upscaled)</button>
               </div>
             </div>
             
-            <div class="relative w-full h-44 rounded-2xl overflow-hidden flex items-center justify-center border border-ios-border dark:border-ios-darkBorder shadow-inner cursor-crosshair bg-slate-900" onmousemove="inspectPixel(event)" id="cameraPreviewArea">
-              <div class="absolute inset-0 flex flex-col items-center justify-center opacity-20 text-xs font-mono tracking-widest text-slate-300 select-none uppercase">
-                <svg class="w-8 h-8 mb-1 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                <span>RoboCasa Camera Frame</span>
-              </div>
-              <div id="pixelCrosshair" class="w-8 h-8 border-2 border-ios-cyan rounded-lg pointer-events-none absolute shadow-lg transition-all duration-75" style="left: 45%; top: 40%;"></div>
+            <div class="relative cursor-crosshair" onmousemove="inspectPixel(event)" id="cameraPreviewArea">
+              ${getRoboCasaSvg({ showGrid: false, showBoxes: false })}
+              <div id="pixelCrosshair" class="w-7 h-7 border-2 border-ios-cyan rounded-lg pointer-events-none absolute shadow-lg transition-all duration-75" style="left: 48%; top: 40%;"></div>
             </div>
 
-            <!-- Dynamic Readout Badges -->
+            <!-- Readout Badges -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center font-mono text-xs">
               <div class="p-2 bg-black/5 dark:bg-white/5 rounded-xl border border-ios-border dark:border-ios-darkBorder">
-                <span class="text-ios-secondary text-[10px]">COORDINATES</span>
-                <div id="pixelCoord" class="font-bold text-ios-text dark:text-ios-darkText mt-0.5">(x: 58, y: 51)</div>
+                <span class="text-ios-secondary text-[10px]">PIXEL LOC</span>
+                <div id="pixelCoord" class="font-bold text-ios-text dark:text-ios-darkText mt-0.5 tabular-nums">(x: 64, y: 78)</div>
               </div>
               <div class="p-2 bg-red-500/10 rounded-xl border border-red-500/30 text-red-500 font-bold">
-                <span class="text-[10px] opacity-75">R (RED)</span>
-                <div id="valR" class="mt-0.5">+0.42</div>
+                <span class="text-[10px] opacity-75">CHANNEL R</span>
+                <div id="valR" class="mt-0.5 tabular-nums">+0.42</div>
               </div>
               <div class="p-2 bg-emerald-500/10 rounded-xl border border-emerald-500/30 text-emerald-500 font-bold">
-                <span class="text-[10px] opacity-75">G (GREEN)</span>
-                <div id="valG" class="mt-0.5">+0.18</div>
+                <span class="text-[10px] opacity-75">CHANNEL G</span>
+                <div id="valG" class="mt-0.5 tabular-nums">+0.18</div>
               </div>
               <div class="p-2 bg-blue-500/10 rounded-xl border border-blue-500/30 text-blue-500 font-bold">
-                <span class="text-[10px] opacity-75">B (BLUE)</span>
-                <div id="valB" class="mt-0.5">-0.65</div>
+                <span class="text-[10px] opacity-75">CHANNEL B</span>
+                <div id="valB" class="mt-0.5 tabular-nums">-0.65</div>
               </div>
             </div>
           </div>
         `,
-        formula: "\\mathbf{I}_t \\in \\mathbb{R}^{B \\times 3 \\times H \\times W}"
+        formula: "\mathbf{I}_t \in \mathbb{R}^{B \times 3 \times 128 \times 128}"
       },
       {
         badge: "STAGE 02 • PERCEPTION",
-        title: "ResNet-18 layer4 Spatial Grid",
-        tensorIn: "Image Tensor: [B, 3, 128, 128] or [B, 3, 224, 224]",
-        tensorOut: "layer4 Grid: [B, 512, 4, 4] or [B, 512, 7, 7]",
-        desc: "5 stride-2 downsamplings shrink the image 32x while channel depth expands to 512. Unlike fully pooled representations, this preserves distinct 2D spatial locations.",
-        details: "Resolution specifications: With 128x128 input, layer4 is 4x4 (16 cells). With 224x224 input, layer4 is 7x7 (49 cells). Select any cell to inspect its 512-d activation vector.",
+        title: "ResNet-18 layer4 Spatial Receptive Fields",
+        tensorIn: "Image Tensor: [B, 3, 128, 128]",
+        tensorOut: "layer4 Grid: [B, 512, 4, 4]",
+        desc: "Five stride-2 convolutions downsample the 128x128 image 32-fold into a 4x4 spatial grid. Crucially, each grid cell (r, c) preserves a localized 32x32 pixel receptive field with 512 activation channels.",
+        details: "Hover over any token in the 4x4 grid below. The corresponding 32x32 patch highlights directly on the kitchen camera frame, demonstrating preserved spatial grounding before pooling.",
         interactiveWidget: `
           <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-4">
             <div class="flex items-center justify-between text-xs">
-              <span class="font-bold text-ios-blue">Interactive 16-Cell Spatial Grid</span>
-              <span id="selectedCellInfo" class="font-mono text-ios-orange font-bold">Cell (1, 2) • Drawer Handle</span>
+              <span class="font-bold text-ios-blue">Receptive Field Mapping</span>
+              <div class="w-60 text-right">
+                <span id="selectedCellInfo" class="font-mono text-ios-orange font-bold text-xs inline-block tabular-nums">Cell (1, 2) • Drawer Handle</span>
+              </div>
             </div>
             
-            <div class="grid grid-cols-4 gap-2 p-3 bg-black/10 dark:bg-white/10 rounded-2xl max-w-[220px] mx-auto shadow-inner" id="gridContainer">
-              ${Array.from({length: 16}).map((_, i) => {
-                const r = Math.floor(i / 4), c = i % 4;
-                const isTarget = (r === 1 && c === 2);
-                return `
-                  <div onmouseover="hoverCell(${r}, ${c})" class="w-11 h-11 rounded-xl flex items-center justify-center font-mono text-[10px] cursor-pointer transition-all hover:scale-110 shadow-sm ${
-                    isTarget ? 'bg-ios-orange text-white font-bold ring-2 ring-ios-orange shadow-md' : 'bg-ios-card dark:bg-ios-darkCard text-ios-secondary hover:text-ios-blue'
-                  }">
-                    (${r},${c})
-                  </div>
-                `;
-              }).join('')}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+              <!-- Left: 4x4 Grid Matrix -->
+              <div class="grid grid-cols-4 gap-2 p-3 bg-black/10 dark:bg-white/10 rounded-2xl max-w-[210px] mx-auto shadow-inner" id="gridContainer">
+                ${Array.from({length: 16}).map((_, i) => {
+                  const r = Math.floor(i / 4), c = i % 4;
+                  const isTarget = (r === 1 && c === 2);
+                  return `
+                    <div onmouseover="hoverCell(${r}, ${c})" class="w-10 h-10 rounded-xl flex items-center justify-center font-mono text-[10px] cursor-pointer transition-all hover:scale-110 shadow-sm ${
+                      isTarget ? 'bg-ios-orange text-white font-bold ring-2 ring-ios-orange shadow-md' : 'bg-ios-card dark:bg-ios-darkCard text-ios-secondary hover:text-ios-blue'
+                    }">
+                      (${r},${c})
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+
+              <!-- Right: Synchronized RoboCasa Kitchen View with Receptive Field Overlay -->
+              <div class="h-44">
+                ${getRoboCasaSvg({ showGrid: true, showBoxes: false, activeCell: [1, 2] })}
+              </div>
             </div>
 
+            <!-- Activation Sparkline Spectrum -->
             <div class="space-y-1.5 pt-1">
               <div class="text-[11px] font-mono text-ios-secondary flex justify-between">
                 <span>512-dim Activation Spectrum:</span>
-                <span id="sparklineMag" class="text-ios-blue font-bold">Magnitude ||x|| = 8.42</span>
+                <span id="sparklineMag" class="text-ios-blue font-bold tabular-nums">Magnitude ||x|| = 8.42</span>
               </div>
-              <div class="h-8 w-full bg-black/10 dark:bg-white/10 rounded-xl overflow-hidden flex items-end px-1.5 gap-1 shadow-inner" id="sparklineBars">
+              <div class="h-7 w-full bg-black/10 dark:bg-white/10 rounded-xl overflow-hidden flex items-end px-1.5 gap-1 shadow-inner" id="sparklineBars">
                 ${Array.from({length: 28}).map(() => `
-                  <div class="flex-1 bg-gradient-to-t from-ios-blue to-ios-cyan rounded-t-sm transition-all duration-300" style="height: ${Math.floor(Math.random() * 85 + 15)}%;"></div>
+                  <div class="flex-1 bg-gradient-to-t from-ios-blue to-ios-cyan rounded-t-sm transition-all duration-300" style="height: ${Math.floor(Math.random() * 80 + 20)}%;"></div>
                 `).join('')}
               </div>
             </div>
           </div>
         `,
-        formula: "\\mathbf{X}_{\\text{layer4}} \\in \\mathbb{R}^{B \\times 512 \\times 4 \\times 4} \\quad (\\text{or } \\mathbb{R}^{B \\times 512 \\times 7 \\times 7})"
+        formula: "\mathbf{X}_{\text{layer4}} \in \mathbb{R}^{B \times 512 \times 4 \times 4} \quad (16 \text{ spatial tokens of } 32\times 32\text{ px})"
       },
       {
         badge: "STAGE 03 • THE BOTTLENECK",
         title: "Global Average Pooling & Spatial Reduction",
         tensorIn: "layer4 Grid: [B, 512, 4, 4]",
         tensorOut: "Pooled Vector: [B, 512] (Collapsed)",
-        desc: "Standard vision policies apply Global Average Pooling (GAP) across space, reducing all 16 (or 49) spatial vectors into a single pooled representation. This eliminates localized coordinate grounding.",
-        details: "Adjust the slider to observe how 16 spatial cells compress into a single vector, eliminating spatial coordinate variance.",
+        desc: "Standard vision baselines apply Global Average Pooling (GAP) across spatial dimensions, averaging all 16 spatial cells into a single vector. This permanently discards coordinate grounding.",
+        details: "Drag the slider right to simulate spatial pooling collapsing all 16 localized tokens into 1 vector. Notice how spatial variance drops to zero.",
         interactiveWidget: `
           <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-5 text-center">
             <div class="flex items-center justify-between text-xs font-mono">
               <span class="text-ios-blue font-bold">16 Independent Cells</span>
-              <span id="gapSliderLabel" class="text-ios-orange font-bold">Spatial Spread: 100%</span>
+              <span id="gapSliderLabel" class="text-ios-orange font-bold tabular-nums">Spatial Spread: 100%</span>
               <span class="text-ios-red font-bold">1 Pooled Vector</span>
             </div>
 
-            <input type="range" min="0" max="100" value="0" id="gapSlider" oninput="slideGap(this.value)" class="w-full">
+            <div class="px-2">
+              <input type="range" min="0" max="100" value="0" id="gapSlider" oninput="slideGap(this.value)" class="w-full">
+            </div>
 
-            <div class="h-28 bg-black/10 dark:bg-white/10 rounded-2xl p-4 flex items-center justify-center relative overflow-hidden border border-ios-border dark:border-ios-darkBorder" id="gapAnimationArea">
-              <div id="gapCellCluster" class="grid grid-cols-4 gap-2 transition-all duration-200">
-                ${Array.from({length: 16}).map((_, i) => `
-                  <div class="w-3.5 h-3.5 rounded-full bg-ios-blue shadow-sm"></div>
+            <div class="h-32 bg-black/10 dark:bg-white/10 rounded-2xl flex items-center justify-center relative overflow-hidden shadow-inner">
+              <div id="gapCellCluster" class="grid grid-cols-4 gap-3 transition-transform duration-100 ease-out">
+                ${Array.from({length: 16}).map(() => `
+                  <div class="w-4 h-4 rounded-full bg-ios-blue shadow-sm"></div>
                 `).join('')}
               </div>
-              <div id="gapSingleVector" class="w-8 h-8 rounded-full bg-ios-red text-white flex items-center justify-center font-bold text-xs shadow-lg hidden">
-                1
-              </div>
+              <div id="gapSingleVector" class="w-8 h-8 rounded-full bg-ios-red absolute shadow-lg hidden"></div>
             </div>
 
             <p id="gapStatusText" class="text-xs font-mono text-ios-secondary">
@@ -885,33 +1054,35 @@
             </p>
           </div>
         `,
-        formula: "\\mathbf{z}_{\\text{GAP}} = \\frac{1}{16} \\sum_{u=1}^4 \\sum_{v=1}^4 \\mathbf{x}_{(u,v)} \\in \\mathbb{R}^{B \\times 512}"
+        formula: "\mathbf{z}_{\text{GAP}} = \frac{1}{16} \sum_{u=1}^4 \sum_{v=1}^4 \mathbf{x}_{(u,v)} \in \mathbb{R}^{B \times 512}"
       },
       {
         badge: "STAGE 04 • UNTANGLING",
-        title: "Overcomplete Sparse Autoencoder (SAE)",
+        title: "Overcomplete Sparse Autoencoder (Top-K)",
         tensorIn: "Spatial Cell: x ∈ ℝ⁵¹²",
         tensorOut: "Sparse Code: f ∈ ℝ⁴⁰⁹⁶ (Top-K Sparsity)",
-        desc: "The SAE takes each 512-d spatial cell and projects it into 4,096 dimensions. A Top-K activation filter retains only the K most intense features and clamps the remaining 4,064 to zero.",
-        details: "Adjust Top-K ($K=1 \\dots 64$) to evaluate the trade-off between explained reconstruction variance and monosemantic sparsity.",
+        desc: "The SAE projects each 512-d spatial vector into a 4,096-dimensional overcomplete dictionary. An exact Top-K activation filter retains only the K most active features and clamps the remaining 4,064 to zero.",
+        details: "Adjust the Top-K dial (1 to 64) to evaluate the Pareto trade-off between explained reconstruction variance and monosemantic feature purity.",
         interactiveWidget: `
           <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-4">
             <div class="flex items-center justify-between text-xs">
               <span class="font-bold text-ios-purple">Top-K Sparsity Dial (1 to 64)</span>
-              <span id="kSliderVal" class="font-mono text-ios-purple font-bold">K = 32 (Pareto Optimum)</span>
+              <span id="kSliderVal" class="font-mono text-ios-purple font-bold tabular-nums">K = 32 (Pareto Optimum)</span>
             </div>
 
-            <input type="range" min="2" max="64" value="32" id="kRange" oninput="updateSparsity(this.value)" class="w-full">
+            <div class="px-2">
+              <input type="range" min="2" max="64" value="32" id="kRange" oninput="updateSparsity(this.value)" class="w-full">
+            </div>
 
             <!-- Real-Time Metrics Gauge Grid -->
             <div class="grid grid-cols-3 gap-2.5 text-center font-mono text-xs">
               <div class="p-3 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder">
                 <span class="text-ios-secondary text-[10px]">ACTIVE / TOTAL</span>
-                <div id="kRatio" class="font-bold text-ios-purple text-sm mt-0.5">32 / 4,096</div>
+                <div id="kRatio" class="font-bold text-ios-purple text-sm mt-0.5 tabular-nums">32 / 4,096</div>
               </div>
               <div class="p-3 bg-emerald-500/10 rounded-2xl border border-emerald-500/30 text-emerald-500">
                 <span class="text-[10px] opacity-75">VARIANCE EXP.</span>
-                <div id="varExplained" class="font-bold text-sm mt-0.5">96.8%</div>
+                <div id="varExplained" class="font-bold text-sm mt-0.5 tabular-nums">96.8%</div>
               </div>
               <div class="p-3 bg-blue-500/10 rounded-2xl border border-blue-500/30 text-blue-500">
                 <span class="text-[10px] opacity-75">MONOSEMANTICITY</span>
@@ -920,95 +1091,204 @@
             </div>
           </div>
         `,
-        formula: "\\mathbf{f} = \\text{TopK}\\left(\\text{ReLU}(\\mathbf{W}_{\\text{enc}}(\\mathbf{x} - \\mathbf{b}_{\\text{dec}}) + \\mathbf{b}_{\\text{enc}}), K=32\\right)"
+        formula: "\mathbf{f} = \text{TopK}\left(\text{ReLU}(\mathbf{W}_{\text{enc}}(\mathbf{x} - \mathbf{b}_{\text{dec}}) + \mathbf{b}_{\text{enc}}), K=32\right)"
       },
       {
         badge: "STAGE 05 • SPATIAL PROJECTION",
-        title: "Monosemantic Spatial Heatmap",
+        title: "Monosemantic Spatial Heatmap Projection",
         tensorIn: "Feature Slice: f[812, :, :] ∈ ℝ⁴ ˣ ⁴",
-        tensorOut: "Upscaled Heatmap: [1, 1, 224, 224]",
-        desc: "Slicing Feature #812 across spatial cells yields a 2D matrix of activation strengths. We upsample this matrix by 32x to overlay it directly onto the full camera frame.",
-        details: "Toggle targets to observe feature spatial localization between task objects and background regions.",
+        tensorOut: "Upscaled Heatmap: [1, 1, 128, 128]",
+        desc: "Slicing an individual dictionary feature across all 4x4 spatial cells produces a 2D activation matrix. Bilinear upsampling by 32x overlays this feature activation directly onto the camera scene.",
+        details: "Toggle targets to observe how individual SAE features localize sharply around task-relevant objects (e.g. drawer handle) vs. static background fixtures.",
         interactiveWidget: `
           <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-4">
             <div class="flex items-center justify-between text-xs">
-              <span class="font-bold text-ios-blue">Interactive Heatmap Generator</span>
-              <button onclick="switchHeatmapTarget()" id="btnHeatmapToggle" class="btn-ios px-3 py-1 rounded-full text-xs font-mono bg-ios-purple text-white shadow-ios">Target: Drawer Handle</button>
+              <span class="font-bold text-ios-blue">Feature Spatial Grounding</span>
+              <button onclick="switchHeatmapTarget()" id="btnHeatmapToggle" class="btn-ios px-3.5 py-1.5 rounded-full text-xs font-mono bg-ios-purple text-white shadow-ios font-semibold">Target: Drawer Handle</button>
             </div>
 
-            <div class="relative w-full h-40 rounded-2xl bg-slate-900 overflow-hidden flex items-center justify-center border border-ios-border dark:border-ios-darkBorder shadow-inner" id="heatmapDisplay">
-              <div class="absolute inset-0 opacity-20 flex flex-col items-center justify-center text-xs font-mono tracking-widest text-slate-300 select-none uppercase">
-                <svg class="w-8 h-8 mb-1 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                <span>Spatial Projection Grid</span>
-              </div>
-              <div id="glowCircle" class="w-16 h-16 rounded-full bg-ios-orange/70 blur-md absolute transition-all duration-300" style="left: 48%; top: 38%;"></div>
-              <div id="glowMarker" class="w-4 h-4 border-2 border-white rounded-full absolute pointer-events-none transition-all duration-300" style="left: 54%; top: 48%;"></div>
+            <div>
+              ${getRoboCasaSvg({ showHeatmap: true, heatmapTarget: 0, showBoxes: false })}
             </div>
 
             <div class="flex items-center justify-between font-mono text-xs text-ios-secondary">
               <span id="activeFeatureLabel">Feature #812 • Max Firing: 5.84</span>
-              <span class="text-ios-green font-bold">100% Focused on Handle Affordance</span>
+              <span class="text-ios-green font-bold" id="featureTargetBadge">100% Focused on Handle Affordance</span>
             </div>
           </div>
         `,
-        formula: "\\mathbf{H}_{812} = \\text{BilinearUpsample}\\left(\\mathbf{f}[812, :, :], \\text{size}=(224, 224)\\right)"
+        formula: "\mathbf{H}_{812} = \text{BilinearUpsample}\left(\mathbf{f}[812, :, :], \text{size}=(128, 128)\right)"
       },
       {
         badge: "STAGE 06 • GROUNDING",
-        title: "Simulator IoU & Latent Kept Set",
+        title: "Simulator IoU Grounding & Latent Kept Set",
         tensorIn: "Heatmap H_j and 3D Bounding Boxes B_obj",
-        tensorOut: "Latent Kept Set: K_latent = { drawer_handle, gripper }",
-        desc: "We compute Intersection-over-Union (IoU) between active feature heatmaps and RoboCasa ground-truth 3D bounding boxes. Features overlapping an object with IoU > 0.5 are semantically labeled.",
-        details: "Adjust the IoU threshold to evaluate object inclusion into the latent kept set based on spatial overlap.",
+        tensorOut: "Latent Kept Set: K_latent = { drawer_handle, robot0_gripper }",
+        desc: "We compute Intersection-over-Union (IoU) between active feature heatmaps and RoboCasa ground-truth 3D bounding boxes. Features overlapping an object with IoU > τ ground semantically.",
+        details: "Adjust the inclusion threshold τ. Objects with IoU exceeding τ enter the emergent latent kept set.",
         interactiveWidget: `
           <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-4">
             <div class="flex items-center justify-between text-xs">
               <span class="font-bold text-ios-blue">IoU Inclusion Threshold (τ)</span>
-              <span id="iouThresholdVal" class="font-mono text-ios-blue font-bold">τ = 0.50</span>
+              <span id="iouThresholdVal" class="font-mono text-ios-blue font-bold tabular-nums">τ = 0.50</span>
             </div>
 
-            <input type="range" min="10" max="90" value="50" id="iouSlider" oninput="slideIouThreshold(this.value)" class="w-full">
+            <div class="px-2">
+              <input type="range" min="10" max="90" value="50" id="iouSlider" oninput="slideIouThreshold(this.value)" class="w-full">
+            </div>
+
+            <div>
+              ${getRoboCasaSvg({ showBoxes: true, iouThreshold: 0.50 })}
+            </div>
 
             <div class="grid grid-cols-3 gap-2 text-xs font-mono">
-              <div class="p-3 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-1">
+              <div class="p-2.5 bg-black/5 dark:bg-white/5 rounded-xl border border-ios-border dark:border-ios-darkBorder space-y-0.5">
                 <div class="text-[10px] text-ios-secondary">DRAWER HANDLE</div>
-                <div class="font-bold text-sm">IoU: 0.78</div>
+                <div class="font-bold text-xs">IoU: 0.78</div>
                 <div id="statusHandle" class="text-[10px] font-bold text-ios-green">✓ IN K_latent</div>
               </div>
-              <div class="p-3 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-1">
+              <div class="p-2.5 bg-black/5 dark:bg-white/5 rounded-xl border border-ios-border dark:border-ios-darkBorder space-y-0.5">
                 <div class="text-[10px] text-ios-secondary">GRIPPER FINGERS</div>
-                <div class="font-bold text-sm">IoU: 0.62</div>
+                <div class="font-bold text-xs">IoU: 0.62</div>
                 <div id="statusGripper" class="text-[10px] font-bold text-ios-green">✓ IN K_latent</div>
               </div>
-              <div class="p-3 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-1">
+              <div class="p-2.5 bg-black/5 dark:bg-white/5 rounded-xl border border-ios-border dark:border-ios-darkBorder space-y-0.5">
                 <div class="text-[10px] text-ios-secondary">MICROWAVE</div>
-                <div class="font-bold text-sm">IoU: 0.04</div>
+                <div class="font-bold text-xs">IoU: 0.04</div>
                 <div id="statusMicrowave" class="text-[10px] font-bold text-ios-red">✗ EXCLUDED</div>
               </div>
             </div>
 
             <div class="text-xs font-mono text-ios-secondary">
-              Discovered Kept Set: <strong id="dynamicKeptSet" class="text-ios-blue">{ drawer_handle, gripper }</strong>
+              Discovered Kept Set: <strong id="dynamicKeptSet" class="text-ios-blue">{ drawer_handle, robot0_gripper }</strong>
             </div>
           </div>
         `,
-        formula: "K_{\\text{latent}} = \\{ \\text{obj} \\mid \\exists f_j \\text{ active}, \\ \\text{IoU}(\\mathbf{H}_j, B_{\\text{obj}}) > 0.5 \\}"
+        formula: "K_{\text{latent}} = \{ \text{obj} \mid \exists f_j \text{ active}, \ \text{IoU}(\mathbf{H}_j, B_{\text{obj}}) > 0.50 \}"
       },
       {
-        badge: "STAGE 07 • ACTION POLICY",
-        title: "MDT Action Generator & Denoising",
-        tensorIn: "Observation Context + CLIP Goal Embedding",
+        badge: "STAGE 07 • COMPARATIVE ANALYSIS",
+        title: "Latent Kept Set vs. SIR Learned Kept Set",
+        tensorIn: "K_latent (Unsupervised SAE) vs. K_SIR (Supervised GNN Selector)",
+        tensorOut: "Set Difference & Spurious Leakage Analysis",
+        desc: "We contrast our emergent latent kept set against SIR's explicit graph selector. While our SAE discovers functional affordances without labels, SIR frequently selects static background fixtures.",
+        details: "In SIR's CloseDrawer task, the learned GNN selector attends to the microwave and window 81% of the time, but the target drawer only 11% of the time. Softmax denominator normalization across all nodes leaks scene context, creating spurious shortcuts.",
+        interactiveWidget: `
+          <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-4">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-ios-blue">Kept Set Comparison</span>
+              <div class="flex space-x-1.5">
+                <button onclick="toggleKeptSetComparison('latent')" id="btnCompLatent" class="btn-ios px-3 py-1 rounded-full text-xs font-mono bg-ios-blue text-white font-bold shadow-ios">Latent Set (Ours)</button>
+                <button onclick="toggleKeptSetComparison('sir')" id="btnCompSir" class="btn-ios px-3 py-1 rounded-full text-xs font-mono bg-black/10 dark:bg-white/10 text-ios-secondary">SIR Kept Set</button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+              <!-- Our Latent Kept Set -->
+              <div id="cardLatentSet" class="p-4 rounded-2xl border-2 border-ios-blue bg-ios-blue/5 space-y-2 transition-all">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-ios-blue uppercase text-[10px] tracking-wide">Our Latent Kept Set (SAE)</span>
+                  <span class="px-2 py-0.5 rounded-full bg-ios-green/10 text-ios-green font-bold text-[10px]">Unsupervised</span>
+                </div>
+                <div class="text-sm font-extrabold text-ios-text dark:text-ios-darkText">
+                  { drawer_handle, gripper }
+                </div>
+                <p class="text-[11px] text-ios-secondary leading-relaxed font-sans">
+                  Emerges strictly from visual policy activations. Excludes static background objects like the microwave and countertop.
+                </p>
+              </div>
+
+              <!-- SIR Learned Kept Set -->
+              <div id="cardSirSet" class="p-4 rounded-2xl border border-ios-border dark:border-ios-darkBorder bg-black/5 dark:bg-white/5 space-y-2 transition-all">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-ios-orange uppercase text-[10px] tracking-wide">SIR Explicit Kept Set</span>
+                  <span class="px-2 py-0.5 rounded-full bg-ios-orange/10 text-ios-orange font-bold text-[10px]">Supervised GNN</span>
+                </div>
+                <div class="text-sm font-extrabold text-ios-text dark:text-ios-darkText">
+                  { drawer_handle, microwave, window }
+                </div>
+                <p class="text-[11px] text-ios-secondary leading-relaxed font-sans">
+                  Trained over ground-truth scene graph nodes. Frequently attends to distant fixtures due to softmax normalization leakage.
+                </p>
+              </div>
+            </div>
+
+            <!-- Root Cause Diagnostic Note -->
+            <div class="p-3 bg-black/5 dark:bg-white/5 rounded-xl border border-ios-border dark:border-ios-darkBorder text-xs text-ios-secondary space-y-1">
+              <div class="font-bold text-ios-text dark:text-ios-darkText text-[11px]">Why does SIR include static fixtures?</div>
+              <p class="text-[10px] leading-relaxed">
+                1. <strong>Softmax Normalization Leakage:</strong> Attention weights normalize across all graph nodes, so node removals alter downstream features.<br>
+                2. <strong>Camera Calibration Anchor:</strong> Static background fixtures act as positional shortcuts for 3D camera reference.
+              </p>
+            </div>
+          </div>
+        `,
+        formula: "K_{\text{latent}} = \{ \text{drawer\_handle}, \text{gripper} \} \quad \text{vs.} \quad K_{\text{SIR}} = \{ \text{handle}, \text{microwave}, \text{window} \}"
+      },
+      {
+        badge: "STAGE 08 • CAUSAL VERIFICATION",
+        title: "Closed-Loop Causal Verification Suite",
+        tensorIn: "Feature Intervention: m ∈ {0, 1}⁴⁰⁹⁶",
+        tensorOut: "Motor Command Delta: Δa = ||a_orig - a_ablated||",
+        desc: "We perform causal surgery during closed-loop rollouts by clamping candidate features to zero (f_j = 0), reconstructing x̂, and verifying Discovery (D-C), Removal (R-C), and Consequence (C-C).",
+        details: "Test each condition to verify how policy actions respond to selective feature zeroing. Invariant motor output under distractor ablation confirms causal Removal.",
+        interactiveWidget: `
+          <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-4">
+            <div class="text-xs font-bold text-ios-blue">Interactive Causal Evaluation Suite:</div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs font-mono">
+              <button onclick="runCausalExperiment('discovery')" id="btnAblateDiscovery" class="btn-ios p-3 rounded-2xl bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-left space-y-1 shadow-ios hover:border-ios-blue">
+                <div class="font-bold text-ios-blue text-xs">1. Discovery (D-C)</div>
+                <div class="text-[10px] text-ios-secondary">Verify Unsupervised</div>
+              </button>
+              <button onclick="runCausalExperiment('removal')" id="btnAblateRemoval" class="btn-ios p-3 rounded-2xl bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-left space-y-1 shadow-ios hover:border-ios-green">
+                <div class="font-bold text-ios-green text-xs">2. Removal (R-C)</div>
+                <div class="text-[10px] text-ios-secondary">Clamp f[microwave] = 0</div>
+              </button>
+              <button onclick="runCausalExperiment('consequence')" id="btnAblateConsequence" class="btn-ios p-3 rounded-2xl bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-left space-y-1 shadow-ios hover:border-ios-red">
+                <div class="font-bold text-ios-red text-xs">3. Consequence (C-C)</div>
+                <div class="text-[10px] text-ios-secondary">Clamp f[handle] = 0</div>
+              </button>
+            </div>
+
+            <!-- Live Verification Gauges -->
+            <div class="p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-2 text-xs font-mono">
+              <div class="flex items-center justify-between">
+                <span class="text-ios-secondary">Motor Command Delta:</span>
+                <span class="font-bold text-ios-green text-sm tabular-nums" id="deltaAReadout">Δa = 0.002 ≈ 0</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-ios-secondary">Rollout Success Rate:</span>
+                <span class="font-bold text-ios-text dark:text-ios-darkText text-xs tabular-nums" id="successRateReadout">81.2% (Nominal)</span>
+              </div>
+              <div class="pt-2 border-t border-ios-border dark:border-ios-darkBorder flex items-center justify-between">
+                <span class="text-ios-secondary">Condition Status:</span>
+                <div class="px-3 py-1 rounded-full bg-ios-green/10 text-ios-green font-bold text-xs" id="causalVerdictBadge">
+                  Removal Test PASSED (Action Invariant)
+                </div>
+              </div>
+            </div>
+          </div>
+        `,
+        formula: "\hat{\mathbf{x}} = \mathbf{W}_{\text{dec}} \left( \mathbf{f} \odot \mathbf{m}_{\text{ablate}} \right) + \mathbf{b}_{\text{dec}}"
+      },
+      {
+        badge: "STAGE 09 • ACTION POLICY",
+        title: "MDT Action Generator & Denoising Trajectory",
+        tensorIn: "Context Embedding + CLIP Goal",
         tensorOut: "Action Chunk: a_t ∈ ℝ¹⁰ ˣ ¹² (10 timesteps)",
-        desc: "The Multimodal Diffusion Transformer (MDT) fuses observation tokens with the CLIP text goal and runs 10 steps of DDIM diffusion denoising.",
-        details: "Adjust the step slider to observe the reverse diffusion trajectory across 10 prediction horizons.",
+        desc: "The Multimodal Diffusion Transformer (MDT) generates a trajectory chunk of 10 future robot actions (7-DoF arm + gripper). 10 DDIM denoising steps refine random Gaussian noise into smooth motor commands.",
+        details: "Drag the slider to observe how DDIM reverse diffusion transforms raw stochastic noise into executable joint control trajectories.",
         interactiveWidget: `
           <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-4">
             <div class="flex items-center justify-between text-xs">
               <span class="font-bold text-ios-blue">DDIM Denoising Trajectory Slider</span>
-              <span id="ddimSliderLabel" class="font-mono text-ios-orange font-bold">Step 10 (Pure Noise)</span>
+              <span id="ddimSliderLabel" class="font-mono text-ios-orange font-bold tabular-nums">Step 10 (Pure Noise)</span>
             </div>
 
-            <input type="range" min="0" max="10" value="10" id="ddimSlider" oninput="slideDdim(this.value)" class="w-full">
+            <div class="px-2">
+              <input type="range" min="0" max="10" value="10" id="ddimSlider" oninput="slideDdim(this.value)" class="w-full">
+            </div>
 
             <div class="h-32 w-full bg-slate-900 rounded-2xl relative overflow-hidden flex items-center justify-center p-3 border border-ios-border dark:border-ios-darkBorder shadow-inner">
               <svg class="w-full h-full" viewBox="0 0 300 100">
@@ -1023,42 +1303,7 @@
             </div>
           </div>
         `,
-        formula: "\\mathbf{a}_t = \\text{DDIM}\\left(\\mathbf{z}_{\\text{noise}}, \\ \\mathbf{x}_{\\text{obs}}, \\ \\mathbf{g}_{\\text{CLIP}}, \\ \\text{steps}=10\\right) \\in \\mathbb{R}^{B \\times 10 \\times 12}"
-      },
-      {
-        badge: "STAGE 08 • CAUSAL VERIFICATION",
-        title: "Closed-Loop Causal Surgery Lab",
-        tensorIn: "Ablation Mask: f[feat_target] = 0.0",
-        tensorOut: "Predicted Motor Delta: Δa = ||a_orig - a_ablated||",
-        desc: "We perform causal surgery during closed-loop rollouts by clamping specific features to zero, reconstructing x̂, and passing it to MDT.",
-        details: "Select an ablation condition to observe motor delta response under causal feature zeroing.",
-        interactiveWidget: `
-          <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-4">
-            <div class="text-xs font-bold text-ios-blue">Interactive Causal Feature Switches:</div>
-
-            <div class="grid grid-cols-2 gap-3 text-xs font-mono">
-              <button onclick="runCausalExperiment('microwave')" id="btnAblateMicrowave" class="btn-ios p-3.5 rounded-2xl bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-left space-y-1 shadow-ios">
-                <div class="font-bold text-ios-orange">Ablate Microwave (Distractor)</div>
-                <div class="text-[10px] text-ios-secondary">Clamp f[microwave] = 0.0</div>
-              </button>
-              <button onclick="runCausalExperiment('handle')" id="btnAblateHandle" class="btn-ios p-3.5 rounded-2xl bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-left space-y-1 shadow-ios">
-                <div class="font-bold text-ios-red">Ablate Handle (Kept Set)</div>
-                <div class="text-[10px] text-ios-secondary">Clamp f[handle] = 0.0</div>
-              </button>
-            </div>
-
-            <div class="p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder flex items-center justify-between text-xs font-mono">
-              <div>
-                <span class="text-ios-secondary">Motor Command Delta: </span>
-                <span class="font-bold text-ios-green text-sm" id="deltaAReadout">Δa = 0.002 ≈ 0</span>
-              </div>
-              <div class="px-3 py-1 rounded-full bg-ios-green/10 text-ios-green font-bold text-xs" id="causalVerdictBadge">
-                Removal Test PASSED
-              </div>
-            </div>
-          </div>
-        `,
-        formula: "\\hat{\\mathbf{x}} = \\mathbf{W}_{\\text{dec}} \\left( \\mathbf{f} \\odot \\mathbf{m}_{\\text{ablate}} \\right) + \\mathbf{b}_{\\text{dec}}"
+        formula: "\mathbf{a}_t = \text{DDIM}\left(\mathbf{z}_{\text{noise}}, \ \mathbf{x}_{\text{obs}}, \ \mathbf{g}_{\text{CLIP}}, \ \text{steps}=10\right) \in \mathbb{R}^{B \times 10 \times 12}"
       }
     ];
 
@@ -1068,13 +1313,14 @@
       const step = galleryData[index];
       currentStep = index;
 
-      document.getElementById('stepCounter').innerText = `Stage ${index + 1} of ${galleryData.length}`;
+      const counterEl = document.getElementById('stepCounter');
+      if (counterEl) counterEl.innerText = `Stage ${index + 1} of ${galleryData.length}`;
 
       document.querySelectorAll('.step-pill').forEach((pill, idx) => {
         if (idx === index) {
-          pill.className = "step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-blue text-white shadow-ios font-semibold";
+          pill.className = "step-pill btn-ios px-3.5 py-2 rounded-full whitespace-nowrap transition bg-ios-blue text-white shadow-ios font-semibold";
         } else {
-          pill.className = "step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary";
+          pill.className = "step-pill btn-ios px-3.5 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary";
         }
       });
 
@@ -1106,15 +1352,16 @@
       `;
 
       const formulaEl = document.getElementById('slideFormula');
-      formulaEl.innerHTML = `$$\\text{Verified Shape: } ${step.formula}$$`;
-      
-      if (typeof renderMathInElement === 'function') {
-        renderMathInElement(formulaEl, {
-          delimiters: [
-            {left: '$$', right: '$$', display: true},
-            {left: '$', right: '$', display: false}
-          ]
-        });
+      if (formulaEl) {
+        formulaEl.innerHTML = `$$\text{Verified Shape: } ${step.formula}$$`;
+        if (typeof renderMathInElement === 'function') {
+          renderMathInElement(formulaEl, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false}
+            ]
+          });
+        }
       }
     }
 
@@ -1154,8 +1401,8 @@
       const y = Math.floor(event.clientY - rect.top);
       const crosshair = document.getElementById('pixelCrosshair');
       if (crosshair) {
-        crosshair.style.left = `${x - 16}px`;
-        crosshair.style.top = `${y - 16}px`;
+        crosshair.style.left = `${Math.max(10, Math.min(rect.width - 30, x - 14))}px`;
+        crosshair.style.top = `${Math.max(10, Math.min(rect.height - 30, y - 14))}px`;
       }
       const coord = document.getElementById('pixelCoord');
       const valR = document.getElementById('valR');
@@ -1173,20 +1420,30 @@
       const info = document.getElementById('selectedCellInfo');
       const sparklineMag = document.getElementById('sparklineMag');
       const bars = document.getElementById('sparklineBars');
+      const highlightRect = document.getElementById('svgHighlightCell');
       if (!info) return;
 
       let name = "Countertop / Background";
       let mag = "4.21";
-      if (r === 1 && c === 2) { name = "Cell (1, 2) • Drawer Handle Affordance"; mag = "8.42"; }
-      else if (r === 0 && c === 1) { name = "Cell (0, 1) • Microwave Window"; mag = "6.15"; }
-      else if (r === 2 && c === 2) { name = "Cell (2, 2) • Robot Gripper Fingers"; mag = "7.91"; }
+      if (r === 1 && c === 2) { name = "Drawer Handle"; mag = "8.42"; }
+      else if (r === 0 && c === 0) { name = "Microwave Top"; mag = "5.12"; }
+      else if (r === 0 && c === 1) { name = "Microwave Window"; mag = "6.15"; }
+      else if (r === 1 && c === 3) { name = "Robot Gripper"; mag = "7.91"; }
+      else if (r === 2 && c === 1) { name = "Cabinet Panel"; mag = "4.88"; }
+      else if (r === 2 && c === 2) { name = "Lower Handle"; mag = "7.34"; }
+      else if (r === 3 && c === 1) { name = "Counter Base"; mag = "3.90"; }
       
       info.innerText = `Cell (${r}, ${c}) • ${name}`;
       if (sparklineMag) sparklineMag.innerText = `Magnitude ||x|| = ${mag}`;
 
+      if (highlightRect) {
+        highlightRect.setAttribute('x', c * 100);
+        highlightRect.setAttribute('y', r * 55);
+      }
+
       if (bars) {
         bars.innerHTML = Array.from({length: 28}).map(() => `
-          <div class="flex-1 bg-gradient-to-t from-ios-blue to-ios-cyan rounded-t-sm transition-all duration-300" style="height: ${Math.floor(Math.random() * 85 + 15)}%;"></div>
+          <div class="flex-1 bg-gradient-to-t from-ios-blue to-ios-cyan rounded-t-sm transition-all duration-300" style="height: ${Math.floor(Math.random() * 80 + 20)}%;"></div>
         `).join('');
       }
     }
@@ -1242,26 +1499,33 @@
     let heatmapTarget = 0;
     function switchHeatmapTarget() {
       const btn = document.getElementById('btnHeatmapToggle');
-      const glow = document.getElementById('glowCircle');
-      const marker = document.getElementById('glowMarker');
+      const glow = document.getElementById('svgHeatmapGlow');
+      const peak = document.getElementById('svgHeatmapPeak');
       const lbl = document.getElementById('activeFeatureLabel');
+      const badge = document.getElementById('featureTargetBadge');
       if (!btn || !glow) return;
 
       heatmapTarget = (heatmapTarget + 1) % 2;
       if (heatmapTarget === 1) {
         btn.innerText = "Target: Microwave Box";
-        glow.style.left = "20%";
-        glow.style.top = "20%";
-        marker.style.left = "26%";
-        marker.style.top = "26%";
-        if (lbl) lbl.innerText = "Feature #1402 • Microwave Contour";
+        glow.setAttribute('cx', 72);
+        glow.setAttribute('cy', 54);
+        glow.setAttribute('rx', 60);
+        glow.setAttribute('ry', 35);
+        glow.setAttribute('fill', 'url(#rcHeatmapGradMicrowave)');
+        if (peak) { peak.setAttribute('cx', 72); peak.setAttribute('cy', 54); }
+        if (lbl) lbl.innerText = "Feature #1402 • Static Fixture Contour";
+        if (badge) { badge.innerText = "Localizes to Background Appliance"; badge.className = "text-ios-blue font-bold"; }
       } else {
         btn.innerText = "Target: Drawer Handle";
-        glow.style.left = "48%";
-        glow.style.top = "38%";
-        marker.style.left = "54%";
-        marker.style.top = "48%";
+        glow.setAttribute('cx', 200);
+        glow.setAttribute('cy', 162);
+        glow.setAttribute('rx', 75);
+        glow.setAttribute('ry', 45);
+        glow.setAttribute('fill', 'url(#rcHeatmapGradHandle)');
+        if (peak) { peak.setAttribute('cx', 200); peak.setAttribute('cy', 162); }
         if (lbl) lbl.innerText = "Feature #812 • Max Firing: 5.84";
+        if (badge) { badge.innerText = "100% Focused on Handle Affordance"; badge.className = "text-ios-green font-bold"; }
       }
     }
 
@@ -1271,30 +1535,89 @@
       const stHandle = document.getElementById('statusHandle');
       const stGripper = document.getElementById('statusGripper');
       const dynamicSet = document.getElementById('dynamicKeptSet');
+      const boxHandle = document.getElementById('svgBoxHandle');
+      const boxGripper = document.getElementById('svgBoxGripper');
+      const boxMicrowave = document.getElementById('svgBoxMicrowave');
       if (!lbl) return;
 
       lbl.innerText = `τ = ${threshold}`;
       let kept = [];
 
       if (0.78 >= threshold) {
-        stHandle.innerText = "✓ IN K_latent";
-        stHandle.className = "text-[10px] font-bold text-ios-green";
+        if (stHandle) { stHandle.innerText = "✓ IN K_latent"; stHandle.className = "text-[10px] font-bold text-ios-green"; }
+        if (boxHandle) boxHandle.setAttribute('class', 'transition-opacity duration-200 opacity-100');
         kept.push("drawer_handle");
       } else {
-        stHandle.innerText = "✗ EXCLUDED";
-        stHandle.className = "text-[10px] font-bold text-ios-red";
+        if (stHandle) { stHandle.innerText = "✗ EXCLUDED"; stHandle.className = "text-[10px] font-bold text-ios-red"; }
+        if (boxHandle) boxHandle.setAttribute('class', 'transition-opacity duration-200 opacity-25');
       }
 
       if (0.62 >= threshold) {
-        stGripper.innerText = "✓ IN K_latent";
-        stGripper.className = "text-[10px] font-bold text-ios-green";
-        kept.push("gripper");
+        if (stGripper) { stGripper.innerText = "✓ IN K_latent"; stGripper.className = "text-[10px] font-bold text-ios-green"; }
+        if (boxGripper) boxGripper.setAttribute('class', 'transition-opacity duration-200 opacity-100');
+        kept.push("robot0_gripper");
       } else {
-        stGripper.innerText = "✗ EXCLUDED";
-        stGripper.className = "text-[10px] font-bold text-ios-red";
+        if (stGripper) { stGripper.innerText = "✗ EXCLUDED"; stGripper.className = "text-[10px] font-bold text-ios-red"; }
+        if (boxGripper) boxGripper.setAttribute('class', 'transition-opacity duration-200 opacity-25');
       }
 
-      dynamicSet.innerText = kept.length > 0 ? `{ ${kept.join(', ')} }` : "{ ∅ } (Empty Set)";
+      if (0.04 >= threshold) {
+        if (boxMicrowave) boxMicrowave.setAttribute('class', 'transition-opacity duration-200 opacity-100');
+        kept.push("microwave");
+      } else {
+        if (boxMicrowave) boxMicrowave.setAttribute('class', 'transition-opacity duration-200 opacity-25');
+      }
+
+      if (dynamicSet) {
+        dynamicSet.innerText = kept.length > 0 ? `{ ${kept.join(', ')} }` : "{ ∅ } (Empty Set)";
+      }
+    }
+
+    function toggleKeptSetComparison(mode) {
+      const btnLatent = document.getElementById('btnCompLatent');
+      const btnSir = document.getElementById('btnCompSir');
+      const cardLatent = document.getElementById('cardLatentSet');
+      const cardSir = document.getElementById('cardSirSet');
+      if (!btnLatent || !btnSir) return;
+
+      if (mode === 'latent') {
+        btnLatent.className = "btn-ios px-3 py-1 rounded-full text-xs font-mono bg-ios-blue text-white font-bold shadow-ios";
+        btnSir.className = "btn-ios px-3 py-1 rounded-full text-xs font-mono bg-black/10 dark:bg-white/10 text-ios-secondary";
+        if (cardLatent) cardLatent.className = "p-4 rounded-2xl border-2 border-ios-blue bg-ios-blue/5 space-y-2 transition-all shadow-md";
+        if (cardSir) cardSir.className = "p-4 rounded-2xl border border-ios-border dark:border-ios-darkBorder bg-black/5 dark:bg-white/5 space-y-2 transition-all opacity-60";
+      } else {
+        btnSir.className = "btn-ios px-3 py-1 rounded-full text-xs font-mono bg-ios-orange text-white font-bold shadow-ios";
+        btnLatent.className = "btn-ios px-3 py-1 rounded-full text-xs font-mono bg-black/10 dark:bg-white/10 text-ios-secondary";
+        if (cardSir) cardSir.className = "p-4 rounded-2xl border-2 border-ios-orange bg-ios-orange/5 space-y-2 transition-all shadow-md";
+        if (cardLatent) cardLatent.className = "p-4 rounded-2xl border border-ios-border dark:border-ios-darkBorder bg-black/5 dark:bg-white/5 space-y-2 transition-all opacity-60";
+      }
+    }
+
+    function runCausalExperiment(type) {
+      const delta = document.getElementById('deltaAReadout');
+      const success = document.getElementById('successRateReadout');
+      const verdict = document.getElementById('causalVerdictBadge');
+      if (!delta || !verdict) return;
+
+      if (type === 'discovery') {
+        delta.innerText = "Δa = 0.000 (Baseline Nominal)";
+        delta.className = "font-bold text-ios-blue text-sm tabular-nums";
+        if (success) success.innerText = "81.2% (Nominal Policy)";
+        verdict.className = "px-3 py-1 rounded-full bg-ios-blue/10 text-ios-blue font-bold text-xs";
+        verdict.innerText = "Discovery Test PASSED (p < 0.001)";
+      } else if (type === 'removal') {
+        delta.innerText = "Δa = 0.002 ≈ 0 (Action Invariant)";
+        delta.className = "font-bold text-ios-green text-sm tabular-nums";
+        if (success) success.innerText = "81.0% (Zero Motor Shift)";
+        verdict.className = "px-3 py-1 rounded-full bg-ios-green/10 text-ios-green font-bold text-xs";
+        verdict.innerText = "Removal Test PASSED (Action Invariant)";
+      } else {
+        delta.innerText = "Δa = 1.482 (Trajectory Collapsed)";
+        delta.className = "font-bold text-ios-red text-sm tabular-nums";
+        if (success) success.innerText = "0.0% (Grasp Execution Failed)";
+        verdict.className = "px-3 py-1 rounded-full bg-ios-red/10 text-ios-red font-bold text-xs";
+        verdict.innerText = "Consequence Test CONFIRMED (Failure)";
+      }
     }
 
     function slideDdim(val) {
@@ -1313,24 +1636,6 @@
       } else {
         stateText.innerText = "Denoising in progress...";
         stateText.className = "text-ios-orange font-bold";
-      }
-    }
-
-    function runCausalExperiment(type) {
-      const delta = document.getElementById('deltaAReadout');
-      const verdict = document.getElementById('causalVerdictBadge');
-      if (!delta || !verdict) return;
-
-      if (type === 'microwave') {
-        delta.innerText = "Δa = 0.002 ≈ 0 (Action Invariant)";
-        delta.className = "font-bold text-ios-green text-sm";
-        verdict.className = "px-3 py-1 rounded-full bg-ios-green/10 text-ios-green font-bold text-xs";
-        verdict.innerText = "Removal Test PASSED (Δa ≈ 0)";
-      } else {
-        delta.innerText = "Δa = 1.482 (Action Collapsed!)";
-        delta.className = "font-bold text-ios-red text-sm";
-        verdict.className = "px-3 py-1 rounded-full bg-ios-red/10 text-ios-red font-bold text-xs";
-        verdict.innerText = "Consequence Test CONFIRMED (0% Success)";
       }
     }
 
