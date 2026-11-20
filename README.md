@@ -11,7 +11,7 @@
 > **Topic 2:** Mechanistic Interpretability with Object Sets (Sparse Autoencoders)  
 > **Team (Group 4):** Allen & Luca  
 > **Supervisor:** Paul Mattes  
-> **Quick Links:** [🌐 Interactive Docs](https://officiallygod.github.io/Mechanistic-Interpretability-for-SIR/) • [🔍 Step-by-Step Tensor Walkthrough](https://officiallygod.github.io/Mechanistic-Interpretability-for-SIR/pipeline_explained.html) • [📊 Bi-Weekly Slides](https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing) • [🧠 Miro Board](https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076) • [📅 Progress Logs](progress/)
+> **Quick Links:** [Interactive Docs](https://officiallygod.github.io/Mechanistic-Interpretability-for-SIR/) • [Step-by-Step Tensor Walkthrough](https://officiallygod.github.io/Mechanistic-Interpretability-for-SIR/pipeline_explained.html) • [Bi-Weekly Slides](https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing) • [Miro Board](https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076) • [Progress Logs](progress/)
 
 ---
 
@@ -34,40 +34,9 @@ In robot imitation learning, two paradigms currently exist:
 
 ---
 
-## 2. Methodology & Architecture
+## 2. Methodology & Research Protocol
 
-> 🗺️ **New to the SIR code?** Start with the [SIR Code Mind Map](docs/sir_code_mindmap.md). It covers every component of `SIR_Model/` and marks where our SAE pipeline plugs in.
-
-```mermaid
-flowchart TD
-    subgraph S1["1. Visual Observation & Backbone (ResNet-18, one per camera)"]
-        Cam["Agentview left / right camera\nRGB: 128 x 128 x 3"] --> Conv1["Conv1 + MaxPool\n32 x 32 x 64"]
-        Conv1 --> L1["Layer 1 (BasicBlock)\n32 x 32 x 64"]
-        L1 --> L2["Layer 2 (BasicBlock)\n16 x 16 x 128"]
-        L2 --> L3["Layer 3 (BasicBlock)\n8 x 8 x 256"]
-        L3 --> L4["Layer 4 (BasicBlock)\n4 x 4 x 512"]
-        L4 --> Pool["Global Average Pooling + fc\nVector: 512-d"]
-    end
-
-    subgraph S2["2. Mechanistic Interpretability: Sparse Autoencoder (SAE)"]
-        L4 -.->|"Tap 16 Spatial Cells (x_i in R^512)"| SAE_Enc["SAE Encoder: ReLU(W_enc · x + b)\nTop-K / L1 Sparsity"]
-        SAE_Enc --> SparseF["Overcomplete Sparse Code\nf in R^4096 (L0 ≪ 4096)"]
-        SparseF --> SAE_Dec["SAE Decoder: W_dec · f + b\nx_hat in R^512"]
-        SparseF --> Grounding["Spatial Feature Heatmaps\nOverlap with Simulator Segmentation Masks"]
-        Grounding --> LatentSet["Emergent Latent Kept Set K_latent\n(Mug, Drawer Handle, Gripper)"]
-    end
-
-    subgraph S3["3. Action Generator: MDT Diffusion Transformer"]
-        Pool --> MDT_Enc["4-layer Transformer Encoder\n(Dim: 512, 16 Attention Heads)\nTokens: goal + left + right"]
-        Goal["Language Instruction (CLIP)\n512-d Embedding"] --> MDT_Enc
-        Noise["Noisy Action Chunk a_t^(k)\n[10 x 12] + Step k"] --> MDT_Dec["6-layer Transformer Decoder\n(Cross-Attention over Observations)"]
-        MDT_Enc --> MDT_Dec
-        MDT_Dec --> DDIM["10-Step DDIM Denoising"]
-        DDIM --> Action["10-Step Action Chunk\n[10 x 12] end-effector actions"]
-    end
-
-    SAE_Dec -.->|"Causal Ablation / Activation Steering"| Pool
-```
+> **Codebase Orientation:** See the [SIR Code Mind Map](docs/sir_code_mindmap.md) for how the upstream codebase is structured and where our MIS components tap in.
 
 ### The 6-Step Protocol:
 1. **Run Rollouts with Trained Image Policy:** Execute an untouched ResNet-18 + MDT policy (`manager.image_modalities=[left,right]`, `manager.graph_modalities=[]`) and record the $4 \times 4 \times 512$ feature map at `layer4` before global average pooling. The cameras are 128 × 128 px, so each of the 16 cells covers a 32 × 32 px patch.
@@ -147,7 +116,7 @@ The repository includes an automated GitHub Action (`.github/workflows/deploy-pa
 To ensure GitHub Pages is enabled in your repository:
 1. Go to **Settings** $\to$ **Pages** in the GitHub repository.
 2. Under **Build and deployment** $\to$ **Source**, select **GitHub Actions**.
-3. Pushing any update to `main` will automatically build and deploy the interactive documentation portal!
+3. Pushing any update to `main` builds and deploys the documentation portal.
 
 ### Local Collaboration:
 ```bash
