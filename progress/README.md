@@ -21,10 +21,17 @@ For each 2-week cycle, we prepare a slide update and log entry answering:
 
 ## Timeline & Logs
 
+**Working Schedule & Cadence:**
+- **Weekly Team Working Session:** Every Friday from 08:00 AM
+- **Bi-Weekly Supervisor Meeting:** Thursdays 13:00 to 14:00 (Next sync: Nov 26, 2026 at 13:00 to 14:00)
+- **Academic Recess (Winter Break):** Dec 24, 2026 to Jan 06, 2027
+
 | Cycle | Date Range | Focus Area | Status | Log Link |
 | :--- | :--- | :--- | :--- | :--- |
-| **Meeting 1** | Kickoff: Nov 13, 2026 | Topic Definition, Architecture Blueprint & Environment Setup | **Completed** | [Cycle 01 Log](cycle_01_kickoff.md) |
-| **Meeting 2** | Nov 14 to Nov 27, 2026 | ResNet-18 Layer4 Activation Capture & Initial SAE Training | Upcoming | *In Progress* |
-| **Meeting 3** | Nov 28 to Dec 11, 2026 | Spatial Grounding to Simulator Bounding Boxes & Affordances | Scheduled | *Pending* |
-| **Meeting 4** | Dec 12 to Dec 25, 2026 | Causal Interventions (Discovery, Removal, Consequence) | Scheduled | *Pending* |
-| **Meeting 5** | Jan 2027 | Benchmarking vs. SIR & Final Seminar/Praktikum Report | Scheduled | *Pending* |
+| **Meeting 1** | Kickoff: Nov 13, 2026 | Topic Definition, Initial Setup & Scope Alignment | **Completed** | [Cycle 01 Log](cycle_01_kickoff.md) |
+| **Meeting 2** | Nov 14 to Nov 27, 2026 | Codebase Familiarization, Checkpoint Exploration & Hook Setup (Sync: Nov 26, 13:00) | **In Progress** | *Current* |
+| **Meeting 3** | Nov 28 to Dec 11, 2026 | Data Logging Pipeline & Activation Capture Validation (Sync: Dec 10) | Scheduled | *Pending* |
+| **Meeting 4** | Dec 12 to Dec 23, 2026 | Dictionary Prototyping & Pre-Holiday Baseline Review | Scheduled | *Pending* |
+| **Break** | Dec 24, 2026 to Jan 06, 2027 | University Winter Holiday Recess | Scheduled | *Recess* |
+| **Meeting 5** | Jan 07 to Jan 21, 2027 | Dictionary Training & Latent Feature Analysis (Sync: Jan 14) | Scheduled | *Pending* |
+| **Meeting 6** | Jan 22 to Feb 2027 | Evaluation, Comparative Synthesis & Final Seminar Report | Scheduled | *Pending* |

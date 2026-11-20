@@ -644,27 +644,65 @@
         </a>
       </div>
 
+      <!-- Schedule Strip -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
+        <div class="p-4 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-2xl shadow-ios">
+          <div class="text-ios-secondary text-[10px] uppercase font-bold tracking-wider">Weekly Working Session</div>
+          <div class="font-bold text-ios-text dark:text-ios-darkText mt-1">Every Friday from 08:00 AM</div>
+          <div class="text-ios-secondary text-[11px] mt-0.5">Hands-on development &amp; implementation</div>
+        </div>
+        <div class="p-4 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-2xl shadow-ios">
+          <div class="text-ios-blue text-[10px] uppercase font-bold tracking-wider">Supervisor Cadence</div>
+          <div class="font-bold text-ios-text dark:text-ios-darkText mt-1">Bi-Weekly, 13:00 - 14:00</div>
+          <div class="text-ios-secondary text-[11px] mt-0.5">Next meeting: Nov 26, 2026 (13:00 - 14:00)</div>
+        </div>
+        <div class="p-4 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-2xl shadow-ios">
+          <div class="text-ios-orange text-[10px] uppercase font-bold tracking-wider">Academic Recess</div>
+          <div class="font-bold text-ios-text dark:text-ios-darkText mt-1">Dec 24, 2026 to Jan 06, 2027</div>
+          <div class="text-ios-secondary text-[11px] mt-0.5">University winter holiday break</div>
+        </div>
+      </div>
+
       <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-8 shadow-ios">
         <div class="relative border-l-2 border-ios-border dark:border-ios-darkBorder ml-4 pl-6 space-y-8 text-xs">
           <div>
             <span class="font-bold text-ios-green font-mono uppercase">Cycle 01 • Completed (Nov 13, 2026)</span>
-            <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-0.5">Topic Formulation, Mathematical Design &amp; Setup</h4>
-            <p class="text-ios-secondary mt-1 leading-relaxed">Analyzed ICLR 2027 paper, structured the SAE dictionary architecture, and isolated team repository.</p>
+            <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-0.5">Topic Formulation, Project Scope &amp; Initial Setup</h4>
+            <p class="text-ios-secondary mt-1 leading-relaxed">Analyzed baseline literature, clarified project direction with supervisor, established team repository, and configured local development environment.</p>
           </div>
           <div>
             <span class="font-bold text-ios-blue font-mono uppercase">Cycle 02 • In Progress (Nov 14 to Nov 27, 2026)</span>
-            <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-0.5">Activation Recording &amp; Sparse Autoencoder Training</h4>
-            <p class="text-ios-secondary mt-1 leading-relaxed">Collecting 50,000 spatial activations via `parallel_tester.py` and training the Top-K SAE ($M=4096, K=32$).</p>
+            <div class="text-[11px] text-ios-blue font-semibold mt-0.5">Next Supervisor Sync: Nov 26, 2026 (13:00 - 14:00) • Team Sessions: Fridays 08:00 AM</div>
+            <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-1">Codebase Familiarization &amp; Visual Representation Exploration</h4>
+            <p class="text-ios-secondary mt-1 leading-relaxed">Exploring pre-trained policy checkpoints, inspecting intermediate visual representations, and designing initial activation extraction hooks.</p>
           </div>
           <div>
             <span class="font-bold text-ios-secondary font-mono uppercase">Cycle 03 • Scheduled (Nov 28 to Dec 11, 2026)</span>
-            <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-0.5">Spatial Grounding &amp; Latent Kept Set Extraction</h4>
-            <p class="text-ios-secondary mt-1 leading-relaxed">Upsampling feature heatmaps and computing IoU against RoboCasa 3D bounding boxes.</p>
+            <div class="text-[11px] text-ios-secondary mt-0.5">Supervisor Sync: Dec 10, 2026</div>
+            <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-1">Data Logging Pipeline &amp; Activation Capture Validation</h4>
+            <p class="text-ios-secondary mt-1 leading-relaxed">Running test policy rollouts in RoboCasa, logging visual feature representations, and verifying data pipeline throughput.</p>
           </div>
           <div>
-            <span class="font-bold text-ios-secondary font-mono uppercase">Cycle 04 • Scheduled (Dec 12 to Dec 25, 2026)</span>
-            <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-0.5">Causal Closed-Loop Interventions (D-C, R-C, C-C)</h4>
-            <p class="text-ios-secondary mt-1 leading-relaxed">Performing closed-loop rollout ablations comparing latent kept set vs. SIR explicit graphs.</p>
+            <span class="font-bold text-ios-secondary font-mono uppercase">Cycle 04 • Scheduled (Dec 12 to Dec 23, 2026)</span>
+            <div class="text-[11px] text-ios-secondary mt-0.5">Pre-Holiday Milestone Review</div>
+            <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-1">Sparse Dictionary Prototyping &amp; Baseline Analysis</h4>
+            <p class="text-ios-secondary mt-1 leading-relaxed">Drafting initial dictionary architecture, testing reconstruction loss baselines, and summarizing mid-term progress before the holiday recess.</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-black/5 dark:bg-white/5 border border-dashed border-ios-border dark:border-ios-darkBorder">
+            <span class="font-bold text-ios-orange font-mono uppercase text-[11px]">Academic Recess (Dec 24, 2026 to Jan 06, 2027)</span>
+            <p class="text-ios-secondary mt-1 leading-relaxed">University winter break. No scheduled supervisor meetings or project deliverables.</p>
+          </div>
+          <div>
+            <span class="font-bold text-ios-secondary font-mono uppercase">Cycle 05 • Scheduled (Jan 07 to Jan 21, 2027)</span>
+            <div class="text-[11px] text-ios-secondary mt-0.5">Supervisor Sync: Jan 14, 2027</div>
+            <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-1">Dictionary Training &amp; Latent Feature Analysis</h4>
+            <p class="text-ios-secondary mt-1 leading-relaxed">Training candidate dictionary models on collected representations, qualitative feature inspection, and preliminary alignment checks.</p>
+          </div>
+          <div>
+            <span class="font-bold text-ios-secondary font-mono uppercase">Cycle 06 • Scheduled (Jan 22 to Feb 2027)</span>
+            <div class="text-[11px] text-ios-secondary mt-0.5">Final Project Delivery</div>
+            <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-1">Evaluation, Comparative Synthesis &amp; Final Seminar Report</h4>
+            <p class="text-ios-secondary mt-1 leading-relaxed">Evaluating latent representations against baseline performance, synthesizing conclusions, and preparing the final seminar presentation and report.</p>
           </div>
         </div>
       </div>
