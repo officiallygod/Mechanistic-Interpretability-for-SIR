@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MIS — Mechanistic Interpretability with Object Sets for Robot Policies</title>
+  <title>MIS — Mechanistic Interpretability for SIR Robot Policies</title>
 
-  <!-- Typography: Inter & JetBrains Mono -->
+  <!-- Typography: Inter, SF Pro-like styling & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -27,403 +27,890 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace'],
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"SF Mono"', '"JetBrains Mono"', 'Menlo', 'monospace'],
           },
           colors: {
-            surface: {
-              base: '#080c14',
-              card: '#0e1320',
-              hover: '#141b2d',
-              border: '#1a2337',
-              subtle: '#25324d',
-            },
-            accent: {
-              cyan: '#38bdf8',
-              violet: '#a78bfa',
-              emerald: '#34d399',
-              amber: '#fbbf24',
-              rose: '#fb7185',
+            ios: {
+              bg: '#F5F5F7',
+              card: '#FFFFFF',
+              cardHover: '#FAFAFC',
+              border: 'rgba(0, 0, 0, 0.08)',
+              text: '#1D1D1F',
+              secondary: '#86868B',
+              blue: '#0071E3',
+              blueHover: '#0077ED',
+              cyan: '#00A3FF',
+              purple: '#7952DE',
+              green: '#34C759',
+              orange: '#FF9500',
+              red: '#FF3B30',
+              // Dark mode tokens
+              darkBg: '#0A0D14',
+              darkCard: '#131824',
+              darkBorder: '#1F2639',
+              darkText: '#F5F5F7',
+              darkSecondary: '#949EAE'
             }
+          },
+          boxShadow: {
+            'ios': '0 4px 24px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.03)',
+            'ios-lg': '0 12px 40px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04)',
+            'ios-button': '0 2px 8px rgba(0, 113, 227, 0.25)',
           }
         }
       }
     }
   </script>
+
   <style>
+    /* Smooth theme transitions */
+    html {
+      scroll-behavior: smooth;
+    }
     body {
-      background-color: #080c14;
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     .math { font-family: 'KaTeX_Math', serif; }
+
+    /* iOS Glassmorphism */
+    .ios-glass {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    /* Active button scale */
+    .btn-ios {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-ios:active {
+      transform: scale(0.97);
+    }
+
+    /* Grid cell animations */
+    .grid-cell {
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+    .grid-cell:hover {
+      transform: scale(1.15);
+      z-index: 10;
+    }
+
+    /* Hide scrollbar for gallery */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
   </style>
 </head>
-<body class="text-slate-200 antialiased selection:bg-cyan-500 selection:text-black">
+<body class="bg-ios-bg dark:bg-ios-darkBg text-ios-text dark:text-ios-darkText antialiased selection:bg-ios-blue selection:text-white min-h-screen">
 
-  <!-- Top Navigation Bar -->
-  <header class="border-b border-surface-border bg-surface-base/90 backdrop-blur-md sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+  <!-- Top iOS Navigation Bar -->
+  <header class="border-b border-ios-border dark:border-ios-darkBorder bg-ios-card/80 dark:bg-ios-darkCard/80 ios-glass sticky top-0 z-50 transition-colors">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <span class="px-2.5 py-0.5 text-xs font-mono font-bold bg-cyan-950 text-cyan-400 rounded-md border border-cyan-800">MIS</span>
-        <h1 class="text-sm font-semibold tracking-tight text-white">Mechanistic Interpretability for SIR</h1>
+        <span class="px-2.5 py-1 text-xs font-mono font-bold bg-ios-blue/10 text-ios-blue dark:bg-ios-blue/20 rounded-full">MIS</span>
+        <a href="#hero" class="text-sm font-semibold tracking-tight hover:opacity-80 transition">Mechanistic Interpretability for SIR</a>
       </div>
 
-      <nav class="hidden md:flex items-center space-x-6 text-xs text-slate-400">
-        <a href="#architecture" class="hover:text-white transition">Architecture</a>
-        <a href="#methodology" class="hover:text-white transition">Methodology</a>
-        <a href="#conditions" class="hover:text-white transition">3 Conditions</a>
-        <a href="#progress" class="hover:text-white transition">Progress</a>
+      <nav class="hidden lg:flex items-center space-x-8 text-xs font-medium text-ios-secondary dark:text-ios-darkSecondary">
+        <a href="#gallery" class="hover:text-ios-blue transition">Tensor Gallery</a>
+        <a href="#discussions" class="hover:text-ios-blue transition">Core Concepts</a>
+        <a href="#architecture" class="hover:text-ios-blue transition">Architecture</a>
+        <a href="#conditions" class="hover:text-ios-blue transition">3 Verification Tests</a>
+        <a href="#progress" class="hover:text-ios-blue transition">Cadence</a>
       </nav>
 
-      <div class="flex items-center space-x-2 text-xs">
-        <a href="pipeline_explained.html" class="px-3 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 font-medium transition border border-cyan-500/30 flex items-center space-x-1.5">
-          <span>🔍 Tensor Walkthrough</span>
-        </a>
+      <div class="flex items-center space-x-3 text-xs">
+        <!-- Theme Toggle Button -->
+        <button id="themeToggle" onclick="toggleTheme()" class="btn-ios p-2 rounded-full bg-black/5 dark:bg-white/10 text-ios-text dark:text-ios-darkText hover:bg-black/10 dark:hover:bg-white/20 transition">
+          <svg id="sunIcon" class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <svg id="moonIcon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
+
         <a href="https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing" target="_blank"
-           class="px-3 py-1.5 rounded-lg bg-surface-card hover:bg-surface-hover text-amber-300 font-medium transition border border-surface-border flex items-center space-x-1.5 hidden sm:flex">
+           class="btn-ios px-3.5 py-1.5 rounded-full bg-ios-orange/10 hover:bg-ios-orange/20 text-ios-orange font-semibold transition border border-ios-orange/30 hidden sm:inline-flex items-center space-x-1.5">
           <span>📊 Slides</span>
         </a>
         <a href="https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076" target="_blank"
-           class="px-3 py-1.5 rounded-lg bg-surface-card hover:bg-surface-hover text-violet-300 font-medium transition border border-surface-border flex items-center space-x-1.5 hidden sm:flex">
+           class="btn-ios px-3.5 py-1.5 rounded-full bg-ios-purple/10 hover:bg-ios-purple/20 text-ios-purple font-semibold transition border border-ios-purple/30 hidden sm:inline-flex items-center space-x-1.5">
           <span>🧠 Miro</span>
         </a>
         <a href="https://github.com/officiallygod/Mechanistic-Interpretability-for-SIR" target="_blank"
-           class="px-3 py-1.5 rounded-lg bg-surface-card hover:bg-surface-hover text-white font-medium transition border border-surface-border flex items-center space-x-1.5">
+           class="btn-ios px-4 py-1.5 rounded-full bg-ios-blue hover:bg-ios-blueHover text-white font-medium transition shadow-ios-button flex items-center space-x-1.5">
           <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-          <span>Repo</span>
+          <span>GitHub</span>
         </a>
       </div>
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <main class="max-w-5xl mx-auto px-6 py-16 space-y-24">
-    <section class="text-center space-y-6">
-      <div class="inline-flex items-center space-x-2 text-xs font-mono text-cyan-400 bg-cyan-950/40 border border-cyan-800/40 rounded-full px-3.5 py-1">
-        <span>MIS PROJECT</span>
-        <span>•</span>
+  <main class="max-w-6xl mx-auto px-6 py-12 md:py-20 space-y-24">
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="text-center space-y-6 max-w-4xl mx-auto">
+      <div class="inline-flex items-center space-x-2 text-xs font-semibold px-4 py-1.5 rounded-full bg-ios-blue/10 text-ios-blue dark:bg-ios-blue/20">
         <span>SEMINAR &amp; PRAKTIKUM</span>
         <span>•</span>
-        <span>INTUITIVE ROBOTS LAB, KIT</span>
+        <span>INTUITIVE ROBOTS LAB (KIT)</span>
       </div>
 
-      <h2 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight">
-        MIS: Mechanistic Interpretability <br/>
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-violet-400">
+      <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-ios-text dark:text-ios-darkText leading-[1.08]">
+        Mechanistic Interpretability <br/>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-ios-blue via-ios-cyan to-ios-purple">
           for SIR Robot Policies
         </span>
-      </h2>
+      </h1>
 
-      <p class="text-lg text-slate-300 font-medium max-w-2xl mx-auto leading-relaxed">
-        Uncovering Implicit Object Sets in Robot Policies via Sparse Autoencoders
+      <p class="text-lg sm:text-xl text-ios-secondary dark:text-ios-darkSecondary max-w-2xl mx-auto font-normal leading-relaxed">
+        Does an end-to-end vision policy implicitly form an object set inside its weights? Uncovering latent kept sets via Sparse Autoencoders.
       </p>
 
-      <p class="text-sm text-slate-400 max-w-3xl mx-auto leading-relaxed">
-        Investigating whether an untouched, end-to-end vision policy implicitly forms an object set internally, evaluating whole-object vs. part-level affordances under Discovery, Removal, and Consequence.
-      </p>
-
-      <div class="pt-4 flex flex-wrap justify-center items-center gap-3 text-xs">
-        <a href="pipeline_explained.html"
-           class="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition flex items-center space-x-2 shadow-lg shadow-cyan-500/10">
-          <span>🔍 Step-by-Step Tensor Walkthrough</span>
+      <!-- Large iOS-Style Buttons -->
+      <div class="pt-4 flex flex-wrap justify-center items-center gap-4">
+        <a href="#gallery"
+           class="btn-ios px-6 py-3.5 rounded-full bg-ios-blue hover:bg-ios-blueHover text-white font-semibold text-sm transition shadow-ios-button flex items-center space-x-2">
+          <span>🔍 Explore Tensor Gallery</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
         </a>
-        <a href="https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing" target="_blank"
-           class="px-4 py-2 rounded-xl bg-surface-card hover:bg-surface-hover text-amber-300 border border-surface-border font-medium transition flex items-center space-x-2">
-          <span>📊 Presentation Slides</span>
+        <a href="#discussions"
+           class="btn-ios px-6 py-3.5 rounded-full bg-ios-card dark:bg-ios-darkCard hover:bg-ios-cardHover border border-ios-border dark:border-ios-darkBorder text-ios-text dark:text-ios-darkText font-semibold text-sm transition shadow-ios flex items-center space-x-2">
+          <span>💡 Core Concepts &amp; FAQs</span>
         </a>
-        <a href="https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076" target="_blank"
-           class="px-4 py-2 rounded-xl bg-surface-card hover:bg-surface-hover text-violet-300 border border-surface-border font-medium transition flex items-center space-x-2">
-          <span>🧠 Miro Board</span>
+        <a href="sir_code_mindmap.md"
+           class="btn-ios px-6 py-3.5 rounded-full bg-ios-purple/10 hover:bg-ios-purple/20 text-ios-purple font-semibold text-sm transition border border-ios-purple/30 flex items-center space-x-2">
+          <span>🗺️ Code Mind Map</span>
         </a>
       </div>
 
-      <div class="pt-4 flex flex-wrap justify-center items-center gap-6 text-xs text-slate-500 font-mono">
-        <div><span class="text-slate-400">Authors:</span> <strong class="text-slate-300 font-sans">Allen &amp; Luca (Group 4)</strong></div>
+      <!-- Authors Meta -->
+      <div class="pt-4 flex flex-wrap justify-center items-center gap-6 text-xs text-ios-secondary dark:text-ios-darkSecondary font-mono">
+        <div>Authors: <strong class="text-ios-text dark:text-ios-darkText font-sans">Allen &amp; Luca (Group 4)</strong></div>
         <div>•</div>
-        <div><span class="text-slate-400">Supervisor:</span> <strong class="text-slate-300 font-sans">Paul Mattes</strong></div>
+        <div>Supervisor: <strong class="text-ios-text dark:text-ios-darkText font-sans">Paul Mattes</strong></div>
         <div>•</div>
-        <div><span class="text-slate-400">Lab:</span> <strong class="text-slate-300 font-sans">Intuitive Robots Lab (KIT)</strong></div>
+        <div>Base: <strong class="text-ios-text dark:text-ios-darkText font-sans">RoboCasa / SIR_Model</strong></div>
       </div>
     </section>
 
-    <!-- Core Research Question -->
-    <section class="bg-surface-card border border-surface-border rounded-2xl p-8 space-y-6">
-      <div class="flex items-center space-x-3">
-        <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
-        <h3 class="text-sm uppercase tracking-widest font-mono text-cyan-400 font-semibold">The Guiding Research Question</h3>
-      </div>
 
-      <blockquote class="text-base sm:text-lg italic text-slate-200 border-l-2 border-cyan-500 pl-5 py-2 leading-relaxed bg-surface-base/40 rounded-r-xl">
-        "Train a sparse autoencoder on the activations of an image policy that has no object selection. Start with the ResNet-18 7×7 feature map before pooling. Label each feature by where it fires (activation map vs. object boxes from the simulator). The objects whose features are active at a step form a 'latent kept set'. Need to see if we take a whole object or only parts of objects (pixel level or object level). Direction: does a policy without explicit selection form an object set internally? Test the latent kept set with Discovery, Removal and Consequence, by switching features off during rollouts, and compare it with SIR's explicit kept set."
-      </blockquote>
-
-      <div class="grid sm:grid-cols-2 gap-4 pt-2">
-        <div class="bg-surface-base p-5 rounded-xl border border-surface-border space-y-2">
-          <div class="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400">Core Direction</div>
-          <p class="text-sm text-slate-300 leading-relaxed">
-            Does a vision policy without explicit subset selection form an implicit object set internally? We test this latent kept set under Discovery, Removal, and Consequence by switching features off during rollouts.
-          </p>
-        </div>
-        <div class="bg-surface-base p-5 rounded-xl border border-surface-border space-y-2">
-          <div class="text-xs font-mono font-bold uppercase tracking-wider text-violet-400">Granularity: Whole vs Part</div>
-          <p class="text-sm text-slate-300 leading-relaxed">
-            Do active SAE features capture entire objects (object-level) or isolate localized functional affordances (e.g. drawer handle, mug rim, gripper fingers)? We evaluate pixel-level vs part-level vs whole-object bounds.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Complete Pipeline Diagram (Mermaid) -->
-    <section id="architecture" class="space-y-6">
-      <div class="border-b border-surface-border pb-3 flex items-center justify-between">
+    <!-- ============================================================ -->
+    <!-- INTERACTIVE TENSOR GALLERY (ONE-BY-ONE STEPPER) -->
+    <!-- ============================================================ -->
+    <section id="gallery" class="space-y-6">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-ios-border dark:border-ios-darkBorder pb-4">
         <div>
-          <h3 class="text-xl font-bold text-white tracking-tight">End-to-End Technical Architecture</h3>
-          <p class="text-xs text-slate-400 mt-1">Visual perception backbone, Sparse Autoencoder tap, grounding, and diffusion action generator.</p>
+          <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-blue">Interactive Pipeline</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
+            End-to-End Tensor Flow Gallery
+          </h2>
+          <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary mt-1">
+            Step through every tensor transition, dimension, and physical mapping one by one.
+          </p>
         </div>
-        <a href="pipeline_explained.html" class="text-xs font-mono text-cyan-400 hover:text-cyan-300 transition">
-          Full Tensor Details ↗
+
+        <!-- Gallery Controls -->
+        <div class="flex items-center space-x-2">
+          <button onclick="prevStep()" class="btn-ios w-10 h-10 rounded-full bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder flex items-center justify-center text-ios-text dark:text-ios-darkText hover:bg-black/5 dark:hover:bg-white/10 shadow-ios">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+          </button>
+          <span id="stepCounter" class="text-xs font-mono font-bold px-3 py-1 bg-black/5 dark:bg-white/10 rounded-full">1 / 8</span>
+          <button onclick="nextStep()" class="btn-ios w-10 h-10 rounded-full bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder flex items-center justify-center text-ios-text dark:text-ios-darkText hover:bg-black/5 dark:hover:bg-white/10 shadow-ios">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step Navigation Pills -->
+      <div class="flex items-center space-x-2 overflow-x-auto no-scrollbar py-2 text-xs font-medium">
+        <button onclick="goToStep(0)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-blue text-white shadow-ios" data-index="0">1. Camera RGB</button>
+        <button onclick="goToStep(1)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary dark:text-ios-darkSecondary" data-index="1">2. Layer 4 Grid</button>
+        <button onclick="goToStep(2)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary dark:text-ios-darkSecondary" data-index="2">3. The GAP Trap</button>
+        <button onclick="goToStep(3)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary dark:text-ios-darkSecondary" data-index="3">4. SAE Untangling</button>
+        <button onclick="goToStep(4)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary dark:text-ios-darkSecondary" data-index="4">5. Spatial Heatmap</button>
+        <button onclick="goToStep(5)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary dark:text-ios-darkSecondary" data-index="5">6. Simulator IoU</button>
+        <button onclick="goToStep(6)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary dark:text-ios-darkSecondary" data-index="6">7. MDT Actions</button>
+        <button onclick="goToStep(7)" class="step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary dark:text-ios-darkSecondary" data-index="7">8. Causal Ablations</button>
+      </div>
+
+      <!-- Gallery Slide Card Container -->
+      <div id="galleryContainer" class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 sm:p-10 shadow-ios-lg transition-all min-h-[460px] flex flex-col justify-between">
+        
+        <!-- Slide Content will be injected dynamically by JavaScript below -->
+        <div id="slideContent">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Slide Footer Action -->
+        <div class="border-t border-ios-border dark:border-ios-darkBorder pt-6 mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-ios-secondary dark:text-ios-darkSecondary">
+          <div id="slideFormula" class="font-mono">
+            <!-- Formula injected by JS -->
+          </div>
+          <div class="flex items-center space-x-3">
+            <button onclick="prevStep()" class="btn-ios px-4 py-2 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 text-ios-text dark:text-ios-darkText font-medium">Previous</button>
+            <button onclick="nextStep()" class="btn-ios px-5 py-2 rounded-full bg-ios-blue text-white font-semibold shadow-ios-button hover:bg-ios-blueHover">Next Stage ➔</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ============================================================ -->
+    <!-- CORE CONCEPTS & THE ARCHITECTURAL QUESTIONS (FAQ / DEEP DIVE) -->
+    <!-- ============================================================ -->
+    <section id="discussions" class="space-y-8">
+      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4">
+        <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-purple">Mental Model &amp; Theory</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
+          Core Architectural Principles &amp; Insights
+        </h2>
+        <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary mt-1">
+          Everything discussed regarding why SAEs work, how they learn, resolution tradeoffs, and causal proofs.
+        </p>
+      </div>
+
+      <!-- iOS Cards Grid (Clean 2-Column Responsive Layout) -->
+      <div class="grid md:grid-cols-2 gap-6">
+
+        <!-- Card 1: Why SAE instead of ResNet? -->
+        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-7 shadow-ios space-y-4 hover:shadow-ios-lg transition-all">
+          <div class="flex items-center justify-between">
+            <span class="w-8 h-8 rounded-full bg-ios-blue/10 text-ios-blue font-bold flex items-center justify-center text-xs font-mono">01</span>
+            <span class="text-xs font-mono px-2.5 py-1 bg-black/5 dark:bg-white/10 rounded-full font-semibold">Superposition</span>
+          </div>
+          <h3 class="text-lg font-bold text-ios-text dark:text-ios-darkText">Why do we need the SAE? Why not just ResNet?</h3>
+          <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+            ResNet has only 512 dimensions at `layer4`, but the kitchen contains thousands of visual concepts. Because dimensions are limited, ResNet stores concepts in <strong class="text-ios-text dark:text-ios-darkText">superposition</strong>—Neuron #42 fires simultaneously for a microwave handle, a sink reflection, and a blue texture (polysemanticity).
+          </p>
+          <div class="p-3 bg-ios-bg dark:bg-ios-darkBg rounded-2xl text-xs font-mono space-y-1">
+            <div class="text-ios-blue font-bold">ResNet: Polysemantic (Tangled)</div>
+            <div class="text-ios-green font-bold">SAE: Monosemantic (1 Feature = 1 Concept)</div>
+          </div>
+        </div>
+
+        <!-- Card 2: How does SAE Learn? -->
+        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-7 shadow-ios space-y-4 hover:shadow-ios-lg transition-all">
+          <div class="flex items-center justify-between">
+            <span class="w-8 h-8 rounded-full bg-ios-green/10 text-ios-green font-bold flex items-center justify-center text-xs font-mono">02</span>
+            <span class="text-xs font-mono px-2.5 py-1 bg-black/5 dark:bg-white/10 rounded-full font-semibold">Unsupervised</span>
+          </div>
+          <h3 class="text-lg font-bold text-ios-text dark:text-ios-darkText">How does the SAE learn? Does it check if the robot succeeds?</h3>
+          <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+            <strong class="text-ios-text dark:text-ios-darkText">NO. The SAE is trained completely offline with ZERO simulator interaction.</strong> It has no idea a robot or kitchen exists! It only solves an unsupervised dictionary puzzle: reconstructing 512-d activation vectors using only 32 non-zero words out of 4,096.
+          </p>
+          <div class="p-3 bg-ios-bg dark:bg-ios-darkBg rounded-2xl text-xs font-mono text-ios-secondary dark:text-ios-darkSecondary">
+            Objective: <span class="text-ios-text dark:text-ios-darkText">min ||x - x̂||²</span> subject to <span class="text-ios-text dark:text-ios-darkText">Top-32(f)</span>. No reward signal!
+          </div>
+        </div>
+
+        <!-- Card 3: Why K=32 & No Identity Shortcut? -->
+        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-7 shadow-ios space-y-4 hover:shadow-ios-lg transition-all">
+          <div class="flex items-center justify-between">
+            <span class="w-8 h-8 rounded-full bg-ios-purple/10 text-ios-purple font-bold flex items-center justify-center text-xs font-mono">03</span>
+            <span class="text-xs font-mono px-2.5 py-1 bg-black/5 dark:bg-white/10 rounded-full font-semibold">Sparsity Pareto</span>
+          </div>
+          <h3 class="text-lg font-bold text-ios-text dark:text-ios-darkText">Why doesn't it learn an identity shortcut, and why K=32?</h3>
+          <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+            Because 4,064 of the 4,096 features are strictly clamped to zero on every forward pass, an identity shortcut is mathematically impossible! Setting $K=32$ (~6% of input dimension) hits the frontier: $\ge 95\%$ variance explained while maintaining strict feature isolation.
+          </p>
+          <div class="p-3 bg-ios-bg dark:bg-ios-darkBg rounded-2xl text-xs font-mono text-ios-secondary dark:text-ios-darkSecondary">
+            Too low ($K=2$): Information loss • Too high ($K=512$): Polysemanticity returns.
+          </div>
+        </div>
+
+        <!-- Card 4: Where does the Language Goal Go? -->
+        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-7 shadow-ios space-y-4 hover:shadow-ios-lg transition-all">
+          <div class="flex items-center justify-between">
+            <span class="w-8 h-8 rounded-full bg-ios-orange/10 text-ios-orange font-bold flex items-center justify-center text-xs font-mono">04</span>
+            <span class="text-xs font-mono px-2.5 py-1 bg-black/5 dark:bg-white/10 rounded-full font-semibold">Modality Separation</span>
+          </div>
+          <h3 class="text-lg font-bold text-ios-text dark:text-ios-darkText">Where do we input the language goal in the SAE?</h3>
+          <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+            <strong class="text-ios-text dark:text-ios-darkText">NOWHERE.</strong> ResNet processes pure camera pixels; CLIP processes text. They only meet downstream inside the MDT action generator. The SAE taps ResNet <em class="text-ios-text dark:text-ios-darkText">before</em> language is combined, isolating objective visual perception from task instructions.
+          </p>
+          <div class="p-3 bg-ios-bg dark:bg-ios-darkBg rounded-2xl text-xs font-mono text-ios-secondary dark:text-ios-darkSecondary">
+            Image ➔ ResNet ➔ [SAE Tap] ➔ MDT Cross-Attention 🠔 CLIP Language
+          </div>
+        </div>
+
+        <!-- Card 5: Whole Objects vs. Affordances -->
+        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-7 shadow-ios space-y-4 hover:shadow-ios-lg transition-all">
+          <div class="flex items-center justify-between">
+            <span class="w-8 h-8 rounded-full bg-ios-cyan/10 text-ios-cyan font-bold flex items-center justify-center text-xs font-mono">05</span>
+            <span class="text-xs font-mono px-2.5 py-1 bg-black/5 dark:bg-white/10 rounded-full font-semibold">Compositionality</span>
+          </div>
+          <h3 class="text-lg font-bold text-ios-text dark:text-ios-darkText">Are we doomed if features activate on small pixel clusters?</h3>
+          <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+            <strong class="text-ios-green font-bold">ABSOLUTELY NOT—WE HIT THE JACKPOT!</strong> Complex objects are represented compositionally (e.g. Microwave = Door + Handle + Keypad). If a feature fires only on the 20-pixel handle rather than the whole drawer, we prove policies naturally discover <strong class="text-ios-text dark:text-ios-darkText">functional affordances</strong>!
+          </p>
+          <div class="p-3 bg-ios-bg dark:bg-ios-darkBg rounded-2xl text-xs font-mono text-ios-secondary dark:text-ios-darkSecondary">
+            Affordance-level: { drawer_handle } vs. Whole-object: { drawer_body }
+          </div>
+        </div>
+
+        <!-- Card 6: 128x128 vs 224x224 Grid Resolution -->
+        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-7 shadow-ios space-y-4 hover:shadow-ios-lg transition-all">
+          <div class="flex items-center justify-between">
+            <span class="w-8 h-8 rounded-full bg-ios-red/10 text-ios-red font-bold flex items-center justify-center text-xs font-mono">06</span>
+            <span class="text-xs font-mono px-2.5 py-1 bg-black/5 dark:bg-white/10 rounded-full font-semibold">Implementation Truth</span>
+          </div>
+          <h3 class="text-lg font-bold text-ios-text dark:text-ios-darkText">Why 7x7 vs 4x4? Where do the 49 spatial locations come from?</h3>
+          <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+            Canonical ImageNet ResNet uses $224 \times 224 \implies 7 \times 7 = 49$ tokens. However, RoboCasa natively stores $128 \times 128 \implies 4 \times 4 = 16$ tokens. We can either upscale frames to $224 \times 224$ for higher spatial precision, or tap the native $4 \times 4$ stream.
+          </p>
+          <div class="p-3 bg-ios-bg dark:bg-ios-darkBg rounded-2xl text-xs font-mono text-ios-secondary dark:text-ios-darkSecondary">
+            224x224: 49 spatial receptive fields • 128x128: 16 spatial receptive fields.
+          </div>
+        </div>
+
+        <!-- Card 7: Role of Distractors & Negative Controls -->
+        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-7 shadow-ios space-y-4 hover:shadow-ios-lg transition-all">
+          <div class="flex items-center justify-between">
+            <span class="w-8 h-8 rounded-full bg-ios-orange/10 text-ios-orange font-bold flex items-center justify-center text-xs font-mono">07</span>
+            <span class="text-xs font-mono px-2.5 py-1 bg-black/5 dark:bg-white/10 rounded-full font-semibold">Control Baselines</span>
+          </div>
+          <h3 class="text-lg font-bold text-ios-text dark:text-ios-darkText">Do we add distractors? How do they prove causality?</h3>
+          <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+            RoboCasa kitchen scenes spawn with 15–25 distractor items (sponges, kettles, mugs). Distractors are our negative control: ablating the handle must fail the robot (0% success), while ablating an equally active distractor must leave the robot unaffected (95% success).
+          </p>
+          <div class="p-3 bg-ios-bg dark:bg-ios-darkBg rounded-2xl text-xs font-mono text-ios-secondary dark:text-ios-darkSecondary">
+            Selectivity Proof: Handle ablation collapses policy; Distractor ablation preserves it.
+          </div>
+        </div>
+
+        <!-- Card 8: How SIR Leaked Information -->
+        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-7 shadow-ios space-y-4 hover:shadow-ios-lg transition-all">
+          <div class="flex items-center justify-between">
+            <span class="w-8 h-8 rounded-full bg-ios-red/10 text-ios-red font-bold flex items-center justify-center text-xs font-mono">08</span>
+            <span class="text-xs font-mono px-2.5 py-1 bg-black/5 dark:bg-white/10 rounded-full font-semibold">ICLR 2027 Finding</span>
+          </div>
+          <h3 class="text-lg font-bold text-ios-text dark:text-ios-darkText">How did SIR "mess up" and why does our project exist?</h3>
+          <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+            The ICLR 2027 paper proved that SIR suffered from <strong class="text-ios-red font-bold">information leakage</strong>—the policy claimed to keep only 2 objects, but secretly relied on leaked information from excluded objects via global graph pooling. When leaks were strictly plugged, success collapsed.
+          </p>
+          <div class="p-3 bg-ios-bg dark:bg-ios-darkBg rounded-2xl text-xs font-mono text-ios-secondary dark:text-ios-darkSecondary">
+            Our Mission: Test if an untouched pixel policy forms an honest, leak-free object set.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ============================================================ -->
+    <!-- THE 3 VERIFICATION TESTS (DISCOVERY, REMOVAL, CONSEQUENCE) -->
+    <!-- ============================================================ -->
+    <section id="conditions" class="space-y-8">
+      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4">
+        <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-green">Formal Scientific Criteria</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
+          The Three Verification Conditions
+        </h2>
+        <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary mt-1">
+          Adopted from the In-Loop Subset Explanations (ILSE) framework to rigorously test our Latent Kept Set.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+
+        <!-- D-C -->
+        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-7 shadow-ios space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono px-2.5 py-1 bg-ios-green/10 text-ios-green font-bold rounded-full">D-C</span>
+            <span class="text-xs text-ios-secondary dark:text-ios-darkSecondary font-mono">1. DISCOVERY</span>
+          </div>
+          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">Discovery Condition</h3>
+          <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+            The object selection must emerge naturally from the policy's own representations, rather than being supplied by an external simulator oracle or ground-truth bounding box list.
+          </p>
+          <div class="p-3 bg-ios-bg dark:bg-ios-darkBg rounded-2xl text-[11px] font-mono text-ios-secondary dark:text-ios-darkSecondary">
+            ✓ Passes by construction: Trained end-to-end on image pixels without object loss.
+          </div>
+        </div>
+
+        <!-- R-C -->
+        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-7 shadow-ios space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono px-2.5 py-1 bg-ios-orange/10 text-ios-orange font-bold rounded-full">R-C</span>
+            <span class="text-xs text-ios-secondary dark:text-ios-darkSecondary font-mono">2. REMOVAL</span>
+          </div>
+          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">Removal Condition</h3>
+          <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+            Excluded objects must have zero causal influence on the generated trajectory chunk. Clamping non-selected object features to zero in the SAE must leave the motor action unchanged.
+          </p>
+          <div class="p-3 bg-ios-bg dark:bg-ios-darkBg rounded-2xl text-[11px] font-mono text-ios-secondary dark:text-ios-darkSecondary">
+            Requirement: <span class="text-ios-text dark:text-ios-darkText">Δa = ||a_original - a_ablated|| ≈ 0</span>
+          </div>
+        </div>
+
+        <!-- C-C -->
+        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-7 shadow-ios space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono px-2.5 py-1 bg-ios-blue/10 text-ios-blue font-bold rounded-full">C-C</span>
+            <span class="text-xs text-ios-secondary dark:text-ios-darkSecondary font-mono">3. CONSEQUENCE</span>
+          </div>
+          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">Consequence Condition</h3>
+          <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+            Ablating the latent kept set features must cause task failure, while ablating a matched random set of distractor features must preserve policy completion.
+          </p>
+          <div class="p-3 bg-ios-bg dark:bg-ios-darkBg rounded-2xl text-[11px] font-mono text-ios-secondary dark:text-ios-darkSecondary">
+            Selectivity: <span class="text-ios-text dark:text-ios-darkText">Success(Kept Ablated) ≪ Success(Distractor Ablated)</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ============================================================ -->
+    <!-- END-TO-END MERMAID ARCHITECTURE -->
+    <!-- ============================================================ -->
+    <section id="architecture" class="space-y-6">
+      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+        <div>
+          <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-blue">Global System Blueprint</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
+            End-to-End System Architecture
+          </h2>
+          <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary mt-1">
+            Tapping ResNet-18 layer4, overcomplete dictionary expansion, and diffusion policy rollouts.
+          </p>
+        </div>
+        <a href="sir_code_mindmap.md" class="text-xs font-mono text-ios-blue font-semibold hover:underline">
+          View Upstream Mind Map ↗
         </a>
       </div>
 
-      <div class="bg-surface-card p-6 sm:p-8 rounded-2xl border border-surface-border overflow-x-auto">
+      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 sm:p-10 shadow-ios overflow-x-auto">
         <pre class="mermaid text-center">
 flowchart TD
-    subgraph S1["1. Visual Observation & Backbone (ResNet-18)"]
-        Cam["Static / In-Hand Camera\nRGB: 224 x 224 x 3"] --> Conv1["Conv1 + MaxPool\n56 x 56 x 64"]
-        Conv1 --> L1["Layer 1 (BasicBlock)\n56 x 56 x 64"]
-        L1 --> L2["Layer 2 (BasicBlock)\n28 x 28 x 128"]
-        L2 --> L3["Layer 3 (BasicBlock)\n14 x 14 x 256"]
-        L3 --> L4["Layer 4 (BasicBlock)\n7 x 7 x 512"]
-        L4 --> Pool["Global Average Pooling\nVector: 512-d"]
+    subgraph S1["1. Visual Observation & ResNet-18 Backbone"]
+        Cam["Static / In-Hand Camera\nRGB: 224x224x3 or 128x128x3"] --> Conv1["Conv1 + MaxPool\nStride 4 Downsampling"]
+        Conv1 --> L1["Layer 1 (BasicBlock)\n64 channels"]
+        L1 --> L2["Layer 2 (BasicBlock)\n128 channels"]
+        L2 --> L3["Layer 3 (BasicBlock)\n256 channels"]
+        L3 --> L4["Layer 4 (BasicBlock)\n7x7x512 (or 4x4x512)"]
+        L4 --> Pool["Global Average Pooling (GAP)\n512-d Collapsed Vector"]
     end
 
     subgraph S2["2. Mechanistic Interpretability: Sparse Autoencoder (SAE)"]
-        L4 -.->|"Tap 49 Spatial Cells (x_i in R^512)"| SAE_Enc["SAE Encoder: ReLU(W_enc · x + b)\nTop-K / L1 Sparsity"]
-        SAE_Enc --> SparseF["Overcomplete Sparse Code\nf in R^4096 (L0 ≪ 4096)"]
+        L4 -.->|"★ MIS Tap 49 Spatial Cells (x_i in R^512)"| SAE_Enc["SAE Encoder: ReLU(W_enc · x + b)\nTop-32 Sparsity (K=32)"]
+        SAE_Enc --> SparseF["Overcomplete Sparse Code\nf in R^4096 (L0 = 32)"]
         SparseF --> SAE_Dec["SAE Decoder: W_dec · f + b\nx_hat in R^512"]
-        SparseF --> Grounding["Spatial Receptive Field Heatmaps\nIoU overlap with Simulator Bounding Boxes"]
-        Grounding --> LatentSet["Emergent Latent Kept Set K_latent\n(Mug, Drawer Handle, Gripper)"]
+        SparseF --> Grounding["Bilinear Upsampling to 224x224\nIoU overlap with RoboCasa 3D Bounding Boxes"]
+        Grounding --> LatentSet["Emergent Latent Kept Set K_latent\n(Drawer Handle, Gripper, Mug Rim)"]
     end
 
     subgraph S3["3. Action Generator: MDT Diffusion Transformer"]
         Pool --> MDT_Enc["4-layer Transformer Encoder\n(Dim: 512, 16 Attention Heads)"]
-        Goal["Language Instruction (CLIP)\n512-d Embedding"] --> MDT_Enc
+        Goal["Language Instruction (CLIP)\n512-d Text Embedding"] --> MDT_Enc
         Noise["Noisy Action Chunk a_t^(k)\n[10 x 12] + Step k"] --> MDT_Dec["6-layer Transformer Decoder\n(Cross-Attention over Observations)"]
         MDT_Enc --> MDT_Dec
         MDT_Dec --> DDIM["10-Step DDIM Denoising"]
-        DDIM --> Action["10-Step Action Chunk\n[10 x 12] (Arm Velocity, Gripper Pose)"]
+        DDIM --> Action["10-Step Action Chunk\n[10 x 12] Robot Motor Commands"]
     end
 
-    SAE_Dec -.->|"Causal Ablation / Activation Steering"| Pool
+    SAE_Dec -.->|"★ MIS Causal Feature Ablation (f[j]=0)"| Pool
         </pre>
       </div>
     </section>
 
-    <!-- Methodology Breakdown -->
-    <section id="methodology" class="space-y-6">
-      <div class="border-b border-surface-border pb-3">
-        <h3 class="text-xl font-bold text-white tracking-tight">Methodology &amp; Step-by-Step Pipeline</h3>
-        <p class="text-xs text-slate-400 mt-1">How we extract, ground, and test implicit object sets without modifying policy weights.</p>
-      </div>
 
-      <div class="grid md:grid-cols-2 gap-4">
-        <div class="bg-surface-card border border-surface-border p-6 rounded-2xl space-y-3">
-          <div class="w-7 h-7 rounded-lg bg-cyan-950 text-cyan-400 font-mono text-xs font-bold border border-cyan-800 flex items-center justify-center">1</div>
-          <h4 class="text-base font-semibold text-white">Activation Tapping (layer4)</h4>
-          <p class="text-sm text-slate-300 leading-relaxed">
-            During policy execution, we register forward hooks at ResNet-18 <code>layer4</code>. Rather than pooling across space, we extract the raw $7 \times 7$ grid of 512-dimensional vectors (49 spatial tokens), each possessing an isolated receptive field over the camera view.
-          </p>
-        </div>
-
-        <div class="bg-surface-card border border-surface-border p-6 rounded-2xl space-y-3">
-          <div class="w-7 h-7 rounded-lg bg-violet-950 text-violet-400 font-mono text-xs font-bold border border-violet-800 flex items-center justify-center">2</div>
-          <h4 class="text-base font-semibold text-white">Overcomplete Sparse Autoencoder</h4>
-          <p class="text-sm text-slate-300 leading-relaxed">
-            We train an SAE to reconstruct the 512-d activations using an expanded feature dictionary ($M = 4096$, $8\times$ expansion). Enforcing Top-K sparsity ($K \approx 32$) decomposes polysemantic neuron activations into distinct, monosemantic feature directions.
-          </p>
-        </div>
-
-        <div class="bg-surface-card border border-surface-border p-6 rounded-2xl space-y-3">
-          <div class="w-7 h-7 rounded-lg bg-emerald-950 text-emerald-400 font-mono text-xs font-bold border border-emerald-800 flex items-center justify-center">3</div>
-          <h4 class="text-base font-semibold text-white">Spatial Grounding to Simulator Boxes</h4>
-          <p class="text-sm text-slate-300 leading-relaxed">
-            Active SAE features are mapped across the $7 \times 7$ spatial grid into 2D heatmaps. By computing Intersection-over-Union (IoU) against simulator 2D/3D bounding boxes from RoboCasa/CALVIN, features are semantically labeled to specific objects.
-          </p>
-        </div>
-
-        <div class="bg-surface-card border border-surface-border p-6 rounded-2xl space-y-3">
-          <div class="w-7 h-7 rounded-lg bg-amber-950 text-amber-400 font-mono text-xs font-bold border border-amber-800 flex items-center justify-center">4</div>
-          <h4 class="text-base font-semibold text-white">Latent Kept Set ($K_{\text{latent}}$)</h4>
-          <p class="text-sm text-slate-300 leading-relaxed">
-            At any timestep $t$, the objects whose grounded SAE features are active constitute the policy's <em>Latent Kept Set</em> $K_{\text{latent}}$. This provides a dynamic, human-interpretable readout of what the policy is internally attending to.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- The 3 Verification Conditions -->
-    <section id="conditions" class="space-y-6">
-      <div class="border-b border-surface-border pb-3">
-        <h3 class="text-xl font-bold text-white tracking-tight">The Three Foundational Verification Tests</h3>
-        <p class="text-xs text-slate-400 mt-1">Rigorous tests established in the companion ICLR 2027 paper applied to the latent kept set.</p>
-      </div>
-
-      <div class="space-y-4 font-sans">
-        <!-- Discovery -->
-        <div class="bg-surface-card border border-surface-border p-6 rounded-2xl space-y-3">
-          <div class="flex items-center justify-between">
-            <h4 class="text-base font-semibold text-emerald-400 flex items-center space-x-2">
-              <span>1. Discovery Condition (D-C)</span>
-            </h4>
-            <span class="text-xs font-mono bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5 rounded">Measured</span>
-          </div>
-          <p class="text-sm text-slate-300 leading-relaxed">
-            <strong>Requirement:</strong> The selection must be discovered by the model itself rather than imposed by ground-truth supervisory lists.
-          </p>
-          <p class="text-xs text-slate-400 leading-relaxed">
-            <em>Our Test:</em> Because the baseline ResNet-18 is trained end-to-end on image pixels without any object bounding-box loss or node annotations, it passes the permutation test by construction. We measure whether the emergent SAE features spontaneously identify task-relevant objects above chance level.
-          </p>
-        </div>
-
-        <!-- Removal -->
-        <div class="bg-surface-card border border-surface-border p-6 rounded-2xl space-y-3">
-          <div class="flex items-center justify-between">
-            <h4 class="text-base font-semibold text-amber-400 flex items-center space-x-2">
-              <span>2. Removal Condition (R-C)</span>
-            </h4>
-            <span class="text-xs font-mono bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded">Causal Ablation</span>
-          </div>
-          <p class="text-sm text-slate-300 leading-relaxed">
-            <strong>Requirement:</strong> Excluded objects must be strictly absent from the downstream computation, ensuring the action depends only on $K_{\text{latent}}$.
-          </p>
-          <p class="text-xs text-slate-400 leading-relaxed">
-            <em>Our Test:</em> We perform causal feature ablation during policy rollouts: for any object outside $K_{\text{latent}}$, we clamp its corresponding SAE feature activations to zero ($f_j = 0$), decode the reconstructed activation vector $\hat{x}$, and inject it back into the MDT action generator. We record whether the generated action remains completely invariant ($\Delta a \approx 0$).
-          </p>
-        </div>
-
-        <!-- Consequence -->
-        <div class="bg-surface-card border border-surface-border p-6 rounded-2xl space-y-3">
-          <div class="flex items-center justify-between">
-            <h4 class="text-base font-semibold text-cyan-400 flex items-center space-x-2">
-              <span>3. Consequence Condition (C-C)</span>
-            </h4>
-            <span class="text-xs font-mono bg-cyan-950 text-cyan-300 border border-cyan-800 px-2 py-0.5 rounded">Closed-Loop Success</span>
-          </div>
-          <p class="text-sm text-slate-300 leading-relaxed">
-            <strong>Requirement:</strong> The selection must matter beyond a matched random subset of the same size (sufficiency + selectivity).
-          </p>
-          <p class="text-xs text-slate-400 leading-relaxed">
-            <em>Our Test:</em> We evaluate full rollout success rates when ablating task-relevant features vs. ablating random feature sets of identical sparsity. If ablating $K_{\text{latent}}$ features drops success to the blind policy baseline while ablating irrelevant features preserves task completion, the explanation is causally validated.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Bi-Weekly Progress Tracking -->
+    <!-- ============================================================ -->
+    <!-- BI-WEEKLY MEETING PROGRESS CADENCE -->
+    <!-- ============================================================ -->
     <section id="progress" class="space-y-6">
-      <div class="border-b border-surface-border pb-3 flex items-center justify-between">
+      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4 flex items-center justify-between">
         <div>
-          <h3 class="text-xl font-bold text-white tracking-tight">Bi-Weekly Progress &amp; Meeting Cadence</h3>
-          <p class="text-xs text-slate-400 mt-1">Regular milestones presented every two weeks to supervisor Paul Mattes.</p>
+          <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-orange">Timeline &amp; Milestones</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
+            Bi-Weekly Supervisor Cadence
+          </h2>
+          <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary mt-1">
+            Presented every 14 days to supervisor Paul Mattes.
+          </p>
         </div>
         <a href="https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing" target="_blank"
-           class="px-2.5 py-1 text-xs font-mono bg-surface-card text-amber-300 border border-surface-border rounded-lg hover:bg-surface-hover transition">
-          Open Slides ↗
+           class="btn-ios px-4 py-2 rounded-full bg-ios-orange/10 hover:bg-ios-orange/20 text-ios-orange border border-ios-orange/30 font-semibold text-xs flex items-center space-x-1">
+          <span>Open Slides ↗</span>
         </a>
       </div>
 
-      <div class="relative border-l border-surface-border ml-4 pl-6 space-y-8 font-sans">
-        <!-- Meeting 1 -->
+      <div class="relative border-l-2 border-ios-border dark:border-ios-darkBorder ml-4 pl-6 space-y-8">
+        
+        <!-- Cycle 01 -->
         <div class="relative">
-          <div class="absolute -left-[31px] top-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-surface-base"></div>
+          <div class="absolute -left-[31px] top-1 w-3.5 h-3.5 rounded-full bg-ios-green border-2 border-ios-bg dark:border-ios-darkBg"></div>
           <div class="flex items-center space-x-2">
-            <span class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">Cycle 01 • Completed</span>
-            <span class="text-xs text-slate-500 font-mono">Kickoff – Nov 13, 2026</span>
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-ios-green">Cycle 01 • Completed</span>
+            <span class="text-xs text-ios-secondary dark:text-ios-darkSecondary font-mono">Kickoff – Nov 13, 2026</span>
           </div>
-          <h4 class="text-base font-semibold text-white mt-1">Topic Formulation, Architecture Blueprint &amp; Setup</h4>
-          <p class="text-sm text-slate-400 mt-1 leading-relaxed">
-            Formalized Topic 2 requirements, analyzed the ICLR 2027 In-Loop Subset Explanation paper, reverse-engineered the ResNet-18 + MDT architecture in <code>SIR_Model</code>, and designed the overcomplete SAE tap. Established repository isolation with automated GitHub Pages deployment.
+          <h4 class="text-base font-semibold text-ios-text dark:text-ios-darkText mt-1">Foundation, Architecture Blueprint &amp; Math Formulation</h4>
+          <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary mt-1 leading-relaxed">
+            Deconstructed Topic 2 requirements, formalized In-Loop Subset Explanations (ILSE), analyzed information leakage in SIR's scene graph pruner, designed the overcomplete Top-K SAE tap, and built the documentation portal.
           </p>
         </div>
 
-        <!-- Meeting 2 -->
+        <!-- Cycle 02 -->
         <div class="relative">
-          <div class="absolute -left-[31px] top-1 w-3.5 h-3.5 rounded-full bg-cyan-500 border-2 border-surface-base animate-pulse"></div>
+          <div class="absolute -left-[31px] top-1 w-3.5 h-3.5 rounded-full bg-ios-blue border-2 border-ios-bg dark:border-ios-darkBg animate-pulse"></div>
           <div class="flex items-center space-x-2">
-            <span class="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400">Cycle 02 • In Progress</span>
-            <span class="text-xs text-slate-500 font-mono">Nov 14 – Nov 27, 2026</span>
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-ios-blue">Cycle 02 • In Progress</span>
+            <span class="text-xs text-ios-secondary dark:text-ios-darkSecondary font-mono">Nov 14 – Nov 27, 2026</span>
           </div>
-          <h4 class="text-base font-semibold text-white mt-1">Activation Recording &amp; Sparse Autoencoder Training</h4>
-          <p class="text-sm text-slate-400 mt-1 leading-relaxed">
-            Running policy rollouts across RoboCasa kitchen tasks to record <code>layer4</code> activation grids ($7 \times 7 \times 512$). Training and tuning the overcomplete SAE ($M = 4096$) with Top-K and L1 sparsity.
+          <h4 class="text-base font-semibold text-ios-text dark:text-ios-darkText mt-1">Activation Recording &amp; Sparse Autoencoder Training</h4>
+          <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary mt-1 leading-relaxed">
+            Integrating activation recording hooks into RoboCasa parallel rollouts (`parallel_tester.py`), harvesting 50,000 spatial vectors, and training the Top-K SAE ($M=4096, K=32$) with reconstruction loss optimization.
           </p>
         </div>
 
-        <!-- Meeting 3 -->
+        <!-- Cycle 03 -->
         <div class="relative">
-          <div class="absolute -left-[31px] top-1 w-3.5 h-3.5 rounded-full bg-surface-subtle border-2 border-surface-base"></div>
+          <div class="absolute -left-[31px] top-1 w-3.5 h-3.5 rounded-full bg-black/20 dark:bg-white/20 border-2 border-ios-bg dark:border-ios-darkBg"></div>
           <div class="flex items-center space-x-2">
-            <span class="text-xs font-mono font-bold uppercase tracking-wider text-slate-500">Cycle 03 • Scheduled</span>
-            <span class="text-xs text-slate-500 font-mono">Nov 28 – Dec 11, 2026</span>
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-ios-secondary dark:text-ios-darkSecondary">Cycle 03 • Scheduled</span>
+            <span class="text-xs text-ios-secondary dark:text-ios-darkSecondary font-mono">Nov 28 – Dec 11, 2026</span>
           </div>
-          <h4 class="text-base font-semibold text-slate-400 mt-1">Spatial Grounding: Whole-Objects vs. Affordances</h4>
-          <p class="text-sm text-slate-500 mt-1 leading-relaxed">
-            Projecting active feature heatmaps to 2D image coordinates and intersecting with simulator bounding boxes to construct $K_{\text{latent}}$. Evaluating whether features isolate whole objects or functional contact points.
+          <h4 class="text-base font-semibold text-ios-text dark:text-ios-darkText mt-1">Spatial Grounding &amp; Latent Kept Set Extraction</h4>
+          <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary mt-1 leading-relaxed">
+            Projecting active feature heatmaps to camera coordinates, performing IoU matching against simulator 3D bounding boxes, and establishing whether features track whole objects vs. functional contact points.
           </p>
         </div>
 
-        <!-- Meeting 4 -->
+        <!-- Cycle 04 -->
         <div class="relative">
-          <div class="absolute -left-[31px] top-1 w-3.5 h-3.5 rounded-full bg-surface-subtle border-2 border-surface-base"></div>
+          <div class="absolute -left-[31px] top-1 w-3.5 h-3.5 rounded-full bg-black/20 dark:bg-white/20 border-2 border-ios-bg dark:border-ios-darkBg"></div>
           <div class="flex items-center space-x-2">
-            <span class="text-xs font-mono font-bold uppercase tracking-wider text-slate-500">Cycle 04 • Scheduled</span>
-            <span class="text-xs text-slate-500 font-mono">Dec 12 – Dec 25, 2026</span>
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-ios-secondary dark:text-ios-darkSecondary">Cycle 04 • Scheduled</span>
+            <span class="text-xs text-ios-secondary dark:text-ios-darkSecondary font-mono">Dec 12 – Dec 25, 2026</span>
           </div>
-          <h4 class="text-base font-semibold text-slate-400 mt-1">Causal Rollout Interventions (D-C, R-C, C-C)</h4>
-          <p class="text-sm text-slate-500 mt-1 leading-relaxed">
-            Performing closed-loop feature clamping to test Discovery, Removal, and Consequence against matched random feature baselines and SIR explicit kept sets.
+          <h4 class="text-base font-semibold text-ios-text dark:text-ios-darkText mt-1">Causal Verification &amp; Comparison with SIR</h4>
+          <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary mt-1 leading-relaxed">
+            Executing closed-loop rollout interventions to test Discovery, Removal ($\Delta a \approx 0$), and Consequence against distractor control baselines and SIR's explicit scene graph.
           </p>
         </div>
+
       </div>
     </section>
 
-    <!-- Project Structure & Roadmap -->
-    <section class="space-y-6">
-      <div class="border-b border-surface-border pb-3">
-        <h3 class="text-xl font-bold text-white tracking-tight">Repository Organization &amp; Deliverables</h3>
-        <p class="text-xs text-slate-400 mt-1">Code structure, seminar report milestones, and practical execution.</p>
-      </div>
-
-      <div class="bg-surface-card p-6 rounded-2xl border border-surface-border font-mono text-xs text-slate-300 space-y-1.5 overflow-x-auto">
-        <div class="text-slate-400">// Repository tree</div>
-        <div><strong class="text-cyan-400">Mechanistic-Interpretability-for-SIR/</strong></div>
-        <div>├── .github/workflows/deploy-pages.yml  <span class="text-slate-500"># GitHub Actions Pages deployment</span></div>
-        <div>├── docs/                             <span class="text-slate-500"># Documentation portal</span></div>
-        <div>│   ├── index.html                    <span class="text-slate-500"># Main portal (this page)</span></div>
-        <div>│   ├── pipeline_explained.html       <span class="text-slate-500"># In-depth tensor walkthrough</span></div>
-        <div>│   └── architecture_deep_dive.md     <span class="text-slate-500"># Markdown technical specification</span></div>
-        <div>├── papers/                           <span class="text-slate-500"># Foundational papers (CVPR 2026, ICLR 2027)</span></div>
-        <div>├── notes/                            <span class="text-slate-500"># Research logs & supervisor questions</span></div>
-        <div>├── src/                              <span class="text-slate-500"># Core implementation</span></div>
-        <div>│   ├── activation_recorder.py        <span class="text-slate-500"># Forward hook for ResNet-18 layer4</span></div>
-        <div>│   ├── sae.py                        <span class="text-slate-500"># Top-K / L1 Sparse Autoencoder model</span></div>
-        <div>│   ├── grounding.py                  <span class="text-slate-500"># Heatmap IoU alignment to simulator bboxes</span></div>
-        <div>│   └── causal_intervention.py        <span class="text-slate-500"># Feature clamping & ablation hooks</span></div>
-        <div>└── README.md                         <span class="text-slate-500"># Main repository guide</span></div>
-      </div>
-    </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="border-t border-surface-border bg-surface-base py-12 text-center text-xs text-slate-500 font-mono">
-    <p>MIS: Mechanistic Interpretability for SIR • Seminar &amp; Praktikum (WS 2026/2027)</p>
-    <p class="mt-1">Intuitive Robots Lab, KIT • Group 4: Allen &amp; Luca • Supervised by Paul Mattes</p>
+  <!-- iOS-Style Footer -->
+  <footer class="border-t border-ios-border dark:border-ios-darkBorder bg-ios-card dark:bg-ios-darkCard py-12 mt-20 text-center text-xs text-ios-secondary dark:text-ios-darkSecondary font-mono transition-colors">
+    <div class="max-w-6xl mx-auto px-6 space-y-2">
+      <p>MIS: Mechanistic Interpretability for SIR • Seminar &amp; Praktikum (WS 2026/2027)</p>
+      <p>Intuitive Robots Lab, KIT • Group 4: Allen &amp; Luca • Supervised by Paul Mattes</p>
+      <div class="pt-2 flex justify-center space-x-4">
+        <a href="https://github.com/officiallygod/Mechanistic-Interpretability-for-SIR" class="hover:underline text-ios-blue">GitHub Repository</a>
+        <span>•</span>
+        <a href="sir_code_mindmap.md" class="hover:underline text-ios-blue">SIR Code Mindmap</a>
+        <span>•</span>
+        <a href="templates/README.md" class="hover:underline text-ios-blue">Slide Templates</a>
+      </div>
+    </div>
   </footer>
 
-  <script>
-    mermaid.initialize({ startOnLoad: true, theme: 'dark' });
 
-    function runKaTeX() {
+  <!-- GALLERY & THEME SCRIPT -->
+  <script>
+    // -------------------------------------------------------------
+    // Gallery Data: 8 Interactive Stages
+    // -------------------------------------------------------------
+    const galleryData = [
+      {
+        badge: "STAGE 01 • INPUT",
+        title: "Camera RGB Observation",
+        tensorIn: "Raw Photons",
+        tensorOut: "Image Tensor: [3, 224, 224] or [3, 128, 128]",
+        desc: "The sensory input begins as standard RGB camera frames from RoboCasa's static kitchen camera or wrist in-hand camera. Pixels are normalized to standard ImageNet mean and std.",
+        details: "RoboCasa saves images at 128×128 to optimize disk I/O and RAM. For canonical ResNet-18, frames can be bilinearly resized to 224×224.",
+        visual: `
+          <div class="flex items-center justify-center p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder">
+            <div class="w-36 h-36 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex flex-col items-center justify-center text-white shadow-ios text-center p-2">
+              <span class="text-2xl">📷</span>
+              <span class="font-bold text-xs mt-1">RGB Frame</span>
+              <span class="font-mono text-[10px] opacity-80">[3, 224, 224]</span>
+            </div>
+          </div>
+        `,
+        formula: "I_t \\in \\mathbb{R}^{3 \\times H \\times W}"
+      },
+      {
+        badge: "STAGE 02 • PERCEPTION",
+        title: "ResNet-18 layer4 Spatial Grid",
+        tensorIn: "Image Tensor: [3, 224, 224]",
+        tensorOut: "layer4 Grid: [512, 7, 7] (49 tokens)",
+        desc: "The image passes through 5 stride-2 downsampling operations (Conv1 + MaxPool, Layer 2, Layer 3, Layer 4). Spatial dimensions shrink by 32x while channel capacity expands from 3 to 512.",
+        details: "At 224x224, layer4 is 7x7 (49 spatial tokens). At 128x128, layer4 is 4x4 (16 spatial tokens). Each cell has a receptive field covering 32x32 pixels of the camera frame.",
+        visual: `
+          <div class="flex flex-col items-center justify-center p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-2">
+            <span class="text-xs font-mono font-bold text-ios-blue">7 x 7 Spatial Grid (49 cells, each ℝ⁵¹²)</span>
+            <div class="grid grid-cols-7 gap-1 bg-black/10 dark:bg-white/10 p-2 rounded-xl">
+              ${Array.from({length: 49}).map((_, i) => `
+                <div class="grid-cell w-4 h-4 sm:w-5 sm:h-5 rounded-md flex items-center justify-center text-[8px] font-mono ${
+                  i === 24 ? 'bg-ios-red text-white font-bold' : (i === 17 || i === 25 ? 'bg-ios-blue text-white' : 'bg-ios-card dark:bg-ios-darkCard text-ios-secondary')
+                }">
+                  ${i === 24 ? '🎯' : ''}
+                </div>
+              `).join('')}
+            </div>
+            <span class="text-[10px] font-mono text-ios-secondary">Cell (3,3) = Center Gripper &amp; Handle</span>
+          </div>
+        `,
+        formula: "\\mathbf{X}_{\\text{layer4}} \\in \\mathbb{R}^{512 \\times 7 \\times 7}"
+      },
+      {
+        badge: "STAGE 03 • THE BOTTLENECK",
+        title: "Global Average Pooling (The GAP Trap)",
+        tensorIn: "layer4 Grid: [512, 7, 7]",
+        tensorOut: "Pooled Vector: [512]",
+        desc: "Standard policy architectures apply Global Average Pooling (GAP) across all 49 cells to produce a single 512-d vector. This completely destroys 2D spatial coordinates!",
+        details: "The network knows a drawer handle exists, but loses the ability to isolate WHERE it is or remove it independently. That is why we tap BEFORE this layer!",
+        visual: `
+          <div class="flex items-center justify-center p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-x-4">
+            <div class="p-3 bg-ios-red/10 border border-ios-red/30 rounded-2xl text-center">
+              <span class="text-lg">💥</span>
+              <div class="text-xs font-bold text-ios-red mt-1">GAP Collapse</div>
+              <div class="text-[10px] font-mono text-ios-secondary">Averages 49 cells ➔ 1 vector</div>
+            </div>
+            <span class="text-xl text-ios-secondary">➔</span>
+            <div class="p-3 bg-ios-green/10 border border-ios-green/30 rounded-2xl text-center">
+              <span class="text-lg">⭐</span>
+              <div class="text-xs font-bold text-ios-green mt-1">MIS Solution</div>
+              <div class="text-[10px] font-mono text-ios-secondary">Tap 49 cells directly into SAE!</div>
+            </div>
+          </div>
+        `,
+        formula: "\\mathbf{z}_{\\text{GAP}} = \\frac{1}{49} \\sum_{u=1}^7 \\sum_{v=1}^7 \\mathbf{x}_{(u,v)}"
+      },
+      {
+        badge: "STAGE 04 • UNTANGLING",
+        title: "Overcomplete Sparse Autoencoder (SAE)",
+        tensorIn: "Spatial Cell: x ∈ ℝ⁵¹²",
+        tensorOut: "Sparse Code: f ∈ ℝ⁴⁰⁹⁶ (Top-32)",
+        desc: "The SAE takes each 512-d cell and projects it into 4,096 dimensions. A mathematical Top-K filter forces exactly 32 features to remain active while 4,064 are strictly zeroed out.",
+        details: "This decomposes polysemantic superposition into monosemantic dictionary vectors. Feature #812 represents only the handle, Feature #1402 represents only blue surfaces.",
+        visual: `
+          <div class="flex flex-col items-center justify-center p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-2">
+            <span class="text-xs font-mono font-bold text-ios-purple">4,096 Dimension Dictionary Expansion</span>
+            <div class="flex items-center space-x-2">
+              <div class="w-12 h-20 bg-ios-blue/20 rounded-xl flex items-center justify-center font-mono text-xs font-bold text-ios-blue border border-ios-blue/30">
+                512-d
+              </div>
+              <span class="text-lg text-ios-secondary">➔</span>
+              <div class="w-24 h-24 bg-ios-purple/20 rounded-2xl flex flex-col items-center justify-center font-mono text-xs font-bold text-ios-purple border border-ios-purple/30 p-2 text-center">
+                <span>4,096-d</span>
+                <span class="text-[10px] text-ios-green font-semibold mt-1">32 Active (Top-K)</span>
+              </div>
+            </div>
+          </div>
+        `,
+        formula: "\\mathbf{f} = \\text{TopK}\\left(\\text{ReLU}(\\mathbf{W}_{\\text{enc}}(\\mathbf{x} - \\mathbf{b}_{\\text{dec}}) + \\mathbf{b}_{\\text{enc}}), K=32\\right)"
+      },
+      {
+        badge: "STAGE 05 • SPATIAL PROJECTION",
+        title: "Monosemantic Spatial Heatmap",
+        tensorIn: "Feature Slice: f[812, :, :] ∈ ℝ⁷ ˣ ⁷",
+        tensorOut: "Upscaled Heatmap: [1, 1, 224, 224]",
+        desc: "Because the SAE runs across all 49 cells, slicing Feature #812 gives a 7x7 matrix showing its intensity across the scene. We upsample this matrix by 32x using bilinear interpolation.",
+        details: "Unlike raw ResNet neurons which glow all over the kitchen, Feature #812 lights up exclusively as a sharp, clean hotspot over the target area.",
+        visual: `
+          <div class="flex items-center justify-center p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-x-4">
+            <div class="text-center">
+              <div class="text-[10px] font-mono font-bold text-ios-secondary">7x7 Grid</div>
+              <div class="w-14 h-14 bg-black/10 dark:bg-white/10 rounded-xl flex items-center justify-center font-mono text-xs">
+                f[812]
+              </div>
+            </div>
+            <span class="text-lg text-ios-secondary">➔ Resize ➔</span>
+            <div class="text-center">
+              <div class="text-[10px] font-mono font-bold text-ios-green">224x224 Heatmap</div>
+              <div class="w-20 h-20 bg-gradient-to-tr from-ios-blue/10 via-ios-purple/30 to-ios-red/40 rounded-2xl border border-ios-purple/40 flex items-center justify-center text-xs font-bold">
+                🎯 Hotspot
+              </div>
+            </div>
+          </div>
+        `,
+        formula: "\\mathbf{H}_{812} = \\text{BilinearUpsample}\\left(\\mathbf{f}[812, :, :], \\text{size}=(224, 224)\\right)"
+      },
+      {
+        badge: "STAGE 06 • GROUNDING",
+        title: "Simulator IoU & Latent Kept Set",
+        tensorIn: "Heatmap H_j and 3D Bounding Boxes B_obj",
+        tensorOut: "Latent Kept Set: K_latent = { drawer_handle, gripper }",
+        desc: "We compute Intersection-over-Union (IoU) between active feature heatmaps and RoboCasa ground-truth 3D bounding boxes. Features overlapping an object with IoU > 0.5 are semantically labeled.",
+        details: "This discovers whether features isolate whole objects (the entire microwave box) or part-level functional affordances (only the graspable pull-handle).",
+        visual: `
+          <div class="flex flex-col items-center justify-center p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-2">
+            <div class="flex items-center space-x-3 text-xs font-mono">
+              <span class="px-2.5 py-1 bg-ios-green/10 text-ios-green rounded-lg border border-ios-green/30">IoU(H_812, B_handle) = 0.74</span>
+              <span class="px-2.5 py-1 bg-ios-red/10 text-ios-red rounded-lg border border-ios-red/30">IoU(H_812, B_microwave) = 0.02</span>
+            </div>
+            <div class="font-bold text-xs text-ios-text dark:text-ios-darkText pt-1">
+              Result: Feature #812 labeled as <span class="text-ios-blue">drawer_handle</span>!
+            </div>
+          </div>
+        `,
+        formula: "K_{\\text{latent}} = \\{ \\text{obj} \\mid \\exists f_j \\text{ active}, \\ \\text{IoU}(\\mathbf{H}_j, B_{\\text{obj}}) > 0.5 \\}"
+      },
+      {
+        badge: "STAGE 07 • ACTION POLICY",
+        title: "MDT Action Generator & Denoising",
+        tensorIn: "Observation Context + CLIP Goal Embedding",
+        tensorOut: "Action Chunk: a_t ∈ ℝ¹⁰ ˣ ¹² (10 timesteps)",
+        desc: "The Multimodal Diffusion Transformer (MDT) fuses observation tokens with the CLIP text goal ('close the drawer') and runs 10 steps of DDIM diffusion denoising.",
+        details: "The output is a 10-step action chunk of 12-DoF robot commands: 3 position velocities, 3 orientation velocities, 1 gripper jaw width, and 5 mobile base velocities.",
+        visual: `
+          <div class="flex items-center justify-center p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-x-3">
+            <div class="p-3 bg-ios-card dark:bg-ios-darkCard rounded-2xl border border-ios-border dark:border-ios-darkBorder text-center shadow-ios">
+              <span class="text-xs font-mono font-bold text-ios-orange">Diffusion Denoising</span>
+              <div class="text-[10px] text-ios-secondary mt-1">10 DDIM Steps</div>
+            </div>
+            <span class="text-lg text-ios-secondary">➔</span>
+            <div class="p-3 bg-ios-blue/10 border border-ios-blue/30 rounded-2xl text-center">
+              <span class="text-xs font-mono font-bold text-ios-blue">Action Chunk [10, 12]</span>
+              <div class="text-[10px] text-ios-secondary mt-1">Smooth Trajectory</div>
+            </div>
+          </div>
+        `,
+        formula: "\\mathbf{a}_t = \\text{DDIM}\\left(\\mathbf{z}_{\\text{noise}}, \\ \\mathbf{x}_{\\text{obs}}, \\ \\mathbf{g}_{\\text{CLIP}}, \\ \\text{steps}=10\\right) \\in \\mathbb{R}^{10 \\times 12}"
+      },
+      {
+        badge: "STAGE 08 • CAUSAL VERIFICATION",
+        title: "Closed-Loop Feature Interventions",
+        tensorIn: "Ablation Mask: f[feat_target] = 0.0",
+        tensorOut: "Reconstructed x̂ ➔ Robot Motor Delta",
+        desc: "We perform causal surgery during closed-loop simulation rollouts by clamping specific features to zero, reconstructing x̂, and passing it to MDT.",
+        details: "Removal Test: Erase microwave ➔ Action unchanged (Δa ≈ 0). Consequence Test: Erase drawer handle ➔ Task collapses to 0% success!",
+        visual: `
+          <div class="grid grid-cols-2 gap-3 text-xs font-mono">
+            <div class="p-3 bg-ios-orange/10 border border-ios-orange/30 rounded-2xl space-y-1">
+              <div class="font-bold text-ios-orange">REMOVAL TEST</div>
+              <div class="text-[10px] text-ios-secondary">f[microwave] = 0.0</div>
+              <div class="text-[11px] font-bold text-ios-green">Action Invariant: Δa ≈ 0</div>
+            </div>
+            <div class="p-3 bg-ios-red/10 border border-ios-red/30 rounded-2xl space-y-1">
+              <div class="font-bold text-ios-red">CONSEQUENCE TEST</div>
+              <div class="text-[10px] text-ios-secondary">f[handle] = 0.0</div>
+              <div class="text-[11px] font-bold text-ios-red">Task Collapses (0% Success)</div>
+            </div>
+          </div>
+        `,
+        formula: "\\hat{\\mathbf{x}} = \\mathbf{W}_{\\text{dec}} \\left( \\mathbf{f} \\odot \\mathbf{m}_{\\text{ablate}} \\right) + \\mathbf{b}_{\\text{dec}}"
+      }
+    ];
+
+    let currentStep = 0;
+
+    function renderStep(index) {
+      const step = galleryData[index];
+      currentStep = index;
+
+      // Update counter
+      document.getElementById('stepCounter').innerText = `${index + 1} / ${galleryData.length}`;
+
+      // Update pills
+      document.querySelectorAll('.step-pill').forEach((pill, idx) => {
+        if (idx === index) {
+          pill.className = "step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-blue text-white shadow-ios font-semibold";
+        } else {
+          pill.className = "step-pill btn-ios px-4 py-2 rounded-full whitespace-nowrap transition bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder text-ios-secondary dark:text-ios-darkSecondary";
+        }
+      });
+
+      // Render content
+      document.getElementById('slideContent').innerHTML = `
+        <div class="space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="px-3 py-1 text-xs font-mono font-bold bg-ios-blue/10 text-ios-blue rounded-full">${step.badge}</span>
+            <div class="flex items-center space-x-2 text-xs font-mono">
+              <span class="px-2.5 py-1 bg-black/5 dark:bg-white/10 rounded-lg text-ios-secondary dark:text-ios-darkSecondary">IN: ${step.tensorIn}</span>
+              <span class="text-ios-secondary">➔</span>
+              <span class="px-2.5 py-1 bg-ios-blue/10 text-ios-blue font-bold rounded-lg">OUT: ${step.tensorOut}</span>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-8 items-center pt-2">
+            <div class="space-y-4">
+              <h3 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight">${step.title}</h3>
+              <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">${step.desc}</p>
+              <div class="p-4 bg-ios-bg dark:bg-ios-darkBg rounded-2xl border border-ios-border dark:border-ios-darkBorder text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
+                <strong class="text-ios-text dark:text-ios-darkText">Architectural Rationale:</strong> ${step.details}
+              </div>
+            </div>
+
+            <div>
+              ${step.visual}
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Render math formula
+      const formulaEl = document.getElementById('slideFormula');
+      formulaEl.innerHTML = `$$\\text{Mathematical Formulation: } ${step.formula}$$`;
+      
+      // Re-trigger KaTeX
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(formulaEl, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ]
+        });
+      }
+    }
+
+    function nextStep() {
+      if (currentStep < galleryData.length - 1) {
+        renderStep(currentStep + 1);
+      } else {
+        renderStep(0);
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 0) {
+        renderStep(currentStep - 1);
+      } else {
+        renderStep(galleryData.length - 1);
+      }
+    }
+
+    function goToStep(index) {
+      renderStep(index);
+    }
+
+    // -------------------------------------------------------------
+    // Theme Toggle (Light / Dark)
+    // -------------------------------------------------------------
+    function toggleTheme() {
+      const html = document.documentElement;
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        html.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    // Initialize Theme
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+
+    // Initialize Gallery & Mermaid & Math
+    document.addEventListener("DOMContentLoaded", () => {
+      renderStep(0);
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+
       if (typeof renderMathInElement === 'function') {
         renderMathInElement(document.body, {
           delimiters: [
@@ -436,11 +923,7 @@ flowchart TD
           ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"]
         });
       }
-    }
-    document.addEventListener("DOMContentLoaded", runKaTeX);
-    window.addEventListener("load", runKaTeX);
-    setTimeout(runKaTeX, 100);
-    setTimeout(runKaTeX, 500);
+    });
   </script>
 </body>
 </html>
