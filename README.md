@@ -11,7 +11,7 @@
 > **Topic 2:** Mechanistic Interpretability with Object Sets (Sparse Autoencoders)  
 > **Team (Group 4):** Allen & Luca  
 > **Supervisor:** Paul Mattes  
-> **Quick Links:** [🌐 Interactive Docs](https://officiallygod.github.io/Mechanistic-Interpretability-for-SIR/) • [🔍 Step-by-Step Tensor Walkthrough](https://officiallygod.github.io/Mechanistic-Interpretability-for-SIR/pipeline_explained.html) • [📊 Bi-Weekly Slides](https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing) • [🧠 Miro Board](https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076) • [📅 Progress Logs](progress/)
+> **Quick Links:** [Interactive Docs](https://officiallygod.github.io/Mechanistic-Interpretability-for-SIR/) • [Step-by-Step Tensor Walkthrough](https://officiallygod.github.io/Mechanistic-Interpretability-for-SIR/pipeline_explained.html) • [Bi-Weekly Slides](https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing) • [Miro Board](https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076) • [Progress Logs](progress/)
 
 ---
 
@@ -36,7 +36,7 @@ In robot imitation learning, two paradigms currently exist:
 
 ## 2. Methodology & Research Protocol
 
-> 🗺️ **New to the SIR code?** See the [SIR Code Mind Map](docs/sir_code_mindmap.md) for how the upstream codebase is structured and where our MIS components tap in.
+> **Codebase Orientation:** See the [SIR Code Mind Map](docs/sir_code_mindmap.md) for how the upstream codebase is structured and where our MIS components tap in.
 
 ### The 6-Step Protocol:
 1. **Run Rollouts with Trained Image Policy:** Execute an untouched ResNet-18 + MDT policy (`manager.image_modalities=[left,right]`, `manager.graph_modalities=[]`) and record the $4 \times 4 \times 512$ feature map at `layer4` before global average pooling. The cameras are 128 × 128 px, so each of the 16 cells covers a 32 × 32 px patch.
@@ -116,7 +116,7 @@ The repository includes an automated GitHub Action (`.github/workflows/deploy-pa
 To ensure GitHub Pages is enabled in your repository:
 1. Go to **Settings** $\to$ **Pages** in the GitHub repository.
 2. Under **Build and deployment** $\to$ **Source**, select **GitHub Actions**.
-3. Pushing any update to `main` will automatically build and deploy the interactive documentation portal!
+3. Pushing any update to `main` builds and deploys the documentation portal.
 
 ### Local Collaboration:
 ```bash

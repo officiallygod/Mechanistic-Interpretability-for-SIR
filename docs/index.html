@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MIS — Mechanistic Interpretability for SIR</title>
+  <title>MIS: Mechanistic Interpretability for SIR</title>
 
   <!-- Typography: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -124,16 +124,16 @@
       <!-- Segmented Navigation Tabs (Architecture removed / kept separate) -->
       <nav class="flex items-center bg-black/5 dark:bg-white/10 p-1 rounded-full text-xs font-medium space-x-1">
         <button onclick="navigate('tensor-studio')" id="tab-tensor-studio" class="spa-tab btn-ios px-4 py-1.5 rounded-full transition font-semibold bg-ios-card dark:bg-ios-darkCard text-ios-blue shadow-ios">
-          ⚡ Interactive Lab
+          Interactive Lab
         </button>
         <button onclick="navigate('core-theory')" id="tab-core-theory" class="spa-tab btn-ios px-4 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
-          💡 Core Theory
+          Core Theory
         </button>
         <button onclick="navigate('causal-lab')" id="tab-causal-lab" class="spa-tab btn-ios px-4 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
-          🔬 3 Tests
+          Verification Suite
         </button>
         <button onclick="navigate('roadmap')" id="tab-roadmap" class="spa-tab btn-ios px-4 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text hidden sm:inline">
-          📅 Roadmap
+          Roadmap
         </button>
       </nav>
 
@@ -158,7 +158,7 @@
   <main class="max-w-6xl mx-auto px-6 py-8 md:py-12 flex-1 w-full">
 
     <!-- ======================================================== -->
-    <!-- VIEW 1: SUPERCHARGED INTERACTIVE TENSOR STUDIO -->
+    <!-- VIEW 1: INTERACTIVE TENSOR STUDIO -->
     <!-- ======================================================== -->
     <div id="view-tensor-studio" class="spa-view space-y-6">
       
@@ -166,15 +166,15 @@
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 sm:p-8 shadow-ios">
         <div class="space-y-1">
           <div class="inline-flex items-center space-x-2 text-[11px] font-mono font-bold text-ios-blue uppercase tracking-widest">
-            <span>Interactive Laboratory</span>
+            <span>Pipeline Mechanics</span>
             <span>•</span>
             <span id="stepCounter">Stage 1 of 8</span>
           </div>
           <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight">
-            Understand the Whole Project in One Go
+            Tensor Dynamics &amp; Causal Mechanisms
           </h2>
           <p class="text-xs sm:text-sm text-ios-secondary dark:text-ios-darkSecondary max-w-2xl leading-relaxed">
-            Interact with live sliders, inspect real tensors, and trigger causal ablations to experience how mechanistic interpretability works from pixels to motor commands.
+            Inspect tensor dimensions, activation spectra, and causal interventions across each stage of the policy pipeline.
           </p>
         </div>
 
@@ -219,12 +219,12 @@
     <!-- ======================================================== -->
     <div id="view-core-theory" class="spa-view hidden space-y-6">
       <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4">
-        <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-purple">Mental Model &amp; Theory</span>
+        <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-purple">Theoretical Foundations</span>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
-          Core Architectural Principles &amp; Insights
+          Architectural Principles &amp; Hypotheses
         </h2>
         <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary mt-1">
-          Deconstructing superposition, unsupervised dictionary mechanics, resolution reality, and causal proof.
+          Foundations of polysemanticity, dictionary learning, spatial resolution, and causal evaluation.
         </p>
       </div>
 
@@ -234,9 +234,9 @@
             <span class="w-7 h-7 rounded-full bg-ios-blue/10 text-ios-blue font-bold flex items-center justify-center text-xs font-mono">01</span>
             <span class="text-xs font-mono px-2.5 py-0.5 bg-black/5 dark:bg-white/10 rounded-full font-semibold">Superposition</span>
           </div>
-          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">Why do we need the SAE? Why not just ResNet?</h3>
+          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">Why is an SAE required beyond the standard ResNet representations?</h3>
           <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
-            ResNet has only 512 dimensions at `layer4`. Real kitchens contain thousands of visual concepts. Because capacity is limited, ResNet stores multiple concepts in the <strong>same neuron</strong> (Neuron #42 fires for microwave handle + blue reflection + metallic rim). The SAE untangles this into 4,096 clean monosemantic directions.
+            The pre-pooling ResNet representation has 512 channels at `layer4`. Manipulation environments contain hundreds of distinct visual properties. Due to limited channel capacity, individual neurons exhibit polysemanticity: a single channel activates for multiple unrelated visual attributes. The SAE projects these activations into an overcomplete 4,096-dimensional basis where individual directions isolate single semantic factors.
           </p>
         </div>
 
@@ -245,9 +245,9 @@
             <span class="w-7 h-7 rounded-full bg-ios-green/10 text-ios-green font-bold flex items-center justify-center text-xs font-mono">02</span>
             <span class="text-xs font-mono px-2.5 py-0.5 bg-black/5 dark:bg-white/10 rounded-full font-semibold">Unsupervised</span>
           </div>
-          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">How does the SAE learn? Does it check if the robot succeeds?</h3>
+          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">How is the SAE trained, and does training depend on task performance?</h3>
           <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
-            <strong>NO. The SAE is trained completely offline with ZERO simulator interaction.</strong> It has no idea a robot or kitchen exists! It only solves an unsupervised dictionary puzzle: reconstructing 512-d activation vectors using only 32 non-zero words out of 4,096 ($\min \|\mathbf{x} - \hat{\mathbf{x}}\|^2$).
+            The SAE is trained strictly offline on recorded activation vectors without environment rollouts or reward feedback. The optimization objective is purely unsupervised: minimizing reconstruction error under a Top-K sparsity constraint: \(\min \|\mathbf{x} - \hat{\mathbf{x}}\|^2\) subject to \(\|f\|_0 \le K\).
           </p>
         </div>
 
@@ -256,9 +256,9 @@
             <span class="w-7 h-7 rounded-full bg-ios-purple/10 text-ios-purple font-bold flex items-center justify-center text-xs font-mono">03</span>
             <span class="text-xs font-mono px-2.5 py-0.5 bg-black/5 dark:bg-white/10 rounded-full font-semibold">Sparsity Pareto</span>
           </div>
-          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">Why doesn't it learn an identity shortcut, and why K=32?</h3>
+          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">What prevents an identity shortcut, and why select K=32?</h3>
           <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
-            Because 4,064 of the 4,096 features are strictly clamped to zero on every forward pass, an identity shortcut is mathematically impossible. $K=32$ (~6% capacity) hits the Pareto sweet spot: $\ge 95\%$ variance explained while maintaining strict feature isolation.
+            Because 4,064 of the 4,096 dictionary coordinates are zeroed out on every forward pass, an identity shortcut cannot form. Setting \(K=32\) (~6% active capacity) provides an empirical balance: capturing over 95% of activation variance while preserving isolated, monosemantic feature directions.
           </p>
         </div>
 
@@ -267,9 +267,9 @@
             <span class="w-7 h-7 rounded-full bg-ios-orange/10 text-ios-orange font-bold flex items-center justify-center text-xs font-mono">04</span>
             <span class="text-xs font-mono px-2.5 py-0.5 bg-black/5 dark:bg-white/10 rounded-full font-semibold">Separation</span>
           </div>
-          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">Where does the Language Goal enter the SAE?</h3>
+          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">Does the language instruction condition the SAE representation?</h3>
           <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
-            <strong>NOWHERE.</strong> ResNet processes pure camera pixels; CLIP processes text. They only meet downstream inside the MDT action generator. The SAE taps ResNet <em>before</em> language is combined, isolating objective visual perception from task bias.
+            No. The visual backbone processes camera frames independently, while the CLIP text embedding is supplied to the downstream MDT action generator. The SAE intercepts visual activations prior to multimodal fusion, isolating visual perception from task goal conditioning.
           </p>
         </div>
 
@@ -278,20 +278,20 @@
             <span class="w-7 h-7 rounded-full bg-ios-cyan/10 text-ios-cyan font-bold flex items-center justify-center text-xs font-mono">05</span>
             <span class="text-xs font-mono px-2.5 py-0.5 bg-black/5 dark:bg-white/10 rounded-full font-semibold">Affordances</span>
           </div>
-          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">Are we doomed if features activate on small pixel clusters?</h3>
+          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">Does activation on localized components invalidate object discovery?</h3>
           <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
-            <strong>NO—WE HIT THE JACKPOT!</strong> Complex objects are represented compositionally (e.g. Microwave = Door + Handle + Keypad). If a feature fires only on the 20-pixel handle rather than the whole drawer, we prove policies naturally discover <strong>functional affordances</strong>!
+            No. Complex objects are represented compositionally in deep vision networks (for example, a microwave decomposed into door, handle, and interface). When an active feature localizes specifically to an interactive component like a handle rather than the entire object silhouette, it indicates that the representation isolates functional affordances relevant to manipulation.
           </p>
         </div>
 
         <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios space-y-3">
           <div class="flex items-center justify-between">
             <span class="w-7 h-7 rounded-full bg-ios-red/10 text-ios-red font-bold flex items-center justify-center text-xs font-mono">06</span>
-            <span class="text-xs font-mono px-2.5 py-0.5 bg-black/5 dark:bg-white/10 rounded-full font-semibold">Code Reality</span>
+            <span class="text-xs font-mono px-2.5 py-0.5 bg-black/5 dark:bg-white/10 rounded-full font-semibold">Resolution</span>
           </div>
-          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">128x128 vs. 224x224: Where do the spatial locations come from?</h3>
+          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">How do input resolution differences affect the spatial feature map?</h3>
           <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
-            In `SIR_Model`, images are natively stored at $128 \times 128 \implies 4 \times 4 = 16$ spatial tokens at `layer4`. In standard ImageNet, $224 \times 224 \implies 7 \times 7 = 49$ tokens. We can tap the native $4 \times 4$ stream or upscale to $224 \times 224$ for higher spatial precision.
+            In `SIR_Model`, images are natively stored at \(128 \times 128\), resulting in a \(4 \times 4\) spatial grid (16 tokens) at `layer4`. In standard ImageNet models with \(224 \times 224\) inputs, `layer4` yields a \(7 \times 7\) grid (49 tokens). The architecture supports both the native \(4 \times 4\) stream and an upscaled \(224 \times 224\) stream for finer spatial localization.
           </p>
         </div>
 
@@ -300,9 +300,9 @@
             <span class="w-7 h-7 rounded-full bg-ios-orange/10 text-ios-orange font-bold flex items-center justify-center text-xs font-mono">07</span>
             <span class="text-xs font-mono px-2.5 py-0.5 bg-black/5 dark:bg-white/10 rounded-full font-semibold">Controls</span>
           </div>
-          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">Do we add distractors? How do they prove causality?</h3>
+          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">What role do distractors play in causal verification?</h3>
           <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
-            RoboCasa scenes spawn with 15–25 distractor items (sponges, kettles, mugs). Distractors are our negative control: ablating the handle must fail the robot (0% success), while ablating an equally active distractor must leave the robot unaffected (95% success).
+            RoboCasa environments include 15 to 25 distractor items (such as sponges, kettles, and mugs). Distractors serve as negative controls: ablating features for a target handle must induce task failure (0% success), whereas ablating features for an equally active distractor item must preserve policy execution (e.g., ~95% success).
           </p>
         </div>
 
@@ -311,9 +311,9 @@
             <span class="w-7 h-7 rounded-full bg-ios-red/10 text-ios-red font-bold flex items-center justify-center text-xs font-mono">08</span>
             <span class="text-xs font-mono px-2.5 py-0.5 bg-black/5 dark:bg-white/10 rounded-full font-semibold">Leakage</span>
           </div>
-          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">How did SIR "mess up" and why does our project exist?</h3>
+          <h3 class="text-base font-bold text-ios-text dark:text-ios-darkText">What motivated this approach over explicit graph selection methods like SIR?</h3>
           <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
-            The ICLR 2027 paper proved that SIR suffered from <strong>information leakage</strong>—the policy claimed to keep only 2 objects, but secretly relied on leaked information from excluded objects via global graph pooling. When leaks were strictly plugged, success collapsed.
+            Prior work (ICLR 2027) showed that explicit subset selection in graph-based policies suffered from information leakage: while the selector claimed to retain only two objects, unselected object features leaked into the representation through graph normalizations and global pooling. Unsupervised latent discovery directly analyzes internal representations in standard end-to-end policies without introducing leaky graph selection bottlenecks.
           </p>
         </div>
       </div>
@@ -408,17 +408,17 @@
             <p class="text-ios-secondary mt-1 leading-relaxed">Analyzed ICLR 2027 paper, structured the SAE dictionary architecture, and isolated team repository.</p>
           </div>
           <div>
-            <span class="font-bold text-ios-blue font-mono uppercase">Cycle 02 • In Progress (Nov 14 – Nov 27, 2026)</span>
+            <span class="font-bold text-ios-blue font-mono uppercase">Cycle 02 • In Progress (Nov 14 to Nov 27, 2026)</span>
             <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-0.5">Activation Recording &amp; Sparse Autoencoder Training</h4>
             <p class="text-ios-secondary mt-1 leading-relaxed">Collecting 50,000 spatial activations via `parallel_tester.py` and training the Top-K SAE ($M=4096, K=32$).</p>
           </div>
           <div>
-            <span class="font-bold text-ios-secondary font-mono uppercase">Cycle 03 • Scheduled (Nov 28 – Dec 11, 2026)</span>
+            <span class="font-bold text-ios-secondary font-mono uppercase">Cycle 03 • Scheduled (Nov 28 to Dec 11, 2026)</span>
             <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-0.5">Spatial Grounding &amp; Latent Kept Set Extraction</h4>
             <p class="text-ios-secondary mt-1 leading-relaxed">Upsampling feature heatmaps and computing IoU against RoboCasa 3D bounding boxes.</p>
           </div>
           <div>
-            <span class="font-bold text-ios-secondary font-mono uppercase">Cycle 04 • Scheduled (Dec 12 – Dec 25, 2026)</span>
+            <span class="font-bold text-ios-secondary font-mono uppercase">Cycle 04 • Scheduled (Dec 12 to Dec 25, 2026)</span>
             <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-0.5">Causal Closed-Loop Interventions (D-C, R-C, C-C)</h4>
             <p class="text-ios-secondary mt-1 leading-relaxed">Performing closed-loop rollout ablations comparing latent kept set vs. SIR explicit graphs.</p>
           </div>
@@ -476,7 +476,7 @@
     });
 
     // -------------------------------------------------------------
-    // Supercharged Gallery Data with Next-Gen Interactive Elements
+    // Gallery Data & Interactive Stage Definitions
     // -------------------------------------------------------------
     const galleryData = [
       {
@@ -485,7 +485,7 @@
         tensorIn: "Raw Photons",
         tensorOut: "Image Tensor: [B, 3, 128, 128] or [B, 3, 224, 224]",
         desc: "The sensory input begins as standard RGB frames from RoboCasa's static kitchen camera or wrist in-hand camera. Normalized to ImageNet mean and std.",
-        details: "Code Reality: In SIR_Model/dataloader/datasets.py line 132, images are loaded natively at 128x128. For canonical ResNet-18, frames can be bilinearly resized to 224x224.",
+        details: "Implementation detail: In SIR_Model/dataloader/datasets.py line 132, images are loaded natively at 128x128. For canonical ResNet-18, frames can be bilinearly resized to 224x224.",
         interactiveWidget: `
           <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-4">
             <div class="flex items-center justify-between text-xs">
@@ -497,7 +497,10 @@
             </div>
             
             <div class="relative w-full h-44 rounded-2xl overflow-hidden flex items-center justify-center border border-ios-border dark:border-ios-darkBorder shadow-inner cursor-crosshair bg-slate-900" onmousemove="inspectPixel(event)" id="cameraPreviewArea">
-              <div class="absolute inset-0 flex items-center justify-center opacity-30 text-6xl select-none">🍳 🤖 🚪</div>
+              <div class="absolute inset-0 flex flex-col items-center justify-center opacity-20 text-xs font-mono tracking-widest text-slate-300 select-none uppercase">
+                <svg class="w-8 h-8 mb-1 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span>RoboCasa Camera Frame</span>
+              </div>
               <div id="pixelCrosshair" class="w-8 h-8 border-2 border-ios-cyan rounded-lg pointer-events-none absolute shadow-lg transition-all duration-75" style="left: 45%; top: 40%;"></div>
             </div>
 
@@ -530,7 +533,7 @@
         tensorIn: "Image Tensor: [B, 3, 128, 128] or [B, 3, 224, 224]",
         tensorOut: "layer4 Grid: [B, 512, 4, 4] or [B, 512, 7, 7]",
         desc: "5 stride-2 downsamplings shrink the image 32x while channel depth expands to 512. Unlike fully pooled representations, this preserves distinct 2D spatial locations.",
-        details: "Code Reality: With 128x128 input, layer4 is 4x4 (16 cells). With 224x224 input, layer4 is 7x7 (49 cells). Hover any cell to inspect its 512-d activation vector!",
+        details: "Resolution specifications: With 128x128 input, layer4 is 4x4 (16 cells). With 224x224 input, layer4 is 7x7 (49 cells). Select any cell to inspect its 512-d activation vector.",
         interactiveWidget: `
           <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-4">
             <div class="flex items-center justify-between text-xs">
@@ -546,7 +549,7 @@
                   <div onmouseover="hoverCell(${r}, ${c})" class="w-11 h-11 rounded-xl flex items-center justify-center font-mono text-[10px] cursor-pointer transition-all hover:scale-110 shadow-sm ${
                     isTarget ? 'bg-ios-orange text-white font-bold ring-2 ring-ios-orange shadow-md' : 'bg-ios-card dark:bg-ios-darkCard text-ios-secondary hover:text-ios-blue'
                   }">
-                    ${isTarget ? '🎯' : `(${r},${c})`}
+                    (${r},${c})
                   </div>
                 `;
               }).join('')}
@@ -569,11 +572,11 @@
       },
       {
         badge: "STAGE 03 • THE BOTTLENECK",
-        title: "Global Average Pooling (The GAP Trap)",
+        title: "Global Average Pooling & Spatial Reduction",
         tensorIn: "layer4 Grid: [B, 512, 4, 4]",
         tensorOut: "Pooled Vector: [B, 512] (Collapsed)",
-        desc: "Standard vision policies apply Global Average Pooling (GAP) across space, collapsing all 16 (or 49) cells into a single average vector. This destroys spatial causality!",
-        details: "Drag the slider to physically watch the 16 spatial cells collapse into a single point, erasing where the objects were located!",
+        desc: "Standard vision policies apply Global Average Pooling (GAP) across space, reducing all 16 (or 49) spatial vectors into a single pooled representation. This eliminates localized coordinate grounding.",
+        details: "Adjust the slider to observe how 16 spatial cells compress into a single vector, eliminating spatial coordinate variance.",
         interactiveWidget: `
           <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-5 text-center">
             <div class="flex items-center justify-between text-xs font-mono">
@@ -608,7 +611,7 @@
         tensorIn: "Spatial Cell: x ∈ ℝ⁵¹²",
         tensorOut: "Sparse Code: f ∈ ℝ⁴⁰⁹⁶ (Top-K Sparsity)",
         desc: "The SAE takes each 512-d spatial cell and projects it into 4,096 dimensions. A Top-K activation filter retains only the K most intense features and clamps the remaining 4,064 to zero.",
-        details: "Drag the slider to test different Top-K values ($K=1 \\dots 64$) and watch the balance between reconstruction accuracy and feature monosemanticity!",
+        details: "Adjust Top-K ($K=1 \\dots 64$) to evaluate the trade-off between explained reconstruction variance and monosemantic sparsity.",
         interactiveWidget: `
           <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-4">
             <div class="flex items-center justify-between text-xs">
@@ -643,7 +646,7 @@
         tensorIn: "Feature Slice: f[812, :, :] ∈ ℝ⁴ ˣ ⁴",
         tensorOut: "Upscaled Heatmap: [1, 1, 224, 224]",
         desc: "Slicing Feature #812 across spatial cells yields a 2D matrix of activation strengths. We upsample this matrix by 32x to overlay it directly onto the full camera frame.",
-        details: "Drag the slider to adjust bilinear smoothing, or toggle targets between the drawer handle and background objects!",
+        details: "Toggle targets to observe feature spatial localization between task objects and background regions.",
         interactiveWidget: `
           <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-4">
             <div class="flex items-center justify-between text-xs">
@@ -652,7 +655,10 @@
             </div>
 
             <div class="relative w-full h-40 rounded-2xl bg-slate-900 overflow-hidden flex items-center justify-center border border-ios-border dark:border-ios-darkBorder shadow-inner" id="heatmapDisplay">
-              <div class="absolute inset-0 opacity-20 flex items-center justify-center text-5xl select-none">🍳 🤖 🚪</div>
+              <div class="absolute inset-0 opacity-20 flex flex-col items-center justify-center text-xs font-mono tracking-widest text-slate-300 select-none uppercase">
+                <svg class="w-8 h-8 mb-1 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                <span>Spatial Projection Grid</span>
+              </div>
               <div id="glowCircle" class="w-16 h-16 rounded-full bg-ios-orange/70 blur-md absolute transition-all duration-300" style="left: 48%; top: 38%;"></div>
               <div id="glowMarker" class="w-4 h-4 border-2 border-white rounded-full absolute pointer-events-none transition-all duration-300" style="left: 54%; top: 48%;"></div>
             </div>
@@ -671,7 +677,7 @@
         tensorIn: "Heatmap H_j and 3D Bounding Boxes B_obj",
         tensorOut: "Latent Kept Set: K_latent = { drawer_handle, gripper }",
         desc: "We compute Intersection-over-Union (IoU) between active feature heatmaps and RoboCasa ground-truth 3D bounding boxes. Features overlapping an object with IoU > 0.5 are semantically labeled.",
-        details: "Drag the IoU threshold slider to see which objects get admitted to the Latent Kept Set K_latent!",
+        details: "Adjust the IoU threshold to evaluate object inclusion into the latent kept set based on spatial overlap.",
         interactiveWidget: `
           <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-4">
             <div class="flex items-center justify-between text-xs">
@@ -712,7 +718,7 @@
         tensorIn: "Observation Context + CLIP Goal Embedding",
         tensorOut: "Action Chunk: a_t ∈ ℝ¹⁰ ˣ ¹² (10 timesteps)",
         desc: "The Multimodal Diffusion Transformer (MDT) fuses observation tokens with the CLIP text goal and runs 10 steps of DDIM diffusion denoising.",
-        details: "Drag the slider to watch 10 future timesteps of 12-DoF actions smoothly denoise from Gaussian noise into a clean trajectory!",
+        details: "Adjust the step slider to observe the reverse diffusion trajectory across 10 prediction horizons.",
         interactiveWidget: `
           <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-4">
             <div class="flex items-center justify-between text-xs">
@@ -743,7 +749,7 @@
         tensorIn: "Ablation Mask: f[feat_target] = 0.0",
         tensorOut: "Predicted Motor Delta: Δa = ||a_orig - a_ablated||",
         desc: "We perform causal surgery during closed-loop rollouts by clamping specific features to zero, reconstructing x̂, and passing it to MDT.",
-        details: "Click any ablation button below to test Discovery, Removal (Δa ≈ 0), and Consequence (task failure) in real time!",
+        details: "Select an ablation condition to observe motor delta response under causal feature zeroing.",
         interactiveWidget: `
           <div class="p-6 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-4">
             <div class="text-xs font-bold text-ios-blue">Interactive Causal Feature Switches:</div>
@@ -917,7 +923,7 @@
 
       if (val >= 90) {
         single.classList.remove('hidden');
-        txt.innerHTML = `<span class="text-ios-red font-bold">Destroyed!</span> 16 cells collapsed into 1 vector. Spatial coordinate variance = 0.00!`;
+        txt.innerHTML = `<span class="text-ios-red font-bold">Pooled:</span> 16 spatial tokens averaged into 1 vector. Spatial variance eliminated.`;
       } else {
         single.classList.add('hidden');
         txt.innerText = "Slide right to simulate GAP pooling collapsing all spatial coordinates.";
