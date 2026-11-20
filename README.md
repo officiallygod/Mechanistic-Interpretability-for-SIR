@@ -34,40 +34,9 @@ In robot imitation learning, two paradigms currently exist:
 
 ---
 
-## 2. Methodology & Architecture
+## 2. Methodology & Research Protocol
 
-> 🗺️ **New to the SIR code?** Start with the [SIR Code Mind Map](docs/sir_code_mindmap.md). It covers every component of `SIR_Model/` and marks where our SAE pipeline plugs in.
-
-```mermaid
-flowchart TD
-    subgraph S1["1. Visual Observation & Backbone (ResNet-18, one per camera)"]
-        Cam["Agentview left / right camera\nRGB: 128 x 128 x 3"] --> Conv1["Conv1 + MaxPool\n32 x 32 x 64"]
-        Conv1 --> L1["Layer 1 (BasicBlock)\n32 x 32 x 64"]
-        L1 --> L2["Layer 2 (BasicBlock)\n16 x 16 x 128"]
-        L2 --> L3["Layer 3 (BasicBlock)\n8 x 8 x 256"]
-        L3 --> L4["Layer 4 (BasicBlock)\n4 x 4 x 512"]
-        L4 --> Pool["Global Average Pooling + fc\nVector: 512-d"]
-    end
-
-    subgraph S2["2. Mechanistic Interpretability: Sparse Autoencoder (SAE)"]
-        L4 -.->|"Tap 16 Spatial Cells (x_i in R^512)"| SAE_Enc["SAE Encoder: ReLU(W_enc · x + b)\nTop-K / L1 Sparsity"]
-        SAE_Enc --> SparseF["Overcomplete Sparse Code\nf in R^4096 (L0 ≪ 4096)"]
-        SparseF --> SAE_Dec["SAE Decoder: W_dec · f + b\nx_hat in R^512"]
-        SparseF --> Grounding["Spatial Feature Heatmaps\nOverlap with Simulator Segmentation Masks"]
-        Grounding --> LatentSet["Emergent Latent Kept Set K_latent\n(Mug, Drawer Handle, Gripper)"]
-    end
-
-    subgraph S3["3. Action Generator: MDT Diffusion Transformer"]
-        Pool --> MDT_Enc["4-layer Transformer Encoder\n(Dim: 512, 16 Attention Heads)\nTokens: goal + left + right"]
-        Goal["Language Instruction (CLIP)\n512-d Embedding"] --> MDT_Enc
-        Noise["Noisy Action Chunk a_t^(k)\n[10 x 12] + Step k"] --> MDT_Dec["6-layer Transformer Decoder\n(Cross-Attention over Observations)"]
-        MDT_Enc --> MDT_Dec
-        MDT_Dec --> DDIM["10-Step DDIM Denoising"]
-        DDIM --> Action["10-Step Action Chunk\n[10 x 12] end-effector actions"]
-    end
-
-    SAE_Dec -.->|"Causal Ablation / Activation Steering"| Pool
-```
+> 🗺️ **New to the SIR code?** See the [SIR Code Mind Map](docs/sir_code_mindmap.md) for how the upstream codebase is structured and where our MIS components tap in.
 
 ### The 6-Step Protocol:
 1. **Run Rollouts with Trained Image Policy:** Execute an untouched ResNet-18 + MDT policy (`manager.image_modalities=[left,right]`, `manager.graph_modalities=[]`) and record the $4 \times 4 \times 512$ feature map at `layer4` before global average pooling. The cameras are 128 × 128 px, so each of the 16 cells covers a 32 × 32 px patch.
