@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MIS: How a Feature Heatmap Is Made</title>
+  <meta name="description" content="Interactive walkthrough: from a camera frame through ResNet-18 layer 4 and the sparse autoencoder to an upsampled feature heatmap compared with object boxes.">
+  <link rel="icon" type="image/svg+xml" href="assets/branding/mis-logo-dark.svg">
+  <style>
+    :root {
+      --bg: #1c1c1e; --card: #26262b; --card-2: #2f2f36; --border: #3a3a44;
+      --text: #f2f2f5; --muted: #a9aac4;
+      --orange: #f26b1d; --orange-soft: rgba(242, 107, 29, 0.16);
+      --red: #fe5757; --purple: #a905b7; --violet: #7030bd; --green: #34c759;
+      --mono: ui-monospace, "SF Mono", "JetBrains Mono", Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html, body { overflow-x: hidden; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    a { color: var(--orange); }
+    header, main, footer { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+    header { padding-top: 32px; }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--muted); font-size: 14px; }
+    .brand img { height: 28px; }
+    h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.15; margin: 24px 0 8px; letter-spacing: -0.02em; }
+    h1 span { color: var(--orange); }
+    .lead { color: var(--muted); max-width: 720px; margin: 0; }
+    .toy {
+      display: inline-block; margin-top: 16px; padding: 6px 12px; border-radius: 999px;
+      background: var(--orange-soft); color: var(--orange); font-size: 13px; font-weight: 600;
+    }
+
+    /* sticky controls */
+    .controls {
+      position: sticky; top: 0; z-index: 10; margin: 24px 0; padding: 12px 16px;
+      display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center;
+      background: rgba(28, 28, 30, 0.92); backdrop-filter: blur(8px);
+      border: 1px solid var(--border); border-radius: 14px;
+    }
+    .control { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); min-width: 0; max-width: 100%; }
+    .seg { display: inline-flex; flex-wrap: wrap; max-width: 100%; border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+    .seg button {
+      background: transparent; color: var(--muted); border: 0; padding: 6px 12px; font: inherit; font-size: 13px; cursor: pointer;
+    }
+    .seg button.on { background: var(--orange); color: #fff; font-weight: 600; }
+    .seg button.on.up { background: var(--red); }
+    input[type=range] { accent-color: var(--orange); width: 120px; }
+    .val { font-family: var(--mono); color: var(--text); min-width: 3ch; }
+
+    /* steps */
+    .step {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start;
+      background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 24px; margin-bottom: 20px;
+    }
+    .step-head { display: flex; gap: 14px; align-items: center; margin-bottom: 8px; }
+    .num {
+      flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center;
+      background: var(--orange); color: #fff; font-weight: 700; font-size: 14px;
+    }
+    .num.purple { background: var(--purple); }
+    .num.violet { background: var(--violet); }
+    h2 { font-size: 20px; margin: 0; }
+    .step p { color: var(--muted); margin: 8px 0; font-size: 15px; }
+    .shape {
+      display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-family: var(--mono); font-size: 13px; color: var(--text);
+      background: var(--card-2); border-radius: 8px; padding: 3px 8px; margin: 4px 0;
+    }
+    .shape .up { color: var(--red); }
+    .formula { font-family: var(--mono); font-size: 13px; color: var(--text); background: var(--card-2); border-radius: 10px; padding: 10px 12px; margin-top: 10px; overflow-x: auto; }
+    .visual { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+    canvas { width: 100%; max-width: 384px; height: auto; border-radius: 12px; background: #111; display: block; }
+    canvas.strip { max-width: 100%; border-radius: 8px; }
+    canvas.clickable { cursor: crosshair; }
+    .caption { font-size: 13px; color: var(--muted); text-align: center; }
+    .check { font-size: 14px; color: var(--muted); display: flex; gap: 8px; align-items: center; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+    td.num-cell { font-family: var(--mono); }
+    tr.pass td { color: var(--green); }
+    .bar { height: 6px; border-radius: 3px; background: var(--orange); }
+    .verdict { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: var(--card-2); font-size: 14px; }
+
+    .note {
+      background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 24px; margin-bottom: 20px;
+    }
+    .note h2 { margin-bottom: 8px; }
+    .note li { color: var(--muted); margin: 6px 0; }
+    footer { color: var(--muted); font-size: 13px; padding-top: 12px; padding-bottom: 40px; }
+
+    @media (max-width: 760px) {
+      .step { grid-template-columns: minmax(0, 1fr); padding: 18px; }
+      .controls { gap: 10px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="index.html"><img src="assets/branding/mis-logo-dark.svg" alt="MIS logo"> ← back to the project portal</a>
+  <h1>How a feature <span>heatmap</span> is made</h1>
+  <p class="lead">
+    From one camera frame to a map that shows where a single SAE feature fires, and which object it belongs to.
+    ResNet runs forward only once. The heatmap is read straight from the sparse codes; nothing is sent back through the network.
+  </p>
+  <span class="toy">Toy data: the scene and all activations are invented for illustration, not results.</span>
+</header>
+
+<main>
+  <div class="controls" role="group" aria-label="Walkthrough controls">
+    <div class="control">Feature
+      <span class="seg" id="featSeg"></span>
+    </div>
+    <div class="control">Grid
+      <span class="seg" id="resSeg">
+        <button data-n="4" class="on">4×4 native</button>
+        <button data-n="7">7×7 upscaled</button>
+      </span>
+    </div>
+    <div class="control">Threshold
+      <input type="range" id="thr" min="0.1" max="0.9" step="0.05" value="0.5" aria-label="Heatmap threshold relative to the maximum">
+      <span class="val" id="thrVal">0.50</span>
+    </div>
+  </div>
+
+  <!-- 01 -->
+  <section class="step">
+    <div>
+      <div class="step-head"><div class="num">01</div><h2>Camera frame</h2></div>
+      <p>RoboCasa renders each camera at 128×128 px. SIR feeds this frame to ResNet-18 as it is.</p>
+      <span class="shape" id="shape1">image: 3 × 128 × 128</span>
+      <p>The simulator also knows where every object is. We use those boxes later, only to <em>label</em> features.</p>
+      <label class="check"><input type="checkbox" id="showBoxes" checked> show object boxes</label>
+    </div>
+    <div class="visual">
+      <canvas id="c1" width="384" height="384" aria-label="Toy kitchen camera frame with object boxes"></canvas>
+      <div class="caption">Toy scene: drawer with handle, mug, microwave, gripper</div>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section class="step">
+    <div>
+      <div class="step-head"><div class="num">02</div><h2>ResNet-18 forward, stop at layer 4</h2></div>
+      <p>The image passes through ResNet once. Convolutions keep the layout, so layer 4 is a small grid laid over the image: each cell sits over one patch.</p>
+      <span class="shape" id="shape2">layer 4: 512 × 4 × 4 = 16 cells</span>
+      <p>Every cell holds a <strong>dense</strong> 512-d vector: almost every channel is non-zero, and one channel mixes many concepts. <strong>Click a cell</strong> to inspect it.</p>
+    </div>
+    <div class="visual">
+      <canvas id="c2" class="clickable" width="384" height="384" aria-label="Layer-4 grid over the frame; click a cell"></canvas>
+      <canvas id="dense" class="strip" width="512" height="70" aria-label="Dense 512-d vector of the selected cell"></canvas>
+      <div class="caption" id="cellCap">cell (row 2, col 1): 512 channels, dense</div>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section class="step">
+    <div>
+      <div class="step-head"><div class="num">03</div><h2>SAE encoder on every cell</h2></div>
+      <p>The SAE turns each cell's 512 numbers into 4,096 features, of which only 32 may be non-zero (Top-32). Ideally each feature means one thing.</p>
+      <span class="shape">x ∈ ℝ⁵¹² → f ∈ ℝ⁴⁰⁹⁶, 32 active</span>
+      <div class="formula">f = TopK₃₂( ReLU( W_enc (x − b_dec) + b_enc ) )</div>
+      <p>The orange bar is the feature selected above. Its height in <em>this</em> cell is one pixel of the heatmap.</p>
+    </div>
+    <div class="visual">
+      <canvas id="sparse" class="strip" width="1024" height="110" aria-label="Sparse 4096-d code of the selected cell"></canvas>
+      <div class="caption" id="sparseCap"></div>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section class="step">
+    <div>
+      <div class="step-head"><div class="num purple">04</div><h2>Collect feature j from every cell</h2></div>
+      <p>Repeat step 03 for all cells and keep only feature j. The result is a tiny map at layer-4 resolution: the heatmap before any upsampling.</p>
+      <span class="shape" id="shape4">f[j] over the grid: 4 × 4</span>
+      <p>This is all the location information the feature carries. Everything after this step only changes how it is displayed.</p>
+    </div>
+    <div class="visual">
+      <canvas id="c4" width="384" height="384" aria-label="Feature values per cell"></canvas>
+      <div class="caption">Activation of the selected feature in each cell</div>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section class="step">
+    <div>
+      <div class="step-head"><div class="num purple">05</div><h2>Upsample to image size</h2></div>
+      <p>Bilinear interpolation stretches the grid to 128×128 px so it can be laid over the frame, as in <code>src/grounding.py</code>:</p>
+      <div class="formula">H_j = F.interpolate(f[j], size=(128, 128), mode="bilinear", align_corners=False)</div>
+      <p>The map now looks smooth, but it holds no new detail: it is still the same 16 (or 49) numbers.</p>
+    </div>
+    <div class="visual">
+      <canvas id="c5" width="384" height="384" aria-label="Upsampled heatmap over the frame"></canvas>
+      <div class="caption">Upsampled heatmap H_j over the frame</div>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section class="step">
+    <div>
+      <div class="step-head"><div class="num violet">06</div><h2>Compare with the object boxes</h2></div>
+      <p>Two ways to say which object the feature belongs to:</p>
+      <p><strong>IoU:</strong> keep pixels above the threshold, then measure overlap with each box. The portal labels a feature when IoU &gt; 0.5.</p>
+      <p><strong>Activation share:</strong> the part of the total heatmap that falls inside each box. No threshold needed.</p>
+      <div id="verdict" class="verdict"></div>
+    </div>
+    <div class="visual">
+      <canvas id="c6" width="384" height="384" aria-label="Thresholded heatmap with object boxes"></canvas>
+      <table aria-label="Overlap of the heatmap with each object box">
+        <thead><tr><th>Object</th><th>IoU</th><th>Share</th><th></th></tr></thead>
+        <tbody id="iouBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="note">
+    <h2>What this toy shows</h2>
+    <ul>
+      <li><strong>Coarse location only.</strong> At 4×4 one cell spans 32×32 px, so a small part like the handle cannot get its own blob. The handle feature ends up overlapping the whole drawer more than the handle.</li>
+      <li><strong>7×7 helps, but costs.</strong> At 7×7 the handle blob sits on the handle (try <a href="#feat=0&amp;n=7">this view</a>). But the policy was trained on 128 px frames, so upscaling feeds it an input size it never saw.</li>
+      <li><strong>Neither rule is safe at 4×4.</strong> The mug feature reaches IoU 0.22 with the mug, and by activation share it even points to the microwave (<a href="#feat=1">see it</a>), because the blob spills over both.</li>
+      <li><strong>Parts sit inside their object.</strong> Every handle pixel is also a drawer pixel, so the drawer always collects at least as much activation share as its handle. To tell part from whole, a rule has to account for that, for example by dividing the share by the box area.</li>
+      <li><strong>Features without an object exist.</strong> The texture feature passes no IoU cutoff and spreads its share thinly. That is the correct outcome: it should not join the latent kept set.</li>
+      <li><strong>Need pixel detail?</strong> Then we <em>would</em> go back through ResNet: gradient attribution (e.g. Grad-CAM, integrated gradients) of f_j with respect to the input pixels gives finer but noisier maps.</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  MIS: Mechanistic Interpretability for SIR · Group 4 · <a href="index.html">project portal</a> · <a href="index.html#gallery">tensor gallery</a>
+</footer>
+
+<script>
+(() => {
+  const IMG = 128;  // camera resolution, all geometry below is in image pixels
+
+  // ---- toy scene: object boxes [x, y, w, h] in image pixels ------------------
+  const OBJECTS = [
+    { name: "drawer", box: [10, 80, 60, 30], color: "#c9a27a" },
+    { name: "drawer_handle", box: [30, 91, 20, 6], color: "#e8e8ee" },
+    { name: "mug", box: [84, 48, 20, 22], color: "#5aa9e6" },
+    { name: "microwave", box: [70, 8, 52, 32], color: "#9aa0a6" },
+    { name: "gripper", box: [34, 10, 18, 36], color: "#ffb74d" },
+  ];
+
+  // ---- toy SAE features: where each one "fires" ------------------------------
+  const FEATURES = [
+    { id: 812, label: "handle-like", kind: "blob", cx: 40, cy: 94, sigma: 6, peak: 2.4 },
+    { id: 1402, label: "mug-like", kind: "blob", cx: 94, cy: 59, sigma: 9, peak: 2.0 },
+    { id: 2977, label: "texture", kind: "texture", peak: 0.9 },
+  ];
+
+  const state = { feat: 0, n: 4, thr: 0.5, cell: null, boxes: true };
+
+  // deterministic pseudo-random numbers so every reload shows the same toy data
+  function rng(seed) {
+    return () => {
+      seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+      let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  // feature value of one cell = average response over the cell's area (+ small noise)
+  function cellValue(f, n, r, c) {
+    const size = IMG / n, x0 = c * size, y0 = r * size, k = 8;
+    let sum = 0;
+    for (let i = 0; i < k; i++) for (let j = 0; j < k; j++) {
+      const x = x0 + (j + 0.5) * size / k, y = y0 + (i + 0.5) * size / k;
+      if (f.kind === "blob") {
+        const d2 = (x - f.cx) ** 2 + (y - f.cy) ** 2;
+        sum += f.peak * Math.exp(-d2 / (2 * f.sigma ** 2));
+      } else {
+        sum += y > 72 ? f.peak : 0.08 * f.peak;  // fires on the counter surface, everywhere
+      }
+    }
+    const noise = (rng(f.id * 97 + n * 13 + r * 7 + c)() - 0.5) * 0.06;
+    return Math.max(0, sum / (k * k) * (f.kind === "blob" ? 3.2 : 1) + noise);
+  }
+
+  function featureGrid(fi, n) {
+    const f = FEATURES[fi], g = [];
+    for (let r = 0; r < n; r++) { g.push([]); for (let c = 0; c < n; c++) g[r].push(cellValue(f, n, r, c)); }
+    return g;
+  }
+
+  // bilinear upsampling with align_corners=False, like torch.nn.functional.interpolate
+  function upsample(g, n, out) {
+    const H = new Float32Array(out * out), s = n / out;
+    for (let y = 0; y < out; y++) {
+      let sy = Math.max(0, (y + 0.5) * s - 0.5);
+      const y0 = Math.min(Math.floor(sy), n - 1), y1 = Math.min(y0 + 1, n - 1), wy = sy - y0;
+      for (let x = 0; x < out; x++) {
+        let sx = Math.max(0, (x + 0.5) * s - 0.5);
+        const x0 = Math.min(Math.floor(sx), n - 1), x1 = Math.min(x0 + 1, n - 1), wx = sx - x0;
+        H[y * out + x] = (1 - wy) * ((1 - wx) * g[y0][x0] + wx * g[y0][x1]) + wy * ((1 - wx) * g[y1][x0] + wx * g[y1][x1]);
+      }
+    }
+    return H;
+  }
+
+  // ---- drawing helpers -------------------------------------------------------
+  function ctxOf(id) { const c = document.getElementById(id); return [c, c.getContext("2d")]; }
+
+  function drawScene(ctx, S) {
+    ctx.save(); ctx.scale(S, S);
+    ctx.fillStyle = "#3b4350"; ctx.fillRect(0, 0, IMG, 72);           // wall
+    ctx.fillStyle = "#6b5a4a"; ctx.fillRect(0, 70, IMG, 4);            // counter edge
+    ctx.fillStyle = "#4e463f"; ctx.fillRect(0, 74, IMG, 54);           // cabinet
+    for (let i = 0; i < 128; i += 8) { ctx.fillStyle = i % 16 ? "#575049" : "#4a433c"; ctx.fillRect(i, 74, 8, 54); } // grain
+    ctx.fillStyle = "#8a7360"; ctx.fillRect(10, 80, 60, 30);           // drawer front
+    ctx.strokeStyle = "#3a2f26"; ctx.lineWidth = 0.8; ctx.strokeRect(10, 80, 60, 30);
+    ctx.fillStyle = "#d9d9df"; ctx.fillRect(30, 92, 20, 4);            // handle
+    ctx.fillStyle = "#777e86"; ctx.fillRect(70, 8, 52, 32);            // microwave
+    ctx.fillStyle = "#1f252c"; ctx.fillRect(74, 12, 32, 24);           // window
+    ctx.fillStyle = "#c8ccd0"; ctx.fillRect(110, 14, 8, 20);           // keypad
+    ctx.fillStyle = "#3d8ad1"; ctx.fillRect(86, 50, 14, 20);           // mug
+    ctx.strokeStyle = "#3d8ad1"; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.arc(101, 60, 4, -Math.PI / 2, Math.PI / 2); ctx.stroke();
+    ctx.fillStyle = "#cfd3d8"; ctx.fillRect(41, 0, 4, 18);             // robot arm
+    ctx.fillStyle = "#e09b3d"; ctx.fillRect(35, 18, 16, 8);            // gripper palm
+    ctx.fillRect(35, 26, 4, 20); ctx.fillRect(47, 26, 4, 20);          // fingers
+    ctx.restore();
+  }
+
+  function drawBoxes(ctx, S, highlight) {
+    ctx.save(); ctx.lineWidth = 2; ctx.font = "600 11px system-ui, sans-serif";
+    for (const o of OBJECTS) {
+      const [x, y, w, h] = o.box;
+      ctx.strokeStyle = highlight && highlight !== o.name ? "rgba(255,255,255,0.35)" : o.color;
+      ctx.setLineDash([5, 3]); ctx.strokeRect(x * S, y * S, w * S, h * S); ctx.setLineDash([]);
+      ctx.fillStyle = ctx.strokeStyle; ctx.fillText(o.name, x * S + 3, y * S - 4 < 10 ? y * S + 13 : y * S - 4);
+    }
+    ctx.restore();
+  }
+
+  function drawGrid(ctx, S, n, color) {
+    ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = 1;
+    const step = IMG / n * S;
+    for (let i = 1; i < n; i++) {
+      ctx.beginPath(); ctx.moveTo(i * step, 0); ctx.lineTo(i * step, IMG * S); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, i * step); ctx.lineTo(IMG * S, i * step); ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function heatOverlay(H, out, maxV, mask) {
+    const off = document.createElement("canvas"); off.width = off.height = out;
+    const octx = off.getContext("2d"), img = octx.createImageData(out, out);
+    for (let i = 0; i < out * out; i++) {
+      const v = maxV > 0 ? H[i] / maxV : 0;
+      const on = mask ? mask[i] : 1;
+      img.data[i * 4] = 242; img.data[i * 4 + 1] = 107; img.data[i * 4 + 2] = 29;
+      img.data[i * 4 + 3] = mask ? (on ? 170 : 0) : Math.round(220 * v);
+    }
+    octx.putImageData(img, 0, 0);
+    return off;
+  }
+
+  // ---- step renderers ----------------------------------------------------------
+  function render() {
+    const n = state.n, up = n === 7;
+    const grid = featureGrid(state.feat, n);
+    let maxV = 0; grid.forEach(row => row.forEach(v => maxV = Math.max(maxV, v)));
+    if (!state.cell || state.cell[0] >= n || state.cell[1] >= n) {
+      const f = FEATURES[0];  // default: the cell over the handle
+      state.cell = [Math.min(n - 1, Math.floor(f.cy / (IMG / n))), Math.min(n - 1, Math.floor(f.cx / (IMG / n)))];
+    }
+
+    document.getElementById("shape1").innerHTML = up
+      ? 'image: 3 × 128 × 128 <span class="up">→ upscaled to 3 × 224 × 224</span>' : "image: 3 × 128 × 128";
+    document.getElementById("shape2").innerHTML = up
+      ? '<span class="up">layer 4: 512 × 7 × 7 = 49 cells</span>' : "layer 4: 512 × 4 × 4 = 16 cells";
+    document.getElementById("shape4").innerHTML = up
+      ? '<span class="up">f[j] over the grid: 7 × 7</span>' : "f[j] over the grid: 4 × 4";
+
+    // 01 scene
+    { const [c, ctx] = ctxOf("c1"), S = c.width / IMG; ctx.clearRect(0, 0, c.width, c.height);
+      drawScene(ctx, S); if (state.boxes) drawBoxes(ctx, S); }
+
+    // 02 grid + selected cell + dense vector
+    { const [c, ctx] = ctxOf("c2"), S = c.width / IMG, step = IMG / n * S;
+      ctx.clearRect(0, 0, c.width, c.height); drawScene(ctx, S);
+      ctx.fillStyle = "rgba(0,0,0,0.25)"; ctx.fillRect(0, 0, c.width, c.height);
+      drawGrid(ctx, S, n, up ? "rgba(254,87,87,0.9)" : "rgba(255,255,255,0.75)");
+      const [r, cc] = state.cell;
+      ctx.strokeStyle = "#f26b1d"; ctx.lineWidth = 3; ctx.strokeRect(cc * step + 1.5, r * step + 1.5, step - 3, step - 3);
+      const [d, dctx] = ctxOf("dense"); dctx.clearRect(0, 0, d.width, d.height);
+      const rnd = rng(1000 + n * 100 + r * 10 + cc);
+      for (let i = 0; i < 512; i++) {
+        const v = Math.abs(rnd() + rnd() + rnd() - 1.5) / 1.5;
+        dctx.fillStyle = "#8d8fb0"; dctx.fillRect(i, d.height - v * (d.height - 4), 1, v * (d.height - 4));
+      }
+      document.getElementById("cellCap").textContent = `cell (row ${r}, col ${cc}): 512 channels, dense`;
+    }
+
+    // 03 sparse code of the selected cell
+    { const [c, ctx] = ctxOf("sparse"); ctx.clearRect(0, 0, c.width, c.height);
+      const [r, cc] = state.cell, H = c.height - 18;
+      ctx.fillStyle = "#33333d"; ctx.fillRect(0, H, c.width, 1);
+      const active = [];
+      FEATURES.forEach((f, fi) => { const v = featureGrid(fi, n)[r][cc]; if (v > 0.05) active.push({ id: f.id, v, sel: fi === state.feat }); });
+      const rnd = rng(5000 + n * 100 + r * 10 + cc), used = new Set(active.map(a => a.id));
+      while (active.length < 32) {
+        const id = Math.floor(rnd() * 4096);
+        if (!used.has(id)) { used.add(id); active.push({ id, v: 0.05 + rnd() * 0.55, sel: false }); }
+      }
+      const vmax = Math.max(1, ...active.map(a => a.v)), px = c.width / 4096;
+      for (const a of active) {
+        const h = a.v / vmax * (H - 6);
+        ctx.fillStyle = a.sel ? "#f26b1d" : "#8d8fb0";
+        ctx.fillRect(Math.round(a.id * px) - (a.sel ? 2 : 1), H - h, a.sel ? 5 : 3, h);
+      }
+      ctx.fillStyle = "#a9aac4"; ctx.font = "12px ui-monospace, monospace";
+      ctx.fillText("0", 0, c.height - 3); ctx.fillText("4095", c.width - 32, c.height - 3);
+      const fsel = FEATURES[state.feat], vsel = featureGrid(state.feat, n)[r][cc];
+      document.getElementById("sparseCap").textContent =
+        `cell (row ${r}, col ${cc}): 32 of 4,096 features active · feature #${fsel.id} = ${vsel > 0.05 ? vsel.toFixed(2) : "0 (not in the top 32)"}`;
+    }
+
+    // 04 per-cell values
+    { const [c, ctx] = ctxOf("c4"), step = c.width / n; ctx.clearRect(0, 0, c.width, c.height);
+      for (let r = 0; r < n; r++) for (let cc = 0; cc < n; cc++) {
+        const v = grid[r][cc] / (maxV || 1);
+        ctx.fillStyle = `rgba(242,107,29,${0.08 + 0.92 * v})`; ctx.fillRect(cc * step + 2, r * step + 2, step - 4, step - 4);
+        ctx.fillStyle = v > 0.55 ? "#fff" : "#d6d6e0"; ctx.font = `600 ${n === 4 ? 18 : 12}px ui-monospace, monospace`;
+        ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.fillText(grid[r][cc].toFixed(2), cc * step + step / 2, r * step + step / 2);
+      }
+      ctx.textAlign = "start"; ctx.textBaseline = "alphabetic";
+    }
+
+    // 05 upsampled heatmap
+    const Hm = upsample(grid, n, IMG);
+    { const [c, ctx] = ctxOf("c5"), S = c.width / IMG; ctx.clearRect(0, 0, c.width, c.height);
+      drawScene(ctx, S); ctx.fillStyle = "rgba(0,0,0,0.35)"; ctx.fillRect(0, 0, c.width, c.height);
+      ctx.imageSmoothingEnabled = true; ctx.drawImage(heatOverlay(Hm, IMG, maxV), 0, 0, c.width, c.height); }
+
+    // 06 threshold + IoU / share table
+    const mask = new Uint8Array(IMG * IMG); let maskCount = 0, total = 0;
+    for (let i = 0; i < IMG * IMG; i++) { total += Hm[i]; if (Hm[i] >= state.thr * maxV) { mask[i] = 1; maskCount++; } }
+    const rows = OBJECTS.map(o => {
+      const [x, y, w, h] = o.box; let inter = 0, inside = 0;
+      for (let yy = y; yy < y + h; yy++) for (let xx = x; xx < x + w; xx++) { const i = yy * IMG + xx; inter += mask[i]; inside += Hm[i]; }
+      return { name: o.name, iou: inter / (maskCount + w * h - inter), share: total > 0 ? inside / total : 0 };
+    });
+    const best = rows.reduce((a, b) => (b.iou > a.iou ? b : a));
+    const bestShare = rows.reduce((a, b) => (b.share > a.share ? b : a));
+    { const [c, ctx] = ctxOf("c6"), S = c.width / IMG; ctx.clearRect(0, 0, c.width, c.height);
+      drawScene(ctx, S); ctx.fillStyle = "rgba(0,0,0,0.45)"; ctx.fillRect(0, 0, c.width, c.height);
+      ctx.imageSmoothingEnabled = false; ctx.drawImage(heatOverlay(Hm, IMG, maxV, mask), 0, 0, c.width, c.height);
+      drawBoxes(ctx, S, best.iou > 0.5 ? best.name : null); }
+    document.getElementById("iouBody").innerHTML = rows.map(rw => `
+      <tr class="${rw.iou > 0.5 ? "pass" : ""}">
+        <td>${rw.name}</td><td class="num-cell">${rw.iou.toFixed(2)}</td><td class="num-cell">${(rw.share * 100).toFixed(0)}%</td>
+        <td style="width:30%"><div class="bar" style="width:${Math.round(rw.share * 100)}%"></div></td>
+      </tr>`).join("");
+    const f = FEATURES[state.feat];
+    document.getElementById("verdict").innerHTML = best.iou > 0.5
+      ? `IoU &gt; 0.5 → feature #${f.id} is labeled <strong>${best.name}</strong>.`
+      : `No box reaches IoU &gt; 0.5 (best: ${best.name}, ${best.iou.toFixed(2)}), so feature #${f.id} stays unlabeled. ` +
+        `By activation share it points to <strong>${bestShare.name}</strong> (${(bestShare.share * 100).toFixed(0)}%).`;
+  }
+
+  // ---- controls ----------------------------------------------------------------
+  const featSeg = document.getElementById("featSeg");
+  FEATURES.forEach((f, i) => {
+    const b = document.createElement("button");
+    b.textContent = `#${f.id} ${f.label}`; if (i === 0) b.className = "on";
+    b.addEventListener("click", () => { state.feat = i; [...featSeg.children].forEach((x, k) => x.className = k === i ? "on" : ""); render(); });
+    featSeg.appendChild(b);
+  });
+  const resSeg = document.getElementById("resSeg");
+  [...resSeg.children].forEach(b => b.addEventListener("click", () => {
+    state.n = Number(b.dataset.n); state.cell = null;
+    [...resSeg.children].forEach(x => x.className = x === b ? (state.n === 7 ? "on up" : "on") : "");
+    render();
+  }));
+  document.getElementById("thr").addEventListener("input", e => {
+    state.thr = Number(e.target.value); document.getElementById("thrVal").textContent = state.thr.toFixed(2); render();
+  });
+  document.getElementById("showBoxes").addEventListener("change", e => { state.boxes = e.target.checked; render(); });
+  document.getElementById("c2").addEventListener("click", e => {
+    const rect = e.target.getBoundingClientRect(), n = state.n;
+    const cc = Math.min(n - 1, Math.floor((e.clientX - rect.left) / rect.width * n));
+    const r = Math.min(n - 1, Math.floor((e.clientY - rect.top) / rect.height * n));
+    state.cell = [r, cc]; render();
+  });
+
+  // deep links, e.g. heatmap_explained.html#feat=1&n=7&thr=0.4 (also used by links on this page)
+  function applyHash() {
+    const params = new URLSearchParams(location.hash.slice(1));
+    if (!params.has("feat") && !params.has("n") && !params.has("thr")) return;
+    const fi = Math.min(FEATURES.length - 1, Math.max(0, Number(params.get("feat")) || 0));
+    featSeg.children[fi].click();
+    resSeg.children[params.get("n") === "7" ? 1 : 0].click();
+    const t = Math.min(0.9, Math.max(0.1, Number(params.get("thr")) || 0.5));
+    const slider = document.getElementById("thr"); slider.value = t; slider.dispatchEvent(new Event("input"));
+    document.querySelector(".controls").scrollIntoView({ behavior: "smooth" });
+  }
+  window.addEventListener("hashchange", applyHash);
+  applyHash();
+
+  render();
+})();
+</script>
+</body>
+</html>

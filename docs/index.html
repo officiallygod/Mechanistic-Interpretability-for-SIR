@@ -122,6 +122,7 @@
         <a href="#architecture" class="hover:text-ios-blue transition">Architecture</a>
         <a href="#conditions" class="hover:text-ios-blue transition">3 Verification Tests</a>
         <a href="#progress" class="hover:text-ios-blue transition">Cadence</a>
+        <a href="#slides" class="hover:text-ios-blue transition">Slides</a>
       </nav>
 
       <div class="flex items-center space-x-3 text-xs">
@@ -131,7 +132,7 @@
           <svg id="moonIcon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
         </button>
 
-        <a href="https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing" target="_blank"
+        <a href="#slides"
            class="btn-ios px-3.5 py-1.5 rounded-full bg-ios-orange/10 hover:bg-ios-orange/20 text-ios-orange font-semibold transition border border-ios-orange/30 hidden sm:inline-flex items-center space-x-1.5">
           <span>📊 Slides</span>
         </a>
@@ -183,6 +184,10 @@
         <a href="sir_code_mindmap.md"
            class="btn-ios px-6 py-3.5 rounded-full bg-ios-purple/10 hover:bg-ios-purple/20 text-ios-purple font-semibold text-sm transition border border-ios-purple/30 flex items-center space-x-2">
           <span>🗺️ Code Mind Map</span>
+        </a>
+        <a href="heatmap_explained.html"
+           class="btn-ios px-6 py-3.5 rounded-full bg-ios-orange/10 hover:bg-ios-orange/20 text-ios-orange font-semibold text-sm transition border border-ios-orange/30 flex items-center space-x-2">
+          <span>🔥 Heatmap Walkthrough</span>
         </a>
       </div>
 
@@ -363,7 +368,7 @@
             Canonical ImageNet ResNet uses $224 \times 224 \implies 7 \times 7 = 49$ tokens. However, RoboCasa natively stores $128 \times 128 \implies 4 \times 4 = 16$ tokens. We can either upscale frames to $224 \times 224$ for higher spatial precision, or tap the native $4 \times 4$ stream.
           </p>
           <div class="p-3 bg-ios-bg dark:bg-ios-darkBg rounded-2xl text-xs font-mono text-ios-secondary dark:text-ios-darkSecondary">
-            224x224: 49 spatial receptive fields • 128x128: 16 spatial receptive fields.
+            224x224: 49 spatial cells • 128x128: 16 spatial cells (cell spacing 32 px).
           </div>
         </div>
 
@@ -375,10 +380,10 @@
           </div>
           <h3 class="text-lg font-bold text-ios-text dark:text-ios-darkText">Do we add distractors? How do they prove causality?</h3>
           <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
-            RoboCasa kitchen scenes spawn with 15–25 distractor items (sponges, kettles, mugs). Distractors are our negative control: ablating the handle must fail the robot (0% success), while ablating an equally active distractor must leave the robot unaffected (95% success).
+            RoboCasa kitchen scenes contain task-irrelevant objects besides the target (exact counts vary by task and scene; not yet measured). These distractors are our negative control: ablating the features of a task-critical part such as the handle should hurt success much more than ablating equally active distractor features.
           </p>
           <div class="p-3 bg-ios-bg dark:bg-ios-darkBg rounded-2xl text-xs font-mono text-ios-secondary dark:text-ios-darkSecondary">
-            Selectivity Proof: Handle ablation collapses policy; Distractor ablation preserves it.
+            Selectivity test (expected): Success(handle ablated) ≪ Success(distractor ablated).
           </div>
         </div>
 
@@ -390,7 +395,7 @@
           </div>
           <h3 class="text-lg font-bold text-ios-text dark:text-ios-darkText">How did SIR "mess up" and why does our project exist?</h3>
           <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">
-            The ICLR 2027 paper proved that SIR suffered from <strong class="text-ios-red font-bold">information leakage</strong>—the policy claimed to keep only 2 objects, but secretly relied on leaked information from excluded objects via global graph pooling. When leaks were strictly plugged, success collapsed.
+            The ICLR 2027 paper proved that SIR suffered from <strong class="text-ios-red font-bold">information leakage</strong>—excluded objects can still influence the action through the removal mechanism (e.g. softmax denominators over all nodes, survivor score weighting, presence counts). Leaky SIR fails Discovery and Removal; the corrected version passes Removal and Consequence but drops from 2.12 to 1.62 average length on CALVIN (Fig. 1). No design point passes all three conditions.
           </p>
           <div class="p-3 bg-ios-bg dark:bg-ios-darkBg rounded-2xl text-xs font-mono text-ios-secondary dark:text-ios-darkSecondary">
             Our Mission: Test if an untouched pixel policy forms an honest, leak-free object set.
@@ -534,9 +539,9 @@ flowchart TD
             Presented every 14 days to supervisor Paul Mattes.
           </p>
         </div>
-        <a href="https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing" target="_blank"
+        <a href="#slides"
            class="btn-ios px-4 py-2 rounded-full bg-ios-orange/10 hover:bg-ios-orange/20 text-ios-orange border border-ios-orange/30 font-semibold text-xs flex items-center space-x-1">
-          <span>Open Slides ↗</span>
+          <span>Slide Sets ↓</span>
         </a>
       </div>
 
@@ -597,6 +602,30 @@ flowchart TD
       </div>
     </section>
 
+    <!-- ============================================================ -->
+    <!-- SLIDE SETS (generated from templates/*.pptx on deploy) -->
+    <!-- ============================================================ -->
+    <section id="slides" class="space-y-6">
+      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4">
+        <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-orange">Presentations</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
+          Slide Sets
+        </h2>
+        <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary mt-1">
+          Every deck in the repository's <code>templates/</code> folder, published automatically on each deploy. Newest first.
+        </p>
+      </div>
+
+      <div id="slideSets" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary">Loading slide sets…</p>
+      </div>
+
+      <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary">
+        Working drafts live in the
+        <a href="https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing" target="_blank" class="text-ios-orange hover:underline">shared Google Slides deck ↗</a>.
+      </p>
+    </section>
+
   </main>
 
   <!-- iOS-Style Footer -->
@@ -609,7 +638,7 @@ flowchart TD
         <span>•</span>
         <a href="sir_code_mindmap.md" class="hover:underline text-ios-blue">SIR Code Mindmap</a>
         <span>•</span>
-        <a href="templates/README.md" class="hover:underline text-ios-blue">Slide Templates</a>
+        <a href="#slides" class="hover:underline text-ios-blue">Slide Sets</a>
       </div>
     </div>
   </footer>
@@ -645,7 +674,7 @@ flowchart TD
         tensorIn: "Image Tensor: [3, 224, 224]",
         tensorOut: "layer4 Grid: [512, 7, 7] (49 tokens)",
         desc: "The image passes through 5 stride-2 downsampling operations (Conv1 + MaxPool, Layer 2, Layer 3, Layer 4). Spatial dimensions shrink by 32x while channel capacity expands from 3 to 512.",
-        details: "At 224x224, layer4 is 7x7 (49 spatial tokens). At 128x128, layer4 is 4x4 (16 spatial tokens). Each cell has a receptive field covering 32x32 pixels of the camera frame.",
+        details: "At 224x224, layer4 is 7x7 (49 spatial tokens). At 128x128, layer4 is 4x4 (16 spatial tokens). Neighbouring cells are 32 px apart in the camera frame, but each cell's receptive field is much larger than 32x32 px.",
         visual: `
           <div class="flex flex-col items-center justify-center p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-2">
             <span class="text-xs font-mono font-bold text-ios-blue">7 x 7 Spatial Grid (49 cells, each ℝ⁵¹²)</span>
@@ -693,7 +722,7 @@ flowchart TD
         tensorIn: "Spatial Cell: x ∈ ℝ⁵¹²",
         tensorOut: "Sparse Code: f ∈ ℝ⁴⁰⁹⁶ (Top-32)",
         desc: "The SAE takes each 512-d cell and projects it into 4,096 dimensions. A mathematical Top-K filter forces exactly 32 features to remain active while 4,064 are strictly zeroed out.",
-        details: "This decomposes polysemantic superposition into monosemantic dictionary vectors. Feature #812 represents only the handle, Feature #1402 represents only blue surfaces.",
+        details: "This decomposes polysemantic superposition into monosemantic dictionary vectors. Ideally one feature represents only the handle and another only blue surfaces (feature numbers in this gallery, e.g. #812, are illustrative).",
         visual: `
           <div class="flex flex-col items-center justify-center p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-y-2">
             <span class="text-xs font-mono font-bold text-ios-purple">4,096 Dimension Dictionary Expansion</span>
@@ -717,7 +746,7 @@ flowchart TD
         tensorIn: "Feature Slice: f[812, :, :] ∈ ℝ⁷ ˣ ⁷",
         tensorOut: "Upscaled Heatmap: [1, 1, 224, 224]",
         desc: "Because the SAE runs across all 49 cells, slicing Feature #812 gives a 7x7 matrix showing its intensity across the scene. We upsample this matrix by 32x using bilinear interpolation.",
-        details: "Unlike raw ResNet neurons which glow all over the kitchen, Feature #812 lights up exclusively as a sharp, clean hotspot over the target area.",
+        details: "Hypothesis: unlike raw ResNet neurons, which fire all over the kitchen, a monosemantic feature such as the illustrative #812 should light up as a single hotspot over its object.",
         visual: `
           <div class="flex items-center justify-center p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-ios-border dark:border-ios-darkBorder space-x-4">
             <div class="text-center">
@@ -751,8 +780,9 @@ flowchart TD
               <span class="px-2.5 py-1 bg-ios-red/10 text-ios-red rounded-lg border border-ios-red/30">IoU(H_812, B_microwave) = 0.02</span>
             </div>
             <div class="font-bold text-xs text-ios-text dark:text-ios-darkText pt-1">
-              Result: Feature #812 labeled as <span class="text-ios-blue">drawer_handle</span>!
+              Then feature #812 would be labeled as <span class="text-ios-blue">drawer_handle</span>
             </div>
+            <div class="text-[10px] text-ios-secondary">Illustrative values, not results.</div>
           </div>
         `,
         formula: "K_{\\text{latent}} = \\{ \\text{obj} \\mid \\exists f_j \\text{ active}, \\ \\text{IoU}(\\mathbf{H}_j, B_{\\text{obj}}) > 0.5 \\}"
@@ -785,7 +815,7 @@ flowchart TD
         tensorIn: "Ablation Mask: f[feat_target] = 0.0",
         tensorOut: "Reconstructed x̂ ➔ Robot Motor Delta",
         desc: "We perform causal surgery during closed-loop simulation rollouts by clamping specific features to zero, reconstructing x̂, and passing it to MDT.",
-        details: "Removal Test: Erase microwave ➔ Action unchanged (Δa ≈ 0). Consequence Test: Erase drawer handle ➔ Task collapses to 0% success!",
+        details: "Expected outcomes, not yet measured. Removal Test: erase the microwave ➔ action unchanged (Δa ≈ 0). Consequence Test: erase the drawer handle ➔ success drops far below the random-ablation control.",
         visual: `
           <div class="grid grid-cols-2 gap-3 text-xs font-mono">
             <div class="p-3 bg-ios-orange/10 border border-ios-orange/30 rounded-2xl space-y-1">
@@ -796,13 +826,62 @@ flowchart TD
             <div class="p-3 bg-ios-red/10 border border-ios-red/30 rounded-2xl space-y-1">
               <div class="font-bold text-ios-red">CONSEQUENCE TEST</div>
               <div class="text-[10px] text-ios-secondary">f[handle] = 0.0</div>
-              <div class="text-[11px] font-bold text-ios-red">Task Collapses (0% Success)</div>
+              <div class="text-[11px] font-bold text-ios-red">Expected: success ≪ control</div>
             </div>
           </div>
         `,
         formula: "\\hat{\\mathbf{x}} = \\mathbf{W}_{\\text{dec}} \\left( \\mathbf{f} \\odot \\mathbf{m}_{\\text{ablate}} \\right) + \\mathbf{b}_{\\text{dec}}"
       }
     ];
+
+    // -------------------------------------------------------------
+    // Slide Sets: rendered from slides/manifest.json (built on deploy)
+    // -------------------------------------------------------------
+    const REPO_TEMPLATES = "https://github.com/officiallygod/Mechanistic-Interpretability-for-SIR/tree/main/templates";
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
+    function renderSlideSets(decks) {
+      const container = document.getElementById("slideSets");
+      if (!decks.length) {
+        container.innerHTML = `<p class="text-sm text-ios-secondary dark:text-ios-darkSecondary">No slide sets published yet.</p>`;
+        return;
+      }
+      container.innerHTML = decks.map((deck, i) => {
+        const fileUrl = new URL("slides/" + encodeURIComponent(deck.file), window.location.href).href;
+        const viewerUrl = "https://view.officeapps.live.com/op/view.aspx?src=" + encodeURIComponent(fileUrl);
+        return `
+          <div class="p-5 rounded-2xl bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder shadow-ios space-y-3">
+            <div class="flex items-center justify-between text-xs font-mono">
+              <span class="font-bold uppercase tracking-wider ${i === 0 ? "text-ios-orange" : "text-ios-secondary dark:text-ios-darkSecondary"}">${i === 0 ? "Latest" : "Archive"}</span>
+              <span class="text-ios-secondary dark:text-ios-darkSecondary">${escapeHtml(deck.updated)} • ${Number(deck.slides) || 0} slides</span>
+            </div>
+            <h3 class="text-lg font-bold text-ios-text dark:text-ios-darkText">${escapeHtml(deck.title)}</h3>
+            ${deck.description ? `<p class="text-sm text-ios-secondary dark:text-ios-darkSecondary leading-relaxed">${escapeHtml(deck.description)}</p>` : ""}
+            <div class="flex flex-wrap gap-2 pt-1 text-xs">
+              <a href="${viewerUrl}" target="_blank" rel="noopener"
+                 class="btn-ios px-4 py-2 rounded-full bg-ios-orange/10 hover:bg-ios-orange/20 text-ios-orange border border-ios-orange/30 font-semibold">View online ↗</a>
+              <a href="${fileUrl}" download
+                 class="btn-ios px-4 py-2 rounded-full bg-black/5 dark:bg-white/10 text-ios-text dark:text-ios-darkText font-semibold">Download .pptx (${Number(deck.size_kb) || 0} KB)</a>
+            </div>
+          </div>`;
+      }).join("");
+    }
+
+    function loadSlideSets() {
+      fetch("slides/manifest.json", { cache: "no-store" })
+        .then(response => { if (!response.ok) throw new Error(response.status); return response.json(); })
+        .then(manifest => renderSlideSets(manifest.decks || []))
+        .catch(() => {
+          document.getElementById("slideSets").innerHTML = `
+            <p class="text-sm text-ios-secondary dark:text-ios-darkSecondary">
+              Slide sets are published when the site deploys. Browse them in the
+              <a href="${REPO_TEMPLATES}" target="_blank" class="text-ios-orange hover:underline">templates folder on GitHub ↗</a>.
+            </p>`;
+        });
+    }
 
     let currentStep = 0;
 
@@ -909,6 +988,7 @@ flowchart TD
     // Initialize Gallery & Mermaid & Math
     document.addEventListener("DOMContentLoaded", () => {
       renderStep(0);
+      loadSlideSets();
       mermaid.initialize({ startOnLoad: true, theme: 'default' });
 
       if (typeof renderMathInElement === 'function') {

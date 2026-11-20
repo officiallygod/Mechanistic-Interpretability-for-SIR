@@ -5,6 +5,8 @@ on:
     branches: ["main"]
     paths:
       - 'docs/**'
+      - 'templates/**'
+      - '.github/scripts/build_slides_manifest.py'
       - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
@@ -26,6 +28,11 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history, so each deck gets its last-commit date
+
+      - name: Publish Slide Decks from templates/
+        run: python3 .github/scripts/build_slides_manifest.py templates docs/slides
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
