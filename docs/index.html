@@ -683,82 +683,149 @@
     <!-- ======================================================== -->
     <!-- VIEW 4: ROADMAP & BI-WEEKLY CADENCE -->
     <!-- ======================================================== -->
-    <div id="view-roadmap" class="spa-view hidden space-y-6">
-      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4 flex items-center justify-between">
+    <div id="view-roadmap" class="spa-view hidden space-y-6 text-xs">
+      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-orange">Timeline &amp; Milestones</span>
+          <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-orange">Course &middot; Timeline</span>
           <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
-            Bi-Weekly Supervisor Cadence
+            Bi-Weekly Supervisor Roadmap
           </h2>
-          <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary mt-1">
-            Presented every 14 days to supervisor Paul Mattes.
+          <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary mt-1 max-w-2xl">
+            14-day iteration cadence presented to supervisor Paul Mattes across WS 2026/2027.
           </p>
         </div>
-        <a href="#slides"
-           class="btn-ios px-4 py-2 rounded-full bg-ios-orange/10 hover:bg-ios-orange/20 text-ios-orange border border-ios-orange/30 font-semibold text-xs flex items-center space-x-1">
-          <span>Slide Sets ↓</span>
-        </a>
-      </div>
-
-      <!-- Schedule Strip -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
-        <div class="p-4 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-2xl shadow-ios">
-          <div class="text-ios-secondary text-[10px] uppercase font-bold tracking-wider">Weekly Working Session</div>
-          <div class="font-bold text-ios-text dark:text-ios-darkText mt-1">Every Friday from 08:00 AM</div>
-          <div class="text-ios-secondary text-[11px] mt-0.5">Hands-on development &amp; implementation</div>
-        </div>
-        <div class="p-4 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-2xl shadow-ios">
-          <div class="text-ios-blue text-[10px] uppercase font-bold tracking-wider">Supervisor Cadence</div>
-          <div class="font-bold text-ios-text dark:text-ios-darkText mt-1">Bi-Weekly, 13:00 - 14:00</div>
-          <div class="text-ios-secondary text-[11px] mt-0.5">Next meeting: Nov 26, 2026 (13:00 - 14:00)</div>
-        </div>
-        <div class="p-4 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-2xl shadow-ios">
-          <div class="text-ios-orange text-[10px] uppercase font-bold tracking-wider">Academic Recess</div>
-          <div class="font-bold text-ios-text dark:text-ios-darkText mt-1">Dec 24, 2026 to Jan 06, 2027</div>
-          <div class="text-ios-secondary text-[11px] mt-0.5">University winter holiday break</div>
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="inline-flex bg-black/5 dark:bg-white/10 p-1 rounded-full gap-0.5">
+            <button onclick="navigate('seminar')" class="paper-filter-btn">Seminar</button>
+            <button onclick="navigate('praktikum')" class="paper-filter-btn">Praktikum</button>
+            <button onclick="navigate('roadmap')" class="paper-filter-btn active">Roadmap</button>
+            <button onclick="navigate('progress')" class="paper-filter-btn">Progress</button>
+          </div>
+          <button onclick="navigate('slides')" class="btn-ios px-4 py-2 rounded-full bg-ios-orange hover:opacity-90 text-white font-semibold text-xs shadow-ios inline-flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+            <span>Slide Sets</span>
+          </button>
         </div>
       </div>
 
-      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-8 shadow-ios">
-        <div class="relative border-l-2 border-ios-border dark:border-ios-darkBorder ml-4 pl-6 space-y-8 text-xs">
-          <div>
-            <span class="font-bold text-ios-green font-mono uppercase">Cycle 01 • Completed (Nov 13, 2026)</span>
-            <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-0.5">Topic Formulation, Project Scope &amp; Initial Setup</h4>
-            <p class="text-ios-secondary mt-1 leading-relaxed">Analyzed baseline literature, clarified project direction with supervisor, established team repository, and configured local development environment.</p>
+      <!-- Schedule & Cadence Strip -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-5 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl shadow-ios flex items-start gap-3.5">
+          <div class="w-10 h-10 rounded-2xl bg-ios-purple/10 text-ios-purple flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
           </div>
           <div>
-            <span class="font-bold text-ios-blue font-mono uppercase">Cycle 02 • In Progress (Nov 14 to Nov 27, 2026)</span>
-            <div class="text-[11px] text-ios-blue font-semibold mt-0.5">Next Supervisor Sync: Nov 26, 2026 (13:00 - 14:00) • Team Sessions: Fridays 08:00 AM</div>
-            <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-1">Codebase Familiarization &amp; Visual Representation Exploration</h4>
-            <p class="text-ios-secondary mt-1 leading-relaxed">Exploring pre-trained policy checkpoints, inspecting intermediate visual representations, and designing initial activation extraction hooks.</p>
+            <div class="text-ios-purple font-mono text-[10px] uppercase font-bold tracking-wider">Weekly Working Session</div>
+            <div class="font-bold text-sm text-ios-text dark:text-ios-darkText mt-0.5">Fridays from 08:00 AM</div>
+            <div class="text-ios-secondary mt-0.5">Hands-on coding &amp; SAE analysis</div>
+          </div>
+        </div>
+        <div class="p-5 bg-ios-card dark:bg-ios-darkCard border border-ios-blue/30 rounded-3xl shadow-ios flex items-start gap-3.5">
+          <div class="w-10 h-10 rounded-2xl bg-ios-blue/10 text-ios-blue flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
           </div>
           <div>
-            <span class="font-bold text-ios-secondary font-mono uppercase">Cycle 03 • Scheduled (Nov 28 to Dec 11, 2026)</span>
-            <div class="text-[11px] text-ios-secondary mt-0.5">Supervisor Sync: Dec 10, 2026</div>
-            <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-1">Data Logging Pipeline &amp; Activation Capture Validation</h4>
-            <p class="text-ios-secondary mt-1 leading-relaxed">Running test policy rollouts in RoboCasa, logging visual feature representations, and verifying data pipeline throughput.</p>
+            <div class="text-ios-blue font-mono text-[10px] uppercase font-bold tracking-wider">Supervisor Sync</div>
+            <div class="font-bold text-sm text-ios-text dark:text-ios-darkText mt-0.5">Bi-Weekly, Thu 13:00-14:00</div>
+            <div class="text-ios-secondary mt-0.5">Next sync: Dec 10, 2026</div>
+          </div>
+        </div>
+        <div class="p-5 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl shadow-ios flex items-start gap-3.5">
+          <div class="w-10 h-10 rounded-2xl bg-ios-orange/10 text-ios-orange flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
           </div>
           <div>
-            <span class="font-bold text-ios-secondary font-mono uppercase">Cycle 04 • Scheduled (Dec 12 to Dec 23, 2026)</span>
-            <div class="text-[11px] text-ios-secondary mt-0.5">Pre-Holiday Milestone Review</div>
-            <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-1">Sparse Dictionary Prototyping &amp; Baseline Analysis</h4>
-            <p class="text-ios-secondary mt-1 leading-relaxed">Drafting initial dictionary architecture, testing reconstruction loss baselines, and summarizing mid-term progress before the holiday recess.</p>
+            <div class="text-ios-orange font-mono text-[10px] uppercase font-bold tracking-wider">Academic Recess</div>
+            <div class="font-bold text-sm text-ios-text dark:text-ios-darkText mt-0.5">Dec 24 to Jan 06</div>
+            <div class="text-ios-secondary mt-0.5">University winter holiday break</div>
           </div>
-          <div class="p-4 rounded-2xl bg-black/5 dark:bg-white/5 border border-dashed border-ios-border dark:border-ios-darkBorder">
-            <span class="font-bold text-ios-orange font-mono uppercase text-[11px]">Academic Recess (Dec 24, 2026 to Jan 06, 2027)</span>
-            <p class="text-ios-secondary mt-1 leading-relaxed">University winter break. No scheduled supervisor meetings or project deliverables.</p>
+        </div>
+      </div>
+
+      <!-- Semester Progress Bar Card -->
+      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-5 sm:p-6 shadow-ios space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="font-bold text-sm text-ios-text dark:text-ios-darkText">Semester Milestone Progress</div>
+          <span class="px-2.5 py-1 rounded-full bg-ios-blue/10 text-ios-blue font-mono font-bold text-[10px]">Cycle 02 of 06 &middot; 33%</span>
+        </div>
+        <div class="w-full h-2 rounded-full bg-black/5 dark:bg-white/10 overflow-hidden">
+          <div class="h-full w-1/3 rounded-full bg-gradient-to-r from-ios-green via-ios-blue to-ios-cyan"></div>
+        </div>
+      </div>
+
+      <!-- Timeline Rail -->
+      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 sm:p-8 shadow-ios">
+        <div class="relative border-l-2 border-ios-border dark:border-ios-darkBorder ml-3 pl-7 space-y-6">
+          <div class="relative p-4 rounded-2xl bg-ios-bg/60 dark:bg-ios-darkBg/60 border border-ios-border dark:border-ios-darkBorder">
+            <span class="absolute -left-[35px] top-5 w-3.5 h-3.5 rounded-full bg-ios-green ring-4 ring-ios-card dark:ring-ios-darkCard"></span>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="font-mono font-bold text-ios-green uppercase text-[10px]">Cycle 01 &middot; Nov 13, 2026</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-ios-green/12 text-ios-green font-mono font-bold text-[10px]">Completed</span>
+            </div>
+            <h4 class="font-bold text-sm text-ios-text dark:text-ios-darkText mt-1.5">Topic Formulation, Project Scope &amp; Initial Setup</h4>
+            <p class="text-ios-secondary mt-1 leading-relaxed">Analyzed baseline SIR &amp; ILSE literature, clarified Topic 2 direction with Paul Mattes, established team repository, and configured local development environment.</p>
           </div>
-          <div>
-            <span class="font-bold text-ios-secondary font-mono uppercase">Cycle 05 • Scheduled (Jan 07 to Jan 21, 2027)</span>
-            <div class="text-[11px] text-ios-secondary mt-0.5">Supervisor Sync: Jan 14, 2027</div>
-            <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-1">Dictionary Training &amp; Latent Feature Analysis</h4>
-            <p class="text-ios-secondary mt-1 leading-relaxed">Training candidate dictionary models on collected representations, qualitative feature inspection, and preliminary alignment checks.</p>
+
+          <div class="relative p-4 rounded-2xl bg-ios-blue/5 border-2 border-ios-blue/35 shadow-ios">
+            <span class="absolute -left-[36px] top-5 w-4 h-4 rounded-full bg-ios-blue ring-4 ring-ios-blue/20"></span>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="font-mono font-bold text-ios-blue uppercase text-[10px]">Cycle 02 &middot; Nov 14 to Nov 27, 2026</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-ios-blue text-white font-mono font-bold text-[10px]">In Progress</span>
+            </div>
+            <h4 class="font-bold text-sm text-ios-text dark:text-ios-darkText mt-1.5">Codebase Familiarization &amp; Visual Representation Exploration</h4>
+            <p class="text-ios-secondary mt-1 leading-relaxed">Exploring pre-trained policy checkpoints, inspecting intermediate ResNet-18 activations, curating the 9/10 SAE literature base, and designing activation extraction hooks.</p>
+            <div class="mt-2.5 inline-flex items-center gap-1.5 text-[11px] font-mono text-ios-blue font-semibold">
+              <span>Supervisor Sync: Nov 26 (13:00-14:00)</span>
+            </div>
           </div>
-          <div>
-            <span class="font-bold text-ios-secondary font-mono uppercase">Cycle 06 • Scheduled (Jan 22 to Feb 2027)</span>
-            <div class="text-[11px] text-ios-secondary mt-0.5">Final Project Delivery</div>
-            <h4 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-1">Evaluation, Comparative Synthesis &amp; Final Seminar Report</h4>
-            <p class="text-ios-secondary mt-1 leading-relaxed">Evaluating latent representations against baseline performance, synthesizing conclusions, and preparing the final seminar presentation and report.</p>
+
+          <div class="relative p-4 rounded-2xl bg-ios-bg/40 dark:bg-ios-darkBg/40 border border-ios-border dark:border-ios-darkBorder">
+            <span class="absolute -left-[35px] top-5 w-3.5 h-3.5 rounded-full bg-black/20 dark:bg-white/25 ring-4 ring-ios-card dark:ring-ios-darkCard"></span>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="font-mono font-bold text-ios-secondary uppercase text-[10px]">Cycle 03 &middot; Nov 28 to Dec 11, 2026</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-black/5 dark:bg-white/10 text-ios-secondary font-mono font-semibold text-[10px]">Scheduled</span>
+            </div>
+            <h4 class="font-bold text-sm text-ios-text dark:text-ios-darkText mt-1.5">Data Logging Pipeline &amp; Activation Capture Validation</h4>
+            <p class="text-ios-secondary mt-1 leading-relaxed">Running test policy rollouts in RoboCasa, logging layer 3 / layer 4 visual feature maps per camera, and verifying data throughput. Sync: Dec 10.</p>
+          </div>
+
+          <div class="relative p-4 rounded-2xl bg-ios-bg/40 dark:bg-ios-darkBg/40 border border-ios-border dark:border-ios-darkBorder">
+            <span class="absolute -left-[35px] top-5 w-3.5 h-3.5 rounded-full bg-black/20 dark:bg-white/25 ring-4 ring-ios-card dark:ring-ios-darkCard"></span>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="font-mono font-bold text-ios-secondary uppercase text-[10px]">Cycle 04 &middot; Dec 12 to Dec 23, 2026</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-black/5 dark:bg-white/10 text-ios-secondary font-mono font-semibold text-[10px]">Scheduled</span>
+            </div>
+            <h4 class="font-bold text-sm text-ios-text dark:text-ios-darkText mt-1.5">Sparse Dictionary Prototyping &amp; Pre-Holiday Review</h4>
+            <p class="text-ios-secondary mt-1 leading-relaxed">Training initial per-camera SAE architectures, measuring reconstruction fidelity vs. sparsity, and locking in the Seminar paper outline before recess.</p>
+          </div>
+
+          <div class="relative p-4 rounded-2xl bg-ios-orange/8 border border-dashed border-ios-orange/40">
+            <span class="absolute -left-[35px] top-5 w-3.5 h-3.5 rounded-full bg-ios-orange ring-4 ring-ios-card dark:ring-ios-darkCard"></span>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="font-mono font-bold text-ios-orange uppercase text-[10px]">Academic Recess &middot; Dec 24 to Jan 06</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-ios-orange/15 text-ios-orange font-mono font-bold text-[10px]">Break</span>
+            </div>
+            <p class="text-ios-secondary mt-1 leading-relaxed">University winter holiday break. No scheduled supervisor meetings or deliverables.</p>
+          </div>
+
+          <div class="relative p-4 rounded-2xl bg-ios-bg/40 dark:bg-ios-darkBg/40 border border-ios-border dark:border-ios-darkBorder">
+            <span class="absolute -left-[35px] top-5 w-3.5 h-3.5 rounded-full bg-black/20 dark:bg-white/25 ring-4 ring-ios-card dark:ring-ios-darkCard"></span>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="font-mono font-bold text-ios-secondary uppercase text-[10px]">Cycle 05 &middot; Jan 07 to Jan 21, 2027</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-black/5 dark:bg-white/10 text-ios-secondary font-mono font-semibold text-[10px]">Scheduled</span>
+            </div>
+            <h4 class="font-bold text-sm text-ios-text dark:text-ios-darkText mt-1.5">Latent Kept-Set Grounding &amp; Causal Verification</h4>
+            <p class="text-ios-secondary mt-1 leading-relaxed">Grounding SAE latents to RoboCasa object masks, running closed-loop Discovery, Removal, and Consequence ablations, and comparing with SIR. Sync: Jan 14.</p>
+          </div>
+
+          <div class="relative p-4 rounded-2xl bg-ios-bg/40 dark:bg-ios-darkBg/40 border border-ios-border dark:border-ios-darkBorder">
+            <span class="absolute -left-[35px] top-5 w-3.5 h-3.5 rounded-full bg-black/20 dark:bg-white/25 ring-4 ring-ios-card dark:ring-ios-darkCard"></span>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="font-mono font-bold text-ios-secondary uppercase text-[10px]">Cycle 06 &middot; Jan 22 to Feb 2027</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-black/5 dark:bg-white/10 text-ios-secondary font-mono font-semibold text-[10px]">Final Delivery</span>
+            </div>
+            <h4 class="font-bold text-sm text-ios-text dark:text-ios-darkText mt-1.5">Synthesis, Final Reports &amp; 20-Minute Presentation</h4>
+            <p class="text-ios-secondary mt-1 leading-relaxed">Finalizing the 6+ page Seminar report, 8+ page Praktikum report, and 20-minute joint presentation (10 min each + 10 min Q&amp;A).</p>
           </div>
         </div>
       </div>
@@ -951,82 +1018,168 @@
     <!-- VIEW: SEMINAR PLAN & REPORT OUTLINE (literature only) -->
     <!-- ======================================================== -->
     <div id="view-seminar" class="spa-view hidden space-y-6 text-xs">
-      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4">
-        <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-orange">Seminar</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
-          Seminar Plan &amp; Report Outline
-        </h2>
-        <p class="text-ios-secondary dark:text-ios-darkSecondary mt-1 leading-relaxed max-w-3xl">
-          The seminar is a literature study: no implementation or experiments (those belong to the Praktikum).
-          Working title: <b class="text-ios-text dark:text-ios-darkText">"Remove the Oven, Break the Robot? Testing Object Explanations with Sparse Autoencoders"</b>
-          Sources are listed on the <a href="#papers" class="text-ios-blue hover:underline">Papers</a> page (P1 to P9, all 9/10 core papers) plus SIR and ILSE.
-        </p>
+      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-orange">Course &middot; Seminar (Literature &amp; Theory)</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
+            Seminar Plan &amp; Report Outline
+          </h2>
+          <p class="text-ios-secondary dark:text-ios-darkSecondary mt-1 leading-relaxed max-w-2xl">
+            Working title: <b class="text-ios-text dark:text-ios-darkText">"Remove the Oven, Break the Robot? Testing Object Explanations with Sparse Autoencoders"</b>
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="inline-flex bg-black/5 dark:bg-white/10 p-1 rounded-full gap-0.5">
+            <button onclick="navigate('seminar')" class="paper-filter-btn active">Seminar</button>
+            <button onclick="navigate('praktikum')" class="paper-filter-btn">Praktikum</button>
+            <button onclick="navigate('roadmap')" class="paper-filter-btn">Roadmap</button>
+            <button onclick="navigate('progress')" class="paper-filter-btn">Progress</button>
+          </div>
+          <button onclick="navigate('papers')" class="btn-ios px-4 py-2 rounded-full bg-ios-blue hover:bg-ios-blueHover text-white font-semibold text-xs shadow-ios-button inline-flex items-center gap-1.5">
+            <span>Core Papers (P1-P9)</span>
+            <span>&#8594;</span>
+          </button>
+        </div>
       </div>
 
-      <!-- Plan -->
-      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios overflow-x-auto">
-        <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mb-3">Plan</h3>
-        <table class="w-full text-left">
-          <thead class="text-ios-secondary uppercase font-mono text-[10px] tracking-wider">
-            <tr><th class="py-2 pr-4">Phase</th><th class="py-2 pr-4">Dates</th><th class="py-2 pr-4">Work</th><th class="py-2">Deliverable</th></tr>
-          </thead>
-          <tbody class="divide-y divide-ios-border dark:divide-ios-darkBorder text-ios-secondary leading-relaxed align-top">
-            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Scope &amp; selection</td><td class="py-2.5 pr-4 font-mono">until Nov 27</td><td class="py-2.5 pr-4">Define the question, search the literature, select the core papers. <span class="text-ios-green font-semibold">Done.</span></td><td class="py-2.5">Paper list with relevance scores</td></tr>
-            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Close reading</td><td class="py-2.5 pr-4 font-mono">Nov 28 &ndash; Dec 11</td><td class="py-2.5 pr-4">Read every core paper fully, including appendices. Fill a comparison matrix: model, tap point, SAE variant, grounding method, causal test, closed loop or not.</td><td class="py-2.5">Comparison matrix, reading notes</td></tr>
-            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Structure</td><td class="py-2.5 pr-4 font-mono">Dec 12 &ndash; Dec 23</td><td class="py-2.5 pr-4">Build the taxonomy, agree on the outline and the cross-cutting findings with the supervisor.</td><td class="py-2.5">Approved outline</td></tr>
-            <tr><td class="py-2.5 pr-4 font-semibold text-ios-orange">Recess</td><td class="py-2.5 pr-4 font-mono">Dec 24 &ndash; Jan 06</td><td class="py-2.5 pr-4">Optional: draft Foundations (section 2).</td><td class="py-2.5">Section 2 draft</td></tr>
-            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Writing</td><td class="py-2.5 pr-4 font-mono">Jan 07 &ndash; Jan 21</td><td class="py-2.5 pr-4">Write sections 3 to 6, create figures and the comparison table.</td><td class="py-2.5">Full report draft</td></tr>
-            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Talk &amp; final</td><td class="py-2.5 pr-4 font-mono">Jan 22 &ndash; Feb</td><td class="py-2.5 pr-4">Incorporate feedback, prepare slides, rehearse the talk.</td><td class="py-2.5">Final report and seminar talk (date TBD)</td></tr>
-          </tbody>
-        </table>
+      <!-- KIT Seminar Spec Strip -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="p-4 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl shadow-ios flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-ios-orange/10 text-ios-orange flex items-center justify-center font-mono font-bold text-sm flex-shrink-0">6+p</div>
+          <div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary">Report Length</div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText mt-0.5">6+ Pages in LaTeX</div>
+            <div class="text-[11px] text-ios-secondary">3+ pages per author + attribution</div>
+          </div>
+        </div>
+        <div class="p-4 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl shadow-ios flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-ios-blue/10 text-ios-blue flex items-center justify-center font-mono font-bold text-sm flex-shrink-0">9/10</div>
+          <div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary">Literature Scope</div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText mt-0.5">9 Core Papers + SIR &amp; ILSE</div>
+            <div class="text-[11px] text-ios-secondary">Theory, survey &amp; blueprint only</div>
+          </div>
+        </div>
+        <div class="p-4 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl shadow-ios flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-ios-purple/10 text-ios-purple flex items-center justify-center font-mono font-bold text-sm flex-shrink-0">20m</div>
+          <div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary">Final Presentation</div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText mt-0.5">20 min Talk + 10 min Q&amp;A</div>
+            <div class="text-[11px] text-ios-secondary">10 min Allen + 10 min Luca</div>
+          </div>
+        </div>
       </div>
 
-      <!-- Report outline -->
+      <!-- Milestone Schedule -->
       <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios space-y-4">
-        <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Report outline</h3>
-        <ol class="space-y-3 text-ios-secondary leading-relaxed">
-          <li><b class="text-ios-text dark:text-ios-darkText">1 &middot; Introduction.</b> Why robot policies need explanations. Two routes: build the explanation into the architecture (explicit object sets) or extract it from a trained network (mechanistic interpretability). Research question of the survey and scope.</li>
-          <li><b class="text-ios-text dark:text-ios-darkText">2 &middot; Foundations.</b>
-            <ul class="list-disc pl-5 mt-1 space-y-0.5">
-              <li>2.1 Superposition and polysemantic units.</li>
-              <li>2.2 Sparse autoencoders: L1 vs. TopK, dead latents, AuxK (P3).</li>
-              <li>2.3 Causal evaluation: ablation types, the error term, faithfulness and completeness (P4).</li>
-              <li>2.4 What makes a subset explanation valid: Discovery, Removal, Consequence (ILSE).</li>
-            </ul>
-          </li>
-          <li><b class="text-ios-text dark:text-ios-darkText">3 &middot; Explicit object-set explanations.</b> SIR: scene graphs, learned pruning, what the kept set revealed (dataset biases, static fixtures), and where ILSE shows explicit bottlenecks leak.</li>
-          <li><b class="text-ios-text dark:text-ios-darkText">4 &middot; Interpreting visual representations.</b>
-            <ul class="list-disc pl-5 mt-1 space-y-0.5">
-              <li>4.1 Grounding units to concepts with segmentation IoU (P6).</li>
-              <li>4.2 Spatial SAEs on vision models: per-patch features and their spatial maps (P9), CNN feature maps (P8).</li>
-              <li>4.3 Lesson: single features rarely decide an output; concepts are distributed.</li>
-            </ul>
-          </li>
-          <li><b class="text-ios-text dark:text-ios-darkText">5 &middot; Sparse autoencoders in robot policies.</b>
-            <ul class="list-disc pl-5 mt-1 space-y-0.5">
-              <li>5.1 General vs. memorized features and steering (P5).</li>
-              <li>5.2 Concepts vs. motor programs across six architectures (P2).</li>
-              <li>5.3 Grounding features in behavioral events (P1).</li>
-              <li>5.4 Named features for failure detection (P7).</li>
-              <li>5.5 Comparison table: model, tap point, SAE, grounding, causal test, closed loop.</li>
-            </ul>
-          </li>
-          <li><b class="text-ios-text dark:text-ios-darkText">6 &middot; Discussion.</b> Cross-cutting findings: good reconstruction does not mean preserved behavior (P1, P2, P9); pooled vs. spatial activations; grounding to motions or states vs. to objects; how far SAE studies satisfy Discovery, Removal and Consequence. Open problem: implicit object sets in visuomotor policies.</li>
-          <li><b class="text-ios-text dark:text-ios-darkText">7 &middot; Conclusion.</b> Summary and research directions.</li>
-        </ol>
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="font-bold text-sm text-ios-text dark:text-ios-darkText">Execution Schedule</h3>
+          <span class="font-mono text-[10px] text-ios-secondary">No experiments here; pure theory &amp; synthesis</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div class="p-4 rounded-2xl bg-ios-green/6 border border-ios-green/25 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[10px] font-bold text-ios-green uppercase">Until Nov 27</span>
+              <span class="px-2 py-0.5 rounded-full bg-ios-green/15 text-ios-green font-mono font-bold text-[10px]">Done</span>
+            </div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText">1. Scope &amp; Paper Selection</div>
+            <p class="text-ios-secondary leading-relaxed">Define the kept-set question, filter literature to 9/10 core papers, map context vs. ResNet-18.</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-blue/6 border border-ios-blue/30 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[10px] font-bold text-ios-blue uppercase">Nov 28 - Dec 11</span>
+              <span class="px-2 py-0.5 rounded-full bg-ios-blue text-white font-mono font-bold text-[10px]">Next</span>
+            </div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText">2. Close Reading &amp; Matrix</div>
+            <p class="text-ios-secondary leading-relaxed">Read P1-P9 fully including appendices. Build comparison matrix (architecture, tap, SAE, grounding, D-R-C).</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-bg/70 dark:bg-ios-darkBg/70 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[10px] font-bold text-ios-secondary uppercase">Dec 12 - Dec 23</span>
+              <span class="px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/10 text-ios-secondary font-mono text-[10px]">Scheduled</span>
+            </div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText">3. Taxonomy &amp; Outline Sign-off</div>
+            <p class="text-ios-secondary leading-relaxed">Lock in the 4-family taxonomy and cross-cutting findings with Paul Mattes before winter recess.</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-orange/8 border border-dashed border-ios-orange/35 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[10px] font-bold text-ios-orange uppercase">Dec 24 - Jan 06</span>
+              <span class="px-2 py-0.5 rounded-full bg-ios-orange/15 text-ios-orange font-mono font-bold text-[10px]">Recess</span>
+            </div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText">Winter Break (Optional)</div>
+            <p class="text-ios-secondary leading-relaxed">Optional drafting of Section 2 (Foundations: superposition, SAE variants, ILSE conditions).</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-bg/70 dark:bg-ios-darkBg/70 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[10px] font-bold text-ios-secondary uppercase">Jan 07 - Jan 21</span>
+              <span class="px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/10 text-ios-secondary font-mono text-[10px]">Scheduled</span>
+            </div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText">4. Full Draft &amp; Figures</div>
+            <p class="text-ios-secondary leading-relaxed">Write Sections 3 to 6 in the IRL LaTeX Report Template, finalize comparison table and diagrams.</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-bg/70 dark:bg-ios-darkBg/70 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[10px] font-bold text-ios-secondary uppercase">Jan 22 - Feb</span>
+              <span class="px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/10 text-ios-secondary font-mono text-[10px]">Final</span>
+            </div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText">5. Final Report &amp; Beamer Talk</div>
+            <p class="text-ios-secondary leading-relaxed">Polish LaTeX submission, build IRL Beamer slides, and rehearse strict 20-minute timing.</p>
+          </div>
+        </div>
       </div>
 
-      <!-- Talk outline -->
-      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios">
-        <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Talk outline</h3>
-        <ol class="list-decimal pl-5 mt-3 space-y-1.5 text-ios-secondary leading-relaxed">
-          <li>Motivation: a robot fails, which objects did it use?</li>
-          <li>Explicit route: SIR's kept set and the D-R-C criteria.</li>
-          <li>Implicit route: superposition and sparse autoencoders in one picture.</li>
-          <li>What SAEs found in vision models and in robot policies (the comparison table).</li>
-          <li>Three lessons: reconstruction is not behavior, concepts are distributed, grounding is mostly to motions, not objects.</li>
-          <li>Open problem and outlook.</li>
-        </ol>
+      <!-- Structured Report Outline (2-Column Grid) -->
+      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="font-bold text-sm text-ios-text dark:text-ios-darkText">LaTeX Report Structure (7 Sections)</h3>
+          <span class="font-mono text-[10px] text-ios-secondary">Target: 6 to 8 pages</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          <div class="p-4 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-ios-blue/12 text-ios-blue font-mono font-bold text-[10px] flex items-center justify-center">01</span><h4 class="font-bold text-ios-text dark:text-ios-darkText">Introduction</h4></div>
+            <p class="text-ios-secondary leading-relaxed">Why robot policies need object explanations. Two routes: explicit selection bottlenecks (SIR) vs. extracting implicit kept sets from an untouched image policy via SAEs.</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-ios-purple/12 text-ios-purple font-mono font-bold text-[10px] flex items-center justify-center">02</span><h4 class="font-bold text-ios-text dark:text-ios-darkText">Foundations (SAEs &amp; ILSE)</h4></div>
+            <ul class="space-y-1 text-ios-secondary leading-relaxed">
+              <li>&bull; Superposition, TopK + AuxK (P3), BatchTopK (P5), JumpReLU (P6).</li>
+              <li>&bull; Error term &amp; dark matter (P4, P9), feature absorption (P8).</li>
+              <li>&bull; Discovery (D-C), Removal (R-C), Consequence (C-C) criteria (ILSE).</li>
+            </ul>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-ios-orange/12 text-ios-orange font-mono font-bold text-[10px] flex items-center justify-center">03</span><h4 class="font-bold text-ios-text dark:text-ios-darkText">Explicit Object-Set Explanations</h4></div>
+            <p class="text-ios-secondary leading-relaxed">SIR scene graphs and learned pruning: how kept sets exposed dataset biases and static fixtures, and why ILSE shows no explicit selector satisfies D-C, R-C, and C-C together.</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-ios-cyan/12 text-ios-cyan font-mono font-bold text-[10px] flex items-center justify-center">04</span><h4 class="font-bold text-ios-text dark:text-ios-darkText">Spatial SAEs on Vision &amp; ResNet-18</h4></div>
+            <p class="text-ios-secondary leading-relaxed">Grounding spatial CNN activations to objects, ResNet-18 SAE vector editing (P7), why language-blind layer4 separates visual inventory from task-conditioned use, and why single features rarely decide outputs.</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-ios-green/12 text-ios-green font-mono font-bold text-[10px] flex items-center justify-center">05</span><h4 class="font-bold text-ios-text dark:text-ios-darkText">SAEs in Robot Policies &amp; Matrix</h4></div>
+            <p class="text-ios-secondary leading-relaxed">Event-grounded SAEs (P1), coordinate-bound motor programs &amp; pooling collapse (P2), plus full comparison table contrasting domain, tap point, SAE variant, grounding, and closed-loop tests.</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-ios-red/12 text-ios-red font-mono font-bold text-[10px] flex items-center justify-center">06</span><h4 class="font-bold text-ios-text dark:text-ios-darkText">Discussion &amp; Blueprint (Sec. 6-7)</h4></div>
+            <p class="text-ios-secondary leading-relaxed">Cross-cutting synthesis (MSE != fidelity, dark matter vs. strict Removal, absorption in kept sets) and our exact Praktikum blueprint for ResNet-18 + SAE on RoboCasa.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 20-Minute Talk Flow -->
+      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="font-bold text-sm text-ios-text dark:text-ios-darkText">Seminar Talk Flow (20 min + 10 min Q&amp;A)</h3>
+          <button onclick="navigate('slides')" class="btn-ios px-3 py-1 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 text-ios-text dark:text-ios-darkText font-semibold text-[11px]">Open Slide Sets</button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+          <div class="p-3 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder"><span class="font-mono text-[10px] font-bold text-ios-blue">01 &middot; 3m</span><div class="font-semibold text-ios-text dark:text-ios-darkText mt-0.5">Motivation: Which objects did the robot use?</div></div>
+          <div class="p-3 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder"><span class="font-mono text-[10px] font-bold text-ios-blue">02 &middot; 3m</span><div class="font-semibold text-ios-text dark:text-ios-darkText mt-0.5">Explicit route: SIR's kept set &amp; ILSE D-R-C</div></div>
+          <div class="p-3 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder"><span class="font-mono text-[10px] font-bold text-ios-blue">03 &middot; 4m</span><div class="font-semibold text-ios-text dark:text-ios-darkText mt-0.5">Implicit route: Superposition &amp; spatial SAEs</div></div>
+          <div class="p-3 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder"><span class="font-mono text-[10px] font-bold text-ios-purple">04 &middot; 4m</span><div class="font-semibold text-ios-text dark:text-ios-darkText mt-0.5">Literature comparison table (P1-P9)</div></div>
+          <div class="p-3 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder"><span class="font-mono text-[10px] font-bold text-ios-purple">05 &middot; 3m</span><div class="font-semibold text-ios-text dark:text-ios-darkText mt-0.5">3 pitfalls: Dark matter, absorption, pooling</div></div>
+          <div class="p-3 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder"><span class="font-mono text-[10px] font-bold text-ios-purple">06 &middot; 3m</span><div class="font-semibold text-ios-text dark:text-ios-darkText mt-0.5">Blueprint &amp; open questions for Praktikum</div></div>
+        </div>
       </div>
     </div>
 
@@ -1034,69 +1187,153 @@
     <!-- VIEW: PRAKTIKUM PLAN & REPORT OUTLINE -->
     <!-- ======================================================== -->
     <div id="view-praktikum" class="spa-view hidden space-y-6 text-xs">
-      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4">
-        <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-orange">Praktikum</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
-          Praktikum Plan &amp; Report Outline
-        </h2>
-        <p class="text-ios-secondary dark:text-ios-darkSecondary mt-1 leading-relaxed max-w-3xl">
-          Working title: <b class="text-ios-text dark:text-ios-darkText">"Does an end-to-end image policy form an implicit object set? Sparse autoencoders on a RoboCasa visuomotor policy."</b>
-          Phases follow the bi-weekly supervisor cycles on the Roadmap.
-        </p>
+      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-green">Course &middot; Praktikum (Implementation &amp; Experiments)</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
+            Praktikum Plan &amp; Report Outline
+          </h2>
+          <p class="text-ios-secondary dark:text-ios-darkSecondary mt-1 leading-relaxed max-w-2xl">
+            Working title: <b class="text-ios-text dark:text-ios-darkText">"Does an end-to-end image policy form an implicit object set? Sparse autoencoders on a RoboCasa visuomotor policy."</b>
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="inline-flex bg-black/5 dark:bg-white/10 p-1 rounded-full gap-0.5">
+            <button onclick="navigate('seminar')" class="paper-filter-btn">Seminar</button>
+            <button onclick="navigate('praktikum')" class="paper-filter-btn active">Praktikum</button>
+            <button onclick="navigate('roadmap')" class="paper-filter-btn">Roadmap</button>
+            <button onclick="navigate('progress')" class="paper-filter-btn">Progress</button>
+          </div>
+          <button onclick="navigate('plan')" class="btn-ios px-4 py-2 rounded-full bg-ios-purple hover:opacity-90 text-white font-semibold text-xs shadow-ios inline-flex items-center gap-1.5">
+            <span>Experiment Plan</span>
+            <span>&#8594;</span>
+          </button>
+        </div>
       </div>
 
-      <!-- Phases -->
-      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios overflow-x-auto">
-        <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mb-3">Plan</h3>
-        <table class="w-full text-left">
-          <thead class="text-ios-secondary uppercase font-mono text-[10px] tracking-wider">
-            <tr><th class="py-2 pr-4">Phase</th><th class="py-2 pr-4">Dates</th><th class="py-2 pr-4">Work</th><th class="py-2">Deliverable</th></tr>
-          </thead>
-          <tbody class="divide-y divide-ios-border dark:divide-ios-darkBorder text-ios-secondary leading-relaxed align-top">
-            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Cycle 03</td><td class="py-2.5 pr-4 font-mono">Nov 28 &ndash; Dec 11</td><td class="py-2.5 pr-4">Get or train the single-task image policy (CloseDrawer, left + right). Record layer 3 / 4 activations per camera.</td><td class="py-2.5">Reproduced success rate, activation dataset</td></tr>
-            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Cycle 04</td><td class="py-2.5 pr-4 font-mono">Dec 12 &ndash; Dec 23</td><td class="py-2.5 pr-4">Train 4 TopK SAEs with a small k sweep. Splice with error term, measure spliced success.</td><td class="py-2.5">SAE metrics (MSE, L0, dead latents), fidelity result</td></tr>
-            <tr><td class="py-2.5 pr-4 font-semibold text-ios-orange">Recess</td><td class="py-2.5 pr-4 font-mono">Dec 24 &ndash; Jan 06</td><td class="py-2.5 pr-4">No meetings. Optional: draft Background and Method sections.</td><td class="py-2.5">Report sections 2 and 3 (draft)</td></tr>
-            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Cycle 05</td><td class="py-2.5 pr-4 font-mono">Jan 07 &ndash; Jan 21</td><td class="py-2.5 pr-4">Discovery: grounding and naming. Removal and Consequence: closed-loop ablations with controls. Compare with SIR.</td><td class="py-2.5">Core results, figures</td></tr>
-            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Cycle 06</td><td class="py-2.5 pr-4 font-mono">Jan 22 &ndash; Feb</td><td class="py-2.5 pr-4">Extensions if time allows (CloseSingleDoor, wrist camera, FiLM). Write and present.</td><td class="py-2.5">Final Praktikum report and presentation</td></tr>
-          </tbody>
-        </table>
+      <!-- KIT Praktikum Spec Strip -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="p-4 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl shadow-ios flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-ios-green/10 text-ios-green flex items-center justify-center font-mono font-bold text-sm flex-shrink-0">8+p</div>
+          <div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary">Report Length</div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText mt-0.5">8+ Pages in LaTeX</div>
+            <div class="text-[11px] text-ios-secondary">4+ pages per author + results</div>
+          </div>
+        </div>
+        <div class="p-4 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl shadow-ios flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-ios-blue/10 text-ios-blue flex items-center justify-center font-mono font-bold text-sm flex-shrink-0">4x4</div>
+          <div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary">Primary Tap</div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText mt-0.5">ResNet-18 layer3 &amp; layer4</div>
+            <div class="text-[11px] text-ios-secondary">Per-camera SAEs on 128&times;128</div>
+          </div>
+        </div>
+        <div class="p-4 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl shadow-ios flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-ios-orange/10 text-ios-orange flex items-center justify-center font-mono font-bold text-sm flex-shrink-0">DRC</div>
+          <div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary">Core Verification</div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText mt-0.5">Closed-Loop Ablations</div>
+            <div class="text-[11px] text-ios-secondary">Latent kept set vs. SIR &amp; random</div>
+          </div>
+        </div>
       </div>
 
-      <!-- Report outline -->
+      <!-- Execution Cycles Grid -->
       <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios space-y-4">
-        <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Report outline</h3>
-        <ol class="space-y-3 text-ios-secondary leading-relaxed">
-          <li><b class="text-ios-text dark:text-ios-darkText">1 &middot; Introduction.</b> Explanations of robot policies are usually imposed (SIR's explicit kept set). Question: does an unconstrained image policy select objects internally, and can we prove it causally? Contributions in three bullets.</li>
-          <li><b class="text-ios-text dark:text-ios-darkText">2 &middot; Background &amp; related work.</b>
-            <ul class="list-disc pl-5 mt-1 space-y-0.5">
-              <li>2.1 SIR and the ILSE conditions (Discovery, Removal, Consequence).</li>
-              <li>2.2 Superposition and sparse autoencoders (TopK, error term): P3, P4.</li>
-              <li>2.3 SAEs on vision models and concept grounding: P6, P8, P9.</li>
-              <li>2.4 Mechanistic interpretability of robot policies: P1, P2, P5, P7, and the gap we fill.</li>
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="font-bold text-sm text-ios-text dark:text-ios-darkText">Implementation Cycles</h3>
+          <button onclick="navigate('tensor-studio')" class="btn-ios px-3 py-1 rounded-full bg-ios-blue/10 hover:bg-ios-blue/20 text-ios-blue font-semibold text-[11px]">Inspect Pipeline in Studio</button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div class="p-4 rounded-2xl bg-ios-blue/6 border border-ios-blue/30 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[10px] font-bold text-ios-blue uppercase">Cycle 03 &middot; Nov 28 - Dec 11</span>
+              <span class="px-2 py-0.5 rounded-full bg-ios-blue text-white font-mono font-bold text-[10px]">Next</span>
+            </div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText">Policy Rollouts &amp; Activation Dump</div>
+            <p class="text-ios-secondary leading-relaxed">Run single-task image policy (CloseDrawer, left + right). Record layer3 &amp; layer4 tensors per camera.</p>
+            <div class="pt-1 font-mono text-[10px] text-ios-text dark:text-ios-darkText">Deliverable: Baseline rate + dataset</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-bg/70 dark:bg-ios-darkBg/70 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[10px] font-bold text-ios-secondary uppercase">Cycle 04 &middot; Dec 12 - Dec 23</span>
+              <span class="px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/10 text-ios-secondary font-mono text-[10px]">Scheduled</span>
+            </div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText">SAE Training &amp; Spliced Fidelity</div>
+            <p class="text-ios-secondary leading-relaxed">Train per-camera TopK / BatchTopK SAEs with k-sweep. Splice with error term and verify rollout fidelity.</p>
+            <div class="pt-1 font-mono text-[10px] text-ios-text dark:text-ios-darkText">Deliverable: MSE, L0, fidelity check</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-orange/8 border border-dashed border-ios-orange/35 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[10px] font-bold text-ios-orange uppercase">Recess &middot; Dec 24 - Jan 06</span>
+              <span class="px-2 py-0.5 rounded-full bg-ios-orange/15 text-ios-orange font-mono font-bold text-[10px]">Break</span>
+            </div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText">Optional Drafting</div>
+            <p class="text-ios-secondary leading-relaxed">No supervisor meetings. Optional draft of Background and Method sections.</p>
+            <div class="pt-1 font-mono text-[10px] text-ios-text dark:text-ios-darkText">Deliverable: Sec. 2-3 draft</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-bg/70 dark:bg-ios-darkBg/70 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[10px] font-bold text-ios-secondary uppercase">Cycle 05 &middot; Jan 07 - Jan 21</span>
+              <span class="px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/10 text-ios-secondary font-mono text-[10px]">Scheduled</span>
+            </div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText">Discovery, Removal &amp; Consequence</div>
+            <p class="text-ios-secondary leading-relaxed">Ground latents to RoboCasa masks, run closed-loop ablations vs. random controls, compare against SIR.</p>
+            <div class="pt-1 font-mono text-[10px] text-ios-text dark:text-ios-darkText">Deliverable: Core results &amp; plots</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-bg/70 dark:bg-ios-darkBg/70 border border-ios-border dark:border-ios-darkBorder space-y-1.5 md:col-span-2">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[10px] font-bold text-ios-secondary uppercase">Cycle 06 &middot; Jan 22 - Feb</span>
+              <span class="px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/10 text-ios-secondary font-mono text-[10px]">Final</span>
+            </div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText">Extensions, Final 8+ Page Report &amp; Presentation</div>
+            <p class="text-ios-secondary leading-relaxed">Optional extensions (CloseSingleDoor, JumpReLU comparison, Mode A vs. Mode B dark-matter bounds), finalize LaTeX report and slides.</p>
+            <div class="pt-1 font-mono text-[10px] text-ios-text dark:text-ios-darkText">Deliverable: Final Praktikum report &amp; talk</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Structured Report Outline (2-Column Grid) -->
+      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="font-bold text-sm text-ios-text dark:text-ios-darkText">Praktikum Report Structure (6 Sections)</h3>
+          <span class="font-mono text-[10px] text-ios-secondary">Target: 8+ pages (4+ per author)</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          <div class="p-4 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-ios-green/12 text-ios-green font-mono font-bold text-[10px] flex items-center justify-center">01</span><h4 class="font-bold text-ios-text dark:text-ios-darkText">Introduction</h4></div>
+            <p class="text-ios-secondary leading-relaxed">Can an unconstrained ResNet-18 image policy form an implicit kept object set without explicit graph selection? Summary of empirical contributions.</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-ios-blue/12 text-ios-blue font-mono font-bold text-[10px] flex items-center justify-center">02</span><h4 class="font-bold text-ios-text dark:text-ios-darkText">Background &amp; Setup Summary</h4></div>
+            <p class="text-ios-secondary leading-relaxed">Concise pointer to SIR/ILSE (D-C, R-C, C-C) and our core SAE methods (P1-P9), avoiding overlap with the Seminar report.</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-ios-purple/12 text-ios-purple font-mono font-bold text-[10px] flex items-center justify-center">03</span><h4 class="font-bold text-ios-text dark:text-ios-darkText">Method &amp; Implementation</h4></div>
+            <ul class="space-y-1 text-ios-secondary leading-relaxed">
+              <li>&bull; Per-camera ResNet-18 hooks at layer3 (8&times;8) and layer4 (4&times;4).</li>
+              <li>&bull; Per-camera TopK / BatchTopK / JumpReLU SAEs with AuxK.</li>
+              <li>&bull; Simulator mask IoU grounding &amp; set-level ablation with Mode A/B error bounds.</li>
             </ul>
-          </li>
-          <li><b class="text-ios-text dark:text-ios-darkText">3 &middot; Method.</b>
-            <ul class="list-disc pl-5 mt-1 space-y-0.5">
-              <li>3.1 Image policy: per-camera ResNet-18 + MDT, single-task training.</li>
-              <li>3.2 Activation recording at layer 3 and layer 4.</li>
-              <li>3.3 Per-camera TopK SAEs (AuxK, k sweep).</li>
-              <li>3.4 Grounding latents to objects via bounding-box IoU; naming protocol.</li>
-              <li>3.5 Splicing with error term; set ablation (which latents, which cells); zero vs. mean ablation.</li>
-              <li>3.6 Mapping D-R-C onto latent sets; comparison with SIR's kept set.</li>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-ios-orange/12 text-ios-orange font-mono font-bold text-[10px] flex items-center justify-center">04</span><h4 class="font-bold text-ios-text dark:text-ios-darkText">Experiments &amp; Results</h4></div>
+            <ul class="space-y-1 text-ios-secondary leading-relaxed">
+              <li>&bull; SAE reconstruction metrics vs. unablated spliced rollout fidelity.</li>
+              <li>&bull; Discovery: grounded objects/parts at layer3 vs. layer4.</li>
+              <li>&bull; Removal &amp; Consequence vs. matched random sets &amp; SIR kept set.</li>
             </ul>
-          </li>
-          <li><b class="text-ios-text dark:text-ios-darkText">4 &middot; Experiments.</b>
-            <ul class="list-disc pl-5 mt-1 space-y-0.5">
-              <li>4.1 Setup: task, rollouts, seeds, compute.</li>
-              <li>4.2 SAE quality and spliced-policy fidelity.</li>
-              <li>4.3 Discovery: which objects the latents ground to; layer 3 (parts) vs. layer 4 (whole objects).</li>
-              <li>4.4 Removal and Consequence: success drop for object-grounded sets vs. random and irrelevant-object sets.</li>
-              <li>4.5 Implicit object set vs. SIR, VGIB and the hand-written relevance table.</li>
-            </ul>
-          </li>
-          <li><b class="text-ios-text dark:text-ios-darkText">5 &middot; Discussion.</b> Whole objects vs. parts, static fixtures as reference frames, camera-pose randomization, limitations (4 &times; 4 resolution, one task, box-level grounding).</li>
-          <li><b class="text-ios-text dark:text-ios-darkText">6 &middot; Conclusion &amp; future work.</b> Wrist camera, FiLM conditioning, multi-task policies.</li>
-        </ol>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-ios-cyan/12 text-ios-cyan font-mono font-bold text-[10px] flex items-center justify-center">05</span><h4 class="font-bold text-ios-text dark:text-ios-darkText">Discussion &amp; Error Analysis</h4></div>
+            <p class="text-ios-secondary leading-relaxed">Whole objects vs. parts, static kitchen fixtures as spatial anchors, absorption/dark-matter effects, and 4&times;4 resolution limits.</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-ios-red/12 text-ios-red font-mono font-bold text-[10px] flex items-center justify-center">06</span><h4 class="font-bold text-ios-text dark:text-ios-darkText">Conclusion &amp; Future Work</h4></div>
+            <p class="text-ios-secondary leading-relaxed">Synthesis of whether implicit object sets emerge faithfully in ResNet-18, plus next steps (wrist camera, FiLM conditioning, multi-task).</p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1392,72 +1629,123 @@
     <!-- ======================================================== -->
     <!-- VIEW 5: WEEKLY PROGRESS LOG -->
     <!-- ======================================================== -->
-    <div id="view-progress" class="spa-view hidden space-y-6">
-      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4">
-        <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-green">Progress Tracking</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
-          Weekly Progress Log
-        </h2>
-        <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary mt-1">
-          What we did each week. Newest first. Detailed meeting logs live in the repository's <code>progress/</code> folder.
-        </p>
+    <div id="view-progress" class="spa-view hidden space-y-6 text-xs">
+      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-green">Course &middot; Weekly Log</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
+            Weekly Progress Log
+          </h2>
+          <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary mt-1 max-w-2xl">
+            Newest first. Detailed meeting minutes live in the repository's <code>progress/</code> directory.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="inline-flex bg-black/5 dark:bg-white/10 p-1 rounded-full gap-0.5">
+            <button onclick="navigate('seminar')" class="paper-filter-btn">Seminar</button>
+            <button onclick="navigate('praktikum')" class="paper-filter-btn">Praktikum</button>
+            <button onclick="navigate('roadmap')" class="paper-filter-btn">Roadmap</button>
+            <button onclick="navigate('progress')" class="paper-filter-btn active">Progress</button>
+          </div>
+          <a href="https://github.com/officiallygod/Mechanistic-Interpretability-for-SIR/tree/main/progress" target="_blank" rel="noopener" class="btn-ios px-4 py-2 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 text-ios-text dark:text-ios-darkText font-semibold text-xs inline-flex items-center gap-1">
+            <span>Logs on GitHub</span>
+            <span class="text-[10px] opacity-70">&#8599;</span>
+          </a>
+        </div>
       </div>
 
-      <div class="space-y-4 text-xs">
-
-        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios">
-          <div class="flex flex-wrap items-baseline justify-between gap-2">
-            <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Week 4 &middot; Nov 23 to Nov 29, 2026</h3>
-            <span class="font-bold text-ios-blue font-mono uppercase text-[11px]">In Progress</span>
-          </div>
-          <ul class="list-disc pl-5 mt-3 space-y-1.5 text-ios-secondary leading-relaxed">
-            <li>Second supervisor sync with Paul Mattes (Nov 26, 13:00 to 14:00), presenting the intro deck and open questions.</li>
-            <li>Added this weekly progress page to the project portal.</li>
-          </ul>
+      <!-- Summary Metric Strip -->
+      <div class="grid grid-cols-3 gap-3 sm:gap-4 font-mono">
+        <div class="p-4 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl shadow-ios text-center">
+          <div class="text-[10px] uppercase tracking-wider text-ios-secondary">Weeks Logged</div>
+          <div class="text-xl sm:text-2xl font-extrabold text-ios-text dark:text-ios-darkText mt-0.5 tabular-nums">04</div>
         </div>
-
-        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios">
-          <div class="flex flex-wrap items-baseline justify-between gap-2">
-            <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Week 3 &middot; Nov 16 to Nov 22, 2026</h3>
-            <span class="font-bold text-ios-green font-mono uppercase text-[11px]">Completed</span>
-          </div>
-          <ul class="list-disc pl-5 mt-3 space-y-1.5 text-ios-secondary leading-relaxed">
-            <li>Updated <code>SIR_Model/</code> to upstream intuitive-robots/sir (<code>49321d0</code>): VGIB sparsification, parallel evaluation, node-score tooling and a test suite.</li>
-            <li>Corrected the ResNet-18 <code>layer4</code> shape: 128 &times; 128 RoboCasa cameras give a 4 &times; 4 &times; 512 map (16 cells), not 7 &times; 7.</li>
-            <li>Wrote the SIR code mind map as an orientation guide to the codebase.</li>
-            <li>Rebuilt the portal as a single-page app with an interactive Tensor Studio (9-stage gallery, RoboCasa scene graphics), core theory FAQs and a slides view.</li>
-            <li>Created the seminar slide template and the intro presentation.</li>
-            <li>Adjusted the timeline to a realistic bi-weekly cadence including the winter recess.</li>
-            <li>Designed MIS logo options for the website and presentations.</li>
-          </ul>
+        <div class="p-4 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl shadow-ios text-center">
+          <div class="text-[10px] uppercase tracking-wider text-ios-secondary">Supervisor Syncs</div>
+          <div class="text-xl sm:text-2xl font-extrabold text-ios-blue mt-0.5 tabular-nums">02</div>
         </div>
-
-        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios">
-          <div class="flex flex-wrap items-baseline justify-between gap-2">
-            <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Week 2 &middot; Nov 9 to Nov 15, 2026</h3>
-            <span class="font-bold text-ios-green font-mono uppercase text-[11px]">Completed</span>
-          </div>
-          <ul class="list-disc pl-5 mt-3 space-y-1.5 text-ios-secondary leading-relaxed">
-            <li>Kickoff meeting with the supervisor (Nov 13): finalized Topic 2, Mechanistic Interpretability with Object Sets.</li>
-            <li>Read the SIR and ILSE papers; formalized the Discovery, Removal and Consequence evaluation criteria.</li>
-            <li>Mapped the policy architecture (ResNet-18 backbone, MDT action generator) and wrote the architecture deep dive.</li>
-            <li>Designed the SAE tap on <code>layer4</code> and the whole-object vs. object-part research direction.</li>
-            <li>Restructured the repository, added the GitHub Pages workflow, the documentation portal and the tensor walkthrough.</li>
-            <li>Scaffolded <code>src/</code> modules: activation recorder, SAE, grounding and causal intervention.</li>
-            <li>Collected open questions for the supervisor (static objects, attention over time, camera view fusion).</li>
-          </ul>
+        <div class="p-4 bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl shadow-ios text-center">
+          <div class="text-[10px] uppercase tracking-wider text-ios-secondary">Active Cycle</div>
+          <div class="text-xl sm:text-2xl font-extrabold text-ios-green mt-0.5 tabular-nums">W4</div>
         </div>
+      </div>
 
-        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios">
-          <div class="flex flex-wrap items-baseline justify-between gap-2">
-            <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Week 1 &middot; Nov 2 to Nov 8, 2026</h3>
-            <span class="font-bold text-ios-green font-mono uppercase text-[11px]">Completed</span>
+      <!-- Weekly Cards -->
+      <div class="space-y-4">
+
+        <article class="bg-ios-card dark:bg-ios-darkCard border-2 border-ios-blue/35 rounded-3xl p-6 shadow-ios space-y-3.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-2xl bg-ios-blue text-white font-mono font-bold text-xs flex items-center justify-center shadow-ios-button">W4</span>
+              <div>
+                <h3 class="font-bold text-sm text-ios-text dark:text-ios-darkText">Week 4 &middot; Nov 23 to Nov 29, 2026</h3>
+                <div class="text-[10px] font-mono text-ios-secondary">Cycle 02 &middot; Literature &amp; Sync</div>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-ios-blue text-white font-mono font-bold uppercase text-[10px]">In Progress</span>
           </div>
-          <ul class="list-disc pl-5 mt-3 space-y-1.5 text-ios-secondary leading-relaxed">
-            <li>Created the team repository with a project overview.</li>
-            <li>Imported the official SIR codebase as the base for our interpretability work.</li>
+          <ul class="space-y-2 text-ios-secondary leading-relaxed">
+            <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ios-blue mt-1.5 flex-shrink-0"></span><span>Second supervisor sync with Paul Mattes (Nov 26, 13:00 to 14:00), presenting the intro deck and open questions.</span></li>
+            <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ios-blue mt-1.5 flex-shrink-0"></span><span>Curated the 9/10 core SAE paper base (P1 to P9) with ResNet-18 context mapping, contributor chips, and shared iOS PDF viewer.</span></li>
+            <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ios-blue mt-1.5 flex-shrink-0"></span><span>Added this weekly progress log and unified the Seminar, Praktikum, and Roadmap portal pages.</span></li>
           </ul>
-        </div>
+        </article>
+
+        <article class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios space-y-3.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-2xl bg-ios-green/12 text-ios-green font-mono font-bold text-xs flex items-center justify-center">W3</span>
+              <div>
+                <h3 class="font-bold text-sm text-ios-text dark:text-ios-darkText">Week 3 &middot; Nov 16 to Nov 22, 2026</h3>
+                <div class="text-[10px] font-mono text-ios-secondary">Cycle 02 &middot; Upstream Sync &amp; Portal</div>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-ios-green/12 text-ios-green font-mono font-bold uppercase text-[10px]">Completed</span>
+          </div>
+          <ul class="space-y-2 text-ios-secondary leading-relaxed">
+            <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ios-green mt-1.5 flex-shrink-0"></span><span>Updated <code>SIR_Model/</code> to upstream intuitive-robots/sir (<code>49321d0</code>): VGIB sparsification, parallel evaluation, node-score tooling and a test suite.</span></li>
+            <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ios-green mt-1.5 flex-shrink-0"></span><span>Corrected the ResNet-18 <code>layer4</code> shape: 128 &times; 128 RoboCasa cameras give a 4 &times; 4 &times; 512 map (16 cells), not 7 &times; 7.</span></li>
+            <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ios-green mt-1.5 flex-shrink-0"></span><span>Wrote the SIR code mind map as an orientation guide to the codebase.</span></li>
+            <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ios-green mt-1.5 flex-shrink-0"></span><span>Rebuilt the portal as a single-page app with an interactive Tensor Studio (9-stage gallery, RoboCasa scene graphics), core theory FAQs and a slides view.</span></li>
+            <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ios-green mt-1.5 flex-shrink-0"></span><span>Created the seminar slide template, intro presentation, realistic bi-weekly timeline, and MIS logo options.</span></li>
+          </ul>
+        </article>
+
+        <article class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios space-y-3.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-2xl bg-ios-green/12 text-ios-green font-mono font-bold text-xs flex items-center justify-center">W2</span>
+              <div>
+                <h3 class="font-bold text-sm text-ios-text dark:text-ios-darkText">Week 2 &middot; Nov 9 to Nov 15, 2026</h3>
+                <div class="text-[10px] font-mono text-ios-secondary">Cycle 01 &middot; Kickoff &amp; Architecture</div>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-ios-green/12 text-ios-green font-mono font-bold uppercase text-[10px]">Completed</span>
+          </div>
+          <ul class="space-y-2 text-ios-secondary leading-relaxed">
+            <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ios-green mt-1.5 flex-shrink-0"></span><span>Kickoff meeting with the supervisor (Nov 13): finalized Topic 2, Mechanistic Interpretability with Object Sets.</span></li>
+            <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ios-green mt-1.5 flex-shrink-0"></span><span>Read the SIR and ILSE papers; formalized the Discovery, Removal and Consequence evaluation criteria.</span></li>
+            <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ios-green mt-1.5 flex-shrink-0"></span><span>Mapped the policy architecture (ResNet-18 backbone, MDT action generator) and designed the SAE tap on <code>layer4</code>.</span></li>
+            <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ios-green mt-1.5 flex-shrink-0"></span><span>Restructured the repository, added GitHub Pages CI/CD, scaffolded <code>src/</code> modules, and collected open questions for Paul Mattes.</span></li>
+          </ul>
+        </article>
+
+        <article class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios space-y-3.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-2xl bg-ios-green/12 text-ios-green font-mono font-bold text-xs flex items-center justify-center">W1</span>
+              <div>
+                <h3 class="font-bold text-sm text-ios-text dark:text-ios-darkText">Week 1 &middot; Nov 2 to Nov 8, 2026</h3>
+                <div class="text-[10px] font-mono text-ios-secondary">Cycle 01 &middot; Repository Init</div>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-ios-green/12 text-ios-green font-mono font-bold uppercase text-[10px]">Completed</span>
+          </div>
+          <ul class="space-y-2 text-ios-secondary leading-relaxed">
+            <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ios-green mt-1.5 flex-shrink-0"></span><span>Created the team repository with a project overview.</span></li>
+            <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ios-green mt-1.5 flex-shrink-0"></span><span>Imported the official SIR codebase as the base for our interpretability work.</span></li>
+          </ul>
+        </article>
 
       </div>
     </div>
