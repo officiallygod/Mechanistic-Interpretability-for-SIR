@@ -938,8 +938,8 @@
           <div class="flex-1 p-3 rounded-2xl bg-ios-blue/10">
             <div class="font-mono text-[10px] uppercase tracking-wider text-ios-blue">2 &middot; Decompose</div>
             <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Spatial SAE per camera</div>
-            <div class="text-ios-secondary mt-1">TopK, BatchTopK, JumpReLU, ResNet-18</div>
-            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-gao">P3</span><span class="paper-chip" data-target="p-batchtopk">P5</span><span class="paper-chip" data-target="p-jumprelu">P6</span><span class="paper-chip" data-target="p-conceptsae">P7</span><span class="paper-chip" data-target="p-aircraft">P10</span></div>
+            <div class="text-ios-secondary mt-1">TopK, BatchTopK, JumpReLU, MSAE, USAE</div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-gao">P3</span><span class="paper-chip" data-target="p-batchtopk">P5</span><span class="paper-chip" data-target="p-jumprelu">P6</span><span class="paper-chip" data-target="p-conceptsae">P7</span><span class="paper-chip" data-target="p-aircraft">P10</span><span class="paper-chip" data-target="p-cones">P11</span><span class="paper-chip" data-target="p-msae">P12</span><span class="paper-chip" data-target="p-usae">P13</span></div>
           </div>
           <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
           <div class="flex-1 p-3 rounded-2xl bg-ios-purple/10">
@@ -950,27 +950,27 @@
           </div>
           <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
           <div class="flex-1 p-3 rounded-2xl bg-ios-green/10">
-            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-green">4 &middot; Discovery</div>
-            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Ground &amp; name kept set</div>
-            <div class="text-ios-secondary mt-1">Spatial grounding &amp; behavior check</div>
-            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-event">P1</span><span class="paper-chip" data-target="p-conceptsae">P7</span></div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-green">4 &middot; Pixel vs. Object</div>
+            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Granularity &amp; grounding</div>
+            <div class="text-ios-secondary mt-1">Parts vs. objects, multi-view align</div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-event">P1</span><span class="paper-chip" data-target="p-conceptsae">P7</span><span class="paper-chip" data-target="p-cones">P11</span><span class="paper-chip" data-target="p-msae">P12</span><span class="paper-chip" data-target="p-usae">P13</span></div>
           </div>
           <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
           <div class="flex-1 p-3 rounded-2xl bg-ios-orange/10">
-            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-orange">5 &middot; Removal &amp; Consequence</div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-orange">5 &middot; Causal Checks (Opt.)</div>
             <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Ablate kept vs. excluded</div>
             <div class="text-ios-secondary mt-1">Absorption, dark matter, controls</div>
-            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-notall">P2</span><span class="paper-chip" data-target="p-marks">P4</span><span class="paper-chip" data-target="p-absorption">P8</span><span class="paper-chip" data-target="p-darkmatter">P9</span></div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-notall">P2</span><span class="paper-chip" data-target="p-marks">P4</span><span class="paper-chip" data-target="p-absorption">P8</span><span class="paper-chip" data-target="p-darkmatter">P9</span><span class="paper-chip" data-target="p-aircraft">P10</span></div>
           </div>
           <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
           <div class="flex-1 p-3 rounded-2xl bg-ios-red/10">
             <div class="font-mono text-[10px] uppercase tracking-wider text-ios-red">6 &middot; Compare</div>
-            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Implicit object set vs. SIR</div>
-            <div class="text-ios-secondary mt-1">What was selected &amp; why</div>
+            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">How ResNet sees vs. SIR</div>
+            <div class="text-ios-secondary mt-1">Pixel/part vs. object detection</div>
             <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-base">SIR</span><span class="paper-chip" data-target="p-base">ILSE</span></div>
           </div>
         </div>
-        <p class="text-ios-secondary leading-relaxed"><b class="text-ios-text dark:text-ios-darkText">Our gap:</b> robot-policy SAE papers (P1, P2) study transformer VLAs; spatial CNN SAE work (P7, P10) studies single-image classification; LLM SAE papers (P3, P4, P5, P6, P8, P9) assume discrete text tokens. Nobody has combined spatial SAEs on a RoboCasa ResNet-18 backbone with object-level kept-set grounding and ILSE's D-R-C evaluation.</p>
+        <p class="text-ios-secondary leading-relaxed"><b class="text-ios-text dark:text-ios-darkText">Our gap:</b> robot-policy SAE papers (P1, P2) study transformer VLAs; spatial CNN and vision SAE papers (P7, P10, P11, P12, P13) study single-image classification or pooled embeddings; LLM SAE papers (P3, P4, P5, P6, P8, P9) assume discrete text tokens. Nobody has used spatial SAEs on a RoboCasa ResNet-18 backbone to test whether visuomotor policies perceive scenes pixel/part-wise vs. whole-object-wise.</p>
       </div>
 
       <!-- Base papers -->
@@ -1036,7 +1036,7 @@
             <button onclick="navigate('progress')" class="paper-filter-btn">Progress</button>
           </div>
           <button onclick="navigate('papers')" class="btn-ios px-4 py-2 rounded-full bg-ios-blue hover:bg-ios-blueHover text-white font-semibold text-xs shadow-ios-button inline-flex items-center gap-1.5">
-            <span>Core Papers (P1-P10)</span>
+            <span>Core Papers (P1-P13)</span>
             <span>&#8594;</span>
           </button>
         </div>
@@ -1056,7 +1056,7 @@
           <div class="w-10 h-10 rounded-2xl bg-ios-blue/10 text-ios-blue flex items-center justify-center font-mono font-bold text-sm flex-shrink-0">9/10</div>
           <div>
             <div class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary">Literature Scope</div>
-            <div class="font-bold text-ios-text dark:text-ios-darkText mt-0.5">9 Core Papers + SIR &amp; ILSE</div>
+            <div class="font-bold text-ios-text dark:text-ios-darkText mt-0.5">13 Core Papers + SIR &amp; ILSE</div>
             <div class="text-[11px] text-ios-secondary">Theory, survey &amp; blueprint only</div>
           </div>
         </div>
@@ -1455,6 +1455,30 @@
           finding: 'Blurring the feature region flips 22.0% of predictions vs. 4.5% for random regions. Suppressing a single feature, locally or globally, flipped no prediction.',
           take: 'Ablate latent sets across all cells of an object box, never one latent in one cell, and always report random-feature and random-region controls.',
           caveat: 'Classifier, one layer, eight hand-picked features; coarse 7 x 7 localization.' },
+        { id: 'p-cones', n: 'P11', arxiv: '2512.07355', score: 9, cls: 'Vision SAE (ResNet)', cat: 'vision', addedBy: 'allen',
+          title: 'A Geometric Unification of Concept Learning with Concept Cones', meta: 'Rocchi, Fel, Franchi, Dec 2025',
+          context: 'ResNet-50, ViT, and DINOv2 on ImageNet and CUB, directly benchmarking TopK, BatchTopK, and JumpReLU SAEs.',
+          whyUs: 'Directly uses ResNet + TopK/BatchTopK/JumpReLU and gives quantitative containment metrics to test whether unsupervised SAE latents actually cover whole-object concept geometry vs. fragmented local pixel patterns.',
+          method: 'Models both supervised Concept Bottlenecks and unsupervised SAEs as non-negative linear "concept cones" and measures how well unsupervised SAE cones contain human-defined object concepts across sparsity and width.',
+          finding: 'Reveals a clear sparsity and dictionary-width sweet spot where emergent ResNet SAE features maximize geometric and semantic alignment with real object concepts.',
+          take: 'Use its sparsity/expansion sweet-spot metrics to judge whether ResNet-18 layer3/layer4 latents align with whole objects or fine pixel parts.',
+          caveat: 'Evaluated on single-step image classification rather than RoboCasa manipulation frames.' },
+        { id: 'p-msae', n: 'P12', arxiv: '2502.20578', score: 9, cls: 'Vision SAE (Hierarchy)', cat: 'vision', addedBy: 'allen',
+          title: 'Interpreting CLIP with Hierarchical Sparse Autoencoders (Matryoshka SAE)', meta: 'Zaigrajew et al., ICML 2025',
+          context: 'Vision encoders (CLIP and SigLIP) evaluated on image concept extraction and Pareto frontiers.',
+          whyUs: 'Directly answers our core pixel/part-wise vs. whole-object-wise question AND provides high-value comparison-table metrics: nested dictionary prefixes separate coarse whole objects ("drawer") from fine local parts ("handle", "edge") inside one SAE.',
+          method: 'Trains a vision Matryoshka SAE (MSAE) with nested latent prefixes simultaneously so early latents must reconstruct coarse object structure while later latents capture fine visual attributes.',
+          finding: 'Establishes a stronger sparsity vs. explained-variance Pareto frontier on vision models while organizing concepts hierarchically without activation suppression.',
+          take: 'Use MSAE hierarchy and Pareto metrics directly in our Seminar comparison table to contrast flat vs. multi-granularity visual detection.',
+          caveat: 'Tested on pooled CLIP/SigLIP embeddings rather than 4x4/8x8 spatial ResNet-18 feature maps.' },
+        { id: 'p-usae', n: 'P13', arxiv: '2502.03714', score: 9, cls: 'Vision SAE (Multi-View)', cat: 'vision', addedBy: 'allen',
+          title: 'Universal Sparse Autoencoders: Interpretable Cross-Model Concept Alignment', meta: 'Thasarathan et al., ICML 2025',
+          context: 'Cross-model vision alignment across CNNs (ResNets) and ViTs on natural image benchmarks.',
+          whyUs: 'Directly supports combining and aligning our two independent RoboCasa camera ResNet-18s (left + right views) into a shared concept space, giving concrete alignment metrics to test whether both views detect the same objects or separate pixel cues.',
+          method: 'Trains a single universal overcomplete SAE that encodes activations from Model A and decodes activations in Model B, isolating shared visual factors across architectures or views.',
+          finding: 'Recovers a unified space of shared low-level textures and high-level object parts across distinct vision backbones including ResNets.',
+          take: 'Blueprint and evaluation metrics for combining left and right ResNet-18 camera representations inside a shared SAE.',
+          caveat: 'Trained on aligned single-frame image benchmarks; RoboCasa camera pose randomization may reduce exact spatial overlap between left and right views.' },
       ];
 
       let paperState = { author: 'all', cat: 'all', sort: 'score' };
