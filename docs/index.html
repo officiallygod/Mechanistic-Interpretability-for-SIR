@@ -148,55 +148,63 @@
       
       <!-- Brand Logo -->
       <div class="flex items-center space-x-2.5 cursor-pointer flex-shrink-0" onclick="navigate('overview')">
-        <span class="px-2.5 py-1 text-xs font-mono font-bold bg-ios-blue/10 text-ios-blue dark:bg-ios-blue/20 rounded-full">MIS</span>
+        <img src="assets/branding/mis-logo-light.svg" alt="MIS logo" class="h-6 w-auto block dark:hidden">
+        <img src="assets/branding/mis-logo-dark.svg" alt="MIS logo" class="h-6 w-auto hidden dark:block">
         <span class="text-sm font-semibold tracking-tight hover:opacity-80 transition hidden sm:inline">Mechanistic Interpretability</span>
       </div>
 
-      <!-- Segmented Navigation Tabs -->
-      <nav class="flex items-center bg-black/5 dark:bg-white/10 p-1 rounded-full text-xs font-medium space-x-0.5 sm:space-x-1 overflow-x-auto no-scrollbar">
+      <!-- Grouped Navigation: single tabs + dropdown menus -->
+      <nav class="relative flex items-center bg-black/5 dark:bg-white/10 p-1 rounded-full text-xs font-medium space-x-0.5 sm:space-x-1">
         <button onclick="navigate('overview')" id="tab-overview" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition font-semibold bg-ios-card dark:bg-ios-darkCard text-ios-blue shadow-ios">
           Overview
         </button>
-        <button onclick="navigate('tensor-studio')" id="tab-tensor-studio" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
-          Interactive Lab
-        </button>
-        <button onclick="navigate('core-theory')" id="tab-core-theory" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text hidden md:inline">
-          Core Theory
-        </button>
-        <button onclick="navigate('causal-lab')" id="tab-causal-lab" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text hidden lg:inline">
-          Verification Suite
-        </button>
-        <button onclick="navigate('roadmap')" id="tab-roadmap" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text hidden sm:inline">
-          Roadmap
-        </button>
-        <button onclick="navigate('plan')" id="tab-plan" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
-          Plan
-        </button>
-        <button onclick="navigate('papers')" id="tab-papers" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
-          Papers
-        </button>
-        <button onclick="navigate('seminar')" id="tab-seminar" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
-          Seminar
-        </button>
-        <button onclick="navigate('praktikum')" id="tab-praktikum" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
-          Praktikum
-        </button>
-        <button onclick="navigate('progress')" id="tab-progress" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
-          Progress
-        </button>
+
+        <div class="nav-group relative">
+          <button id="group-learn" data-routes="tensor-studio,core-theory,causal-lab" onclick="toggleNavMenu('learn', event)" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text flex items-center gap-1">
+            Learn <span class="text-[9px]">&#9662;</span>
+          </button>
+          <div id="menu-learn" class="nav-menu hidden absolute left-0 top-full mt-2 min-w-[190px] p-1.5 rounded-2xl bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder shadow-ios-lg z-50">
+            <button onclick="navigate('tensor-studio')" id="tab-tensor-studio" class="nav-item">Interactive Lab</button>
+            <button onclick="navigate('core-theory')" id="tab-core-theory" class="nav-item">Core Theory</button>
+            <button onclick="navigate('causal-lab')" id="tab-causal-lab" class="nav-item">Verification Suite</button>
+          </div>
+        </div>
+
+        <div class="nav-group relative">
+          <button id="group-research" data-routes="papers,plan" onclick="toggleNavMenu('research', event)" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text flex items-center gap-1">
+            Research <span class="text-[9px]">&#9662;</span>
+          </button>
+          <div id="menu-research" class="nav-menu hidden absolute left-0 top-full mt-2 min-w-[190px] p-1.5 rounded-2xl bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder shadow-ios-lg z-50">
+            <button onclick="navigate('papers')" id="tab-papers" class="nav-item">Papers</button>
+            <button onclick="navigate('plan')" id="tab-plan" class="nav-item">Experiment Plan</button>
+          </div>
+        </div>
+
+        <div class="nav-group relative">
+          <button id="group-course" data-routes="seminar,praktikum,roadmap,progress" onclick="toggleNavMenu('course', event)" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text flex items-center gap-1">
+            Course <span class="text-[9px]">&#9662;</span>
+          </button>
+          <div id="menu-course" class="nav-menu hidden absolute right-0 sm:left-0 sm:right-auto top-full mt-2 min-w-[190px] p-1.5 rounded-2xl bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder shadow-ios-lg z-50">
+            <button onclick="navigate('seminar')" id="tab-seminar" class="nav-item">Seminar</button>
+            <button onclick="navigate('praktikum')" id="tab-praktikum" class="nav-item">Praktikum</button>
+            <button onclick="navigate('roadmap')" id="tab-roadmap" class="nav-item">Roadmap</button>
+            <button onclick="navigate('progress')" id="tab-progress" class="nav-item">Progress</button>
+          </div>
+        </div>
+
         <button onclick="navigate('slides')" id="tab-slides" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
           Slides
         </button>
       </nav>
+      <style>
+        .nav-item { display: block; width: 100%; text-align: left; padding: 6px 12px; border-radius: 12px; color: #86868B; font-weight: 500; transition: background 0.15s, color 0.15s; }
+        .nav-item:hover { background: rgba(0,0,0,0.05); color: #1D1D1F; }
+        .dark .nav-item:hover { background: rgba(255,255,255,0.08); color: #F5F5F7; }
+        .nav-item.active { color: #0071E3; font-weight: 600; background: rgba(0,113,227,0.10); }
+      </style>
 
       <!-- External Links & Theme Toggle -->
       <div class="flex items-center space-x-1.5 sm:space-x-2 text-xs flex-shrink-0">
-        <a href="#slides"
-           class="btn-ios px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 text-ios-text dark:text-ios-darkText font-medium transition flex items-center space-x-1.5"
-           title="Bi-Weekly Presentation Slides">
-          <svg class="w-3.5 h-3.5 text-ios-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
-          <span class="hidden md:inline">Slides</span>
-        </a>
         <a href="https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076" target="_blank"
            class="btn-ios px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 text-ios-text dark:text-ios-darkText font-medium transition flex items-center space-x-1.5"
            title="Miro Ideation &amp; Architecture Canvas">
@@ -229,6 +237,10 @@
       
       <!-- Hero Section (Symmetric, Centered, Apple Aesthetic) -->
       <section class="text-center space-y-6 max-w-4xl mx-auto pt-6 pb-2">
+        <div class="flex justify-center">
+          <img src="assets/branding/mis-logo-light.svg" alt="MIS logo" class="h-20 sm:h-24 w-auto block dark:hidden">
+          <img src="assets/branding/mis-logo-dark.svg" alt="MIS logo" class="h-20 sm:h-24 w-auto hidden dark:block">
+        </div>
         <div class="inline-flex items-center space-x-2 text-xs font-semibold px-4 py-1.5 rounded-full bg-ios-blue/10 text-ios-blue dark:bg-ios-blue/20 tracking-wide font-mono uppercase">
           <span>Seminar &amp; Praktikum</span>
           <span>•</span>
@@ -1305,23 +1317,43 @@
   <!-- ============================================================ -->
   <script>
     const routes = ['overview', 'tensor-studio', 'core-theory', 'causal-lab', 'roadmap', 'plan', 'papers', 'seminar', 'praktikum', 'progress', 'slides'];
+    const PILL_ACTIVE = "spa-tab btn-ios px-3.5 py-1.5 rounded-full transition font-semibold bg-ios-card dark:bg-ios-darkCard text-ios-blue shadow-ios";
+    const PILL_IDLE = "spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text";
+
+    function closeNavMenus() {
+      document.querySelectorAll('.nav-menu').forEach(m => m.classList.add('hidden'));
+    }
+
+    function toggleNavMenu(name, event) {
+      event.stopPropagation();
+      const menu = document.getElementById(`menu-${name}`);
+      const wasOpen = !menu.classList.contains('hidden');
+      closeNavMenus();
+      if (!wasOpen) menu.classList.remove('hidden');
+    }
+
+    document.addEventListener('click', closeNavMenus);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNavMenus(); });
 
     function navigate(viewId) {
       routes.forEach(id => {
         const viewEl = document.getElementById(`view-${id}`);
         const tabEl = document.getElementById(`tab-${id}`);
-        if (id === viewId) {
-          if (viewEl) viewEl.classList.remove('hidden');
-          if (tabEl) {
-            tabEl.className = "spa-tab btn-ios px-4 py-1.5 rounded-full transition font-semibold bg-ios-card dark:bg-ios-darkCard text-ios-blue shadow-ios";
-          }
+        const active = id === viewId;
+        if (viewEl) viewEl.classList.toggle('hidden', !active);
+        if (!tabEl) return;
+        if (tabEl.classList.contains('nav-item')) {
+          tabEl.classList.toggle('active', active);
         } else {
-          if (viewEl) viewEl.classList.add('hidden');
-          if (tabEl) {
-            tabEl.className = "spa-tab btn-ios px-4 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text";
-          }
+          tabEl.className = active ? PILL_ACTIVE : PILL_IDLE;
         }
       });
+      // A dropdown group is highlighted when one of its pages is open.
+      document.querySelectorAll('[id^="group-"]').forEach(group => {
+        const inGroup = group.dataset.routes.split(',').includes(viewId);
+        group.className = (inGroup ? PILL_ACTIVE : PILL_IDLE) + ' flex items-center gap-1';
+      });
+      closeNavMenus();
       window.location.hash = `#${viewId}`;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
