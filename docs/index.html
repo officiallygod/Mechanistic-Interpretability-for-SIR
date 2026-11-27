@@ -178,6 +178,9 @@
         <button onclick="navigate('seminar')" id="tab-seminar" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
           Seminar
         </button>
+        <button onclick="navigate('praktikum')" id="tab-praktikum" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
+          Praktikum
+        </button>
         <button onclick="navigate('progress')" id="tab-progress" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
           Progress
         </button>
@@ -913,13 +916,96 @@
     </div>
 
     <!-- ======================================================== -->
-    <!-- VIEW: SEMINAR PLAN & REPORT OUTLINE -->
+    <!-- VIEW: SEMINAR PLAN & REPORT OUTLINE (literature only) -->
     <!-- ======================================================== -->
     <div id="view-seminar" class="spa-view hidden space-y-6 text-xs">
       <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4">
         <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-orange">Seminar</span>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
           Seminar Plan &amp; Report Outline
+        </h2>
+        <p class="text-ios-secondary dark:text-ios-darkSecondary mt-1 leading-relaxed max-w-3xl">
+          The seminar is a literature study: no implementation or experiments (those belong to the Praktikum).
+          Working title: <b class="text-ios-text dark:text-ios-darkText">"Remove the Oven, Break the Robot? Testing Object Explanations with Sparse Autoencoders"</b>
+          Sources are listed on the <a href="#papers" class="text-ios-blue hover:underline">Papers</a> page (P1 to P9) plus SIR and ILSE.
+        </p>
+      </div>
+
+      <!-- Plan -->
+      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios overflow-x-auto">
+        <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mb-3">Plan</h3>
+        <table class="w-full text-left">
+          <thead class="text-ios-secondary uppercase font-mono text-[10px] tracking-wider">
+            <tr><th class="py-2 pr-4">Phase</th><th class="py-2 pr-4">Dates</th><th class="py-2 pr-4">Work</th><th class="py-2">Deliverable</th></tr>
+          </thead>
+          <tbody class="divide-y divide-ios-border dark:divide-ios-darkBorder text-ios-secondary leading-relaxed align-top">
+            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Scope &amp; selection</td><td class="py-2.5 pr-4 font-mono">until Nov 27</td><td class="py-2.5 pr-4">Define the question, search the literature, select the core papers. <span class="text-ios-green font-semibold">Done.</span></td><td class="py-2.5">Paper list with relevance scores</td></tr>
+            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Close reading</td><td class="py-2.5 pr-4 font-mono">Nov 28 &ndash; Dec 11</td><td class="py-2.5 pr-4">Read every core paper fully, including appendices. Fill a comparison matrix: model, tap point, SAE variant, grounding method, causal test, closed loop or not.</td><td class="py-2.5">Comparison matrix, reading notes</td></tr>
+            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Structure</td><td class="py-2.5 pr-4 font-mono">Dec 12 &ndash; Dec 23</td><td class="py-2.5 pr-4">Build the taxonomy, agree on the outline and the cross-cutting findings with the supervisor.</td><td class="py-2.5">Approved outline</td></tr>
+            <tr><td class="py-2.5 pr-4 font-semibold text-ios-orange">Recess</td><td class="py-2.5 pr-4 font-mono">Dec 24 &ndash; Jan 06</td><td class="py-2.5 pr-4">Optional: draft Foundations (section 2).</td><td class="py-2.5">Section 2 draft</td></tr>
+            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Writing</td><td class="py-2.5 pr-4 font-mono">Jan 07 &ndash; Jan 21</td><td class="py-2.5 pr-4">Write sections 3 to 6, create figures and the comparison table.</td><td class="py-2.5">Full report draft</td></tr>
+            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Talk &amp; final</td><td class="py-2.5 pr-4 font-mono">Jan 22 &ndash; Feb</td><td class="py-2.5 pr-4">Incorporate feedback, prepare slides, rehearse the talk.</td><td class="py-2.5">Final report and seminar talk (date TBD)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Report outline -->
+      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios space-y-4">
+        <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Report outline</h3>
+        <ol class="space-y-3 text-ios-secondary leading-relaxed">
+          <li><b class="text-ios-text dark:text-ios-darkText">1 &middot; Introduction.</b> Why robot policies need explanations. Two routes: build the explanation into the architecture (explicit object sets) or extract it from a trained network (mechanistic interpretability). Research question of the survey and scope.</li>
+          <li><b class="text-ios-text dark:text-ios-darkText">2 &middot; Foundations.</b>
+            <ul class="list-disc pl-5 mt-1 space-y-0.5">
+              <li>2.1 Superposition and polysemantic units.</li>
+              <li>2.2 Sparse autoencoders: L1 vs. TopK, dead latents, AuxK (P3).</li>
+              <li>2.3 Causal evaluation: ablation types, the error term, faithfulness and completeness (P4).</li>
+              <li>2.4 What makes a subset explanation valid: Discovery, Removal, Consequence (ILSE).</li>
+            </ul>
+          </li>
+          <li><b class="text-ios-text dark:text-ios-darkText">3 &middot; Explicit object-set explanations.</b> SIR: scene graphs, learned pruning, what the kept set revealed (dataset biases, static fixtures), and where ILSE shows explicit bottlenecks leak.</li>
+          <li><b class="text-ios-text dark:text-ios-darkText">4 &middot; Interpreting visual representations.</b>
+            <ul class="list-disc pl-5 mt-1 space-y-0.5">
+              <li>4.1 Grounding units to concepts with segmentation IoU (P6).</li>
+              <li>4.2 Spatial SAEs on vision models: per-patch features and their spatial maps (P9), CNN feature maps (P8).</li>
+              <li>4.3 Lesson: single features rarely decide an output; concepts are distributed.</li>
+            </ul>
+          </li>
+          <li><b class="text-ios-text dark:text-ios-darkText">5 &middot; Sparse autoencoders in robot policies.</b>
+            <ul class="list-disc pl-5 mt-1 space-y-0.5">
+              <li>5.1 General vs. memorized features and steering (P5).</li>
+              <li>5.2 Concepts vs. motor programs across six architectures (P2).</li>
+              <li>5.3 Grounding features in behavioral events (P1).</li>
+              <li>5.4 Named features for failure detection (P7).</li>
+              <li>5.5 Comparison table: model, tap point, SAE, grounding, causal test, closed loop.</li>
+            </ul>
+          </li>
+          <li><b class="text-ios-text dark:text-ios-darkText">6 &middot; Discussion.</b> Cross-cutting findings: good reconstruction does not mean preserved behavior (P1, P2, P9); pooled vs. spatial activations; grounding to motions or states vs. to objects; how far SAE studies satisfy Discovery, Removal and Consequence. Open problem: implicit object sets in visuomotor policies.</li>
+          <li><b class="text-ios-text dark:text-ios-darkText">7 &middot; Conclusion.</b> Summary and research directions.</li>
+        </ol>
+      </div>
+
+      <!-- Talk outline -->
+      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios">
+        <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Talk outline</h3>
+        <ol class="list-decimal pl-5 mt-3 space-y-1.5 text-ios-secondary leading-relaxed">
+          <li>Motivation: a robot fails, which objects did it use?</li>
+          <li>Explicit route: SIR's kept set and the D-R-C criteria.</li>
+          <li>Implicit route: superposition and sparse autoencoders in one picture.</li>
+          <li>What SAEs found in vision models and in robot policies (the comparison table).</li>
+          <li>Three lessons: reconstruction is not behavior, concepts are distributed, grounding is mostly to motions, not objects.</li>
+          <li>Open problem and outlook.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- VIEW: PRAKTIKUM PLAN & REPORT OUTLINE -->
+    <!-- ======================================================== -->
+    <div id="view-praktikum" class="spa-view hidden space-y-6 text-xs">
+      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4">
+        <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-orange">Praktikum</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
+          Praktikum Plan &amp; Report Outline
         </h2>
         <p class="text-ios-secondary dark:text-ios-darkSecondary mt-1 leading-relaxed max-w-3xl">
           Working title: <b class="text-ios-text dark:text-ios-darkText">"Does an end-to-end image policy form an implicit object set? Sparse autoencoders on a RoboCasa visuomotor policy."</b>
@@ -939,7 +1025,7 @@
             <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Cycle 04</td><td class="py-2.5 pr-4 font-mono">Dec 12 &ndash; Dec 23</td><td class="py-2.5 pr-4">Train 4 TopK SAEs with a small k sweep. Splice with error term, measure spliced success.</td><td class="py-2.5">SAE metrics (MSE, L0, dead latents), fidelity result</td></tr>
             <tr><td class="py-2.5 pr-4 font-semibold text-ios-orange">Recess</td><td class="py-2.5 pr-4 font-mono">Dec 24 &ndash; Jan 06</td><td class="py-2.5 pr-4">No meetings. Optional: draft Background and Method sections.</td><td class="py-2.5">Report sections 2 and 3 (draft)</td></tr>
             <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Cycle 05</td><td class="py-2.5 pr-4 font-mono">Jan 07 &ndash; Jan 21</td><td class="py-2.5 pr-4">Discovery: grounding and naming. Removal and Consequence: closed-loop ablations with controls. Compare with SIR.</td><td class="py-2.5">Core results, figures</td></tr>
-            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Cycle 06</td><td class="py-2.5 pr-4 font-mono">Jan 22 &ndash; Feb</td><td class="py-2.5 pr-4">Extensions if time allows (CloseSingleDoor, wrist camera, FiLM). Write and present.</td><td class="py-2.5">Final report and seminar talk</td></tr>
+            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Cycle 06</td><td class="py-2.5 pr-4 font-mono">Jan 22 &ndash; Feb</td><td class="py-2.5 pr-4">Extensions if time allows (CloseSingleDoor, wrist camera, FiLM). Write and present.</td><td class="py-2.5">Final Praktikum report and presentation</td></tr>
           </tbody>
         </table>
       </div>
@@ -1218,7 +1304,7 @@
   <!-- JAVASCRIPT: ADVANCED INTERACTIVE ENGINE -->
   <!-- ============================================================ -->
   <script>
-    const routes = ['overview', 'tensor-studio', 'core-theory', 'causal-lab', 'roadmap', 'plan', 'papers', 'seminar', 'progress', 'slides'];
+    const routes = ['overview', 'tensor-studio', 'core-theory', 'causal-lab', 'roadmap', 'plan', 'papers', 'seminar', 'praktikum', 'progress', 'slides'];
 
     function navigate(viewId) {
       routes.forEach(id => {
