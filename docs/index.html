@@ -169,6 +169,18 @@
         <button onclick="navigate('roadmap')" id="tab-roadmap" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text hidden sm:inline">
           Roadmap
         </button>
+        <button onclick="navigate('plan')" id="tab-plan" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
+          Plan
+        </button>
+        <button onclick="navigate('papers')" id="tab-papers" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
+          Papers
+        </button>
+        <button onclick="navigate('seminar')" id="tab-seminar" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
+          Seminar
+        </button>
+        <button onclick="navigate('progress')" id="tab-progress" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
+          Progress
+        </button>
         <button onclick="navigate('slides')" id="tab-slides" class="spa-tab btn-ios px-3.5 py-1.5 rounded-full transition text-ios-secondary hover:text-ios-text">
           Slides
         </button>
@@ -747,6 +759,417 @@
       </div>
     </div>
 
+    <!-- ======================================================== -->
+    <!-- VIEW: EXPERIMENT PLAN & DESIGN DECISIONS -->
+    <!-- ======================================================== -->
+    <div id="view-plan" class="spa-view hidden space-y-6 text-xs">
+      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4">
+        <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-purple">Experiment Plan</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
+          Design Decisions
+        </h2>
+        <p class="text-ios-secondary dark:text-ios-darkSecondary mt-1 leading-relaxed max-w-3xl">
+          Options we are considering, in dependency order. Score 1 to 10 combines feasibility and research value; two scores mean recommended / alternative.
+        </p>
+      </div>
+
+      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="text-ios-secondary uppercase font-mono text-[10px] tracking-wider">
+            <tr><th class="py-2 pr-4">#</th><th class="py-2 pr-4">Decision</th><th class="py-2 pr-4">Verdict &amp; reason</th><th class="py-2">Score</th></tr>
+          </thead>
+          <tbody class="divide-y divide-ios-border dark:divide-ios-darkBorder text-ios-secondary leading-relaxed align-top">
+            <tr>
+              <td class="py-3 pr-4 font-mono">1</td>
+              <td class="py-3 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Cameras: 2 static vs. all 3</td>
+              <td class="py-3 pr-4">Start with left + right: matches the published image baseline. Add the wrist camera later for part-level features; it needs a retrained policy and its view changes heavily during a rollout.</td>
+              <td class="py-3 font-mono font-bold text-ios-green">9 / 6</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-4 font-mono">2</td>
+              <td class="py-3 pr-4 font-semibold text-ios-text dark:text-ios-darkText">ResNet: single-task fine-tune vs. none</td>
+              <td class="py-3 pr-4">The baseline already trains the ResNets end to end (on all 24 tasks). Train single-task on CloseDrawer (71 % baseline) for a clear success margin. A frozen ImageNet ResNet only as a control, since a weak policy makes removal effects uninformative.</td>
+              <td class="py-3 font-mono font-bold text-ios-green">8 / 4</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-4 font-mono">3</td>
+              <td class="py-3 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Resolution: 128 vs. 224</td>
+              <td class="py-3 pr-4">Stay at 128. The demos are stored at 128, so 224 means re-rendering the dataset and losing comparability with SIR. Get finer resolution from layer 3 instead.</td>
+              <td class="py-3 font-mono font-bold text-ios-green">9 / 3</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-4 font-mono">4</td>
+              <td class="py-3 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Tap: layer 3 vs. layer 4</td>
+              <td class="py-3 pr-4">Record both in one pass. Layer 3 (8 &times; 8 &times; 256) should hold parts, layer 4 (4 &times; 4 &times; 512) whole objects; comparing them answers the whole-object vs. part question.</td>
+              <td class="py-3 font-mono font-bold text-ios-green">9</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-4 font-mono">5</td>
+              <td class="py-3 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Stack cameras vs. one at a time</td>
+              <td class="py-3 pr-4">One SAE per camera on the spatial map before pooling (the 1 &times; 1 &times; 512 vector has no location left). Stacking feature maps cannot work: each camera has its own ResNet, and the randomized camera poses leave no fixed correspondence between cells. The MDT already fuses cameras as separate tokens.</td>
+              <td class="py-3 font-mono font-bold text-ios-green">9 / 2</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-4 font-mono">6</td>
+              <td class="py-3 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Feed SAE output to the MDT</td>
+              <td class="py-3 pr-4">Required. Splicing the reconstruction into the rollout is what enables Discovery, Removal and Consequence; without it we only have correlations. Check spliced success against the original first.</td>
+              <td class="py-3 font-mono font-bold text-ios-green">10</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-4 font-mono">7</td>
+              <td class="py-3 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Compare kept set with SIR</td>
+              <td class="py-3 pr-4">Yes. Ground SAE features to objects via the dataset's bounding boxes and compare with SIR's top-k set. SIR is a different (graph) policy, so agreement means both rely on the same objects, not the same mechanism.</td>
+              <td class="py-3 font-mono font-bold text-ios-green">8</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-4 font-mono">8</td>
+              <td class="py-3 pr-4 font-semibold text-ios-text dark:text-ios-darkText">FiLM ResNet vs. plain ResNet</td>
+              <td class="py-3 pr-4">Optional extension. The code supports a language-conditioned ResNet (<code>use_film</code>), which makes visual features goal-dependent. Needs its own trained policy, and it matters most in multi-task or door tasks where the instruction varies.</td>
+              <td class="py-3 font-mono font-bold text-ios-orange">4</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- VIEW: RELATED PAPERS -->
+    <!-- ======================================================== -->
+    <div id="view-papers" class="spa-view hidden space-y-6 text-xs">
+      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4">
+        <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-cyan">Literature</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
+          Most Relevant Papers
+        </h2>
+        <p class="text-ios-secondary dark:text-ios-darkSecondary mt-1 leading-relaxed max-w-3xl">
+          The nine papers that shape our method, placed in our pipeline. Relevance (1 to 10) means how directly a paper informs our setup:
+          per-camera TopK SAEs on ResNet-18 layer 3 / 4, spliced back into the MDT, with Discovery, Removal and Consequence tested in closed-loop RoboCasa rollouts.
+        </p>
+      </div>
+
+      <!-- Pipeline context -->
+      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios space-y-4">
+        <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Where each paper fits in our pipeline</h3>
+        <div class="flex flex-col lg:flex-row lg:items-stretch gap-2">
+          <div class="flex-1 p-3 rounded-2xl bg-black/5 dark:bg-white/5">
+            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary">1 &middot; Policy</div>
+            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Cameras &rarr; ResNet-18</div>
+            <div class="text-ios-secondary mt-1">Tap layer 3 / layer 4, one per camera</div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-base">SIR</span></div>
+          </div>
+          <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
+          <div class="flex-1 p-3 rounded-2xl bg-ios-blue/10">
+            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-blue">2 &middot; Decompose</div>
+            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">TopK SAE per camera</div>
+            <div class="text-ios-secondary mt-1">Spatial latents per grid cell</div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-gao">P3</span><span class="paper-chip" data-target="p-aircraft">P8</span><span class="paper-chip" data-target="p-patchsae">P9</span></div>
+          </div>
+          <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
+          <div class="flex-1 p-3 rounded-2xl bg-ios-purple/10">
+            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-purple">3 &middot; Splice</div>
+            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">SAE output + error &rarr; MDT</div>
+            <div class="text-ios-secondary mt-1">Check spliced success first</div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-event">P1</span><span class="paper-chip" data-target="p-notall">P2</span><span class="paper-chip" data-target="p-marks">P4</span><span class="paper-chip" data-target="p-patchsae">P9</span></div>
+          </div>
+          <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
+          <div class="flex-1 p-3 rounded-2xl bg-ios-green/10">
+            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-green">4 &middot; Discovery</div>
+            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Ground &amp; name latents</div>
+            <div class="text-ios-secondary mt-1">Bounding-box IoU, held-out naming</div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-netdissect">P6</span><span class="paper-chip" data-target="p-mind">P7</span><span class="paper-chip" data-target="p-event">P1</span></div>
+          </div>
+          <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
+          <div class="flex-1 p-3 rounded-2xl bg-ios-orange/10">
+            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-orange">5 &middot; Removal &amp; Consequence</div>
+            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Ablate latent sets in closed loop</div>
+            <div class="text-ios-secondary mt-1">vs. random and irrelevant-object controls</div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-drvla">P5</span><span class="paper-chip" data-target="p-marks">P4</span><span class="paper-chip" data-target="p-notall">P2</span><span class="paper-chip" data-target="p-aircraft">P8</span></div>
+          </div>
+          <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
+          <div class="flex-1 p-3 rounded-2xl bg-ios-red/10">
+            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-red">6 &middot; Compare</div>
+            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Implicit object set vs. SIR</div>
+            <div class="text-ios-secondary mt-1">The gap no paper covers yet</div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-base">SIR</span><span class="paper-chip" data-target="p-base">ILSE</span></div>
+          </div>
+        </div>
+        <p class="text-ios-secondary leading-relaxed"><b class="text-ios-text dark:text-ios-darkText">Our gap:</b> robot-policy SAE papers (P1, P2, P5, P7) use transformer VLAs with token or pooled vectors and ground features to motion or state concepts. Vision SAE papers (P8, P9) are spatial but study classifiers. Nobody combines spatial CNN SAEs inside a robot policy with object-level grounding and closed-loop D-R-C.</p>
+      </div>
+
+      <!-- Base papers -->
+      <div id="p-base" class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios">
+        <div class="flex flex-wrap items-baseline justify-between gap-2">
+          <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Base papers (lab-internal, not embedded)</h3>
+          <span class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary">Foundation</span>
+        </div>
+        <ul class="list-disc pl-5 mt-3 space-y-1.5 text-ios-secondary leading-relaxed">
+          <li><b class="text-ios-text dark:text-ios-darkText">SIR</b> (Mattes et al., CVPR 2026): scene-graph policy that learns an explicit, sparse kept set of objects. Our comparison target.</li>
+          <li><b class="text-ios-text dark:text-ios-darkText">ILSE</b> (under review, ICLR 2027): defines the Discovery, Removal and Consequence conditions we test on an implicit, SAE-based object set.</li>
+        </ul>
+      </div>
+
+      <!-- Paper cards -->
+      <div class="space-y-4" id="paperList"></div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- VIEW: SEMINAR PLAN & REPORT OUTLINE -->
+    <!-- ======================================================== -->
+    <div id="view-seminar" class="spa-view hidden space-y-6 text-xs">
+      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4">
+        <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-orange">Seminar</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
+          Seminar Plan &amp; Report Outline
+        </h2>
+        <p class="text-ios-secondary dark:text-ios-darkSecondary mt-1 leading-relaxed max-w-3xl">
+          Working title: <b class="text-ios-text dark:text-ios-darkText">"Does an end-to-end image policy form an implicit object set? Sparse autoencoders on a RoboCasa visuomotor policy."</b>
+          Phases follow the bi-weekly supervisor cycles on the Roadmap.
+        </p>
+      </div>
+
+      <!-- Phases -->
+      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios overflow-x-auto">
+        <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mb-3">Plan</h3>
+        <table class="w-full text-left">
+          <thead class="text-ios-secondary uppercase font-mono text-[10px] tracking-wider">
+            <tr><th class="py-2 pr-4">Phase</th><th class="py-2 pr-4">Dates</th><th class="py-2 pr-4">Work</th><th class="py-2">Deliverable</th></tr>
+          </thead>
+          <tbody class="divide-y divide-ios-border dark:divide-ios-darkBorder text-ios-secondary leading-relaxed align-top">
+            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Cycle 03</td><td class="py-2.5 pr-4 font-mono">Nov 28 &ndash; Dec 11</td><td class="py-2.5 pr-4">Get or train the single-task image policy (CloseDrawer, left + right). Record layer 3 / 4 activations per camera.</td><td class="py-2.5">Reproduced success rate, activation dataset</td></tr>
+            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Cycle 04</td><td class="py-2.5 pr-4 font-mono">Dec 12 &ndash; Dec 23</td><td class="py-2.5 pr-4">Train 4 TopK SAEs with a small k sweep. Splice with error term, measure spliced success.</td><td class="py-2.5">SAE metrics (MSE, L0, dead latents), fidelity result</td></tr>
+            <tr><td class="py-2.5 pr-4 font-semibold text-ios-orange">Recess</td><td class="py-2.5 pr-4 font-mono">Dec 24 &ndash; Jan 06</td><td class="py-2.5 pr-4">No meetings. Optional: draft Background and Method sections.</td><td class="py-2.5">Report sections 2 and 3 (draft)</td></tr>
+            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Cycle 05</td><td class="py-2.5 pr-4 font-mono">Jan 07 &ndash; Jan 21</td><td class="py-2.5 pr-4">Discovery: grounding and naming. Removal and Consequence: closed-loop ablations with controls. Compare with SIR.</td><td class="py-2.5">Core results, figures</td></tr>
+            <tr><td class="py-2.5 pr-4 font-semibold text-ios-text dark:text-ios-darkText">Cycle 06</td><td class="py-2.5 pr-4 font-mono">Jan 22 &ndash; Feb</td><td class="py-2.5 pr-4">Extensions if time allows (CloseSingleDoor, wrist camera, FiLM). Write and present.</td><td class="py-2.5">Final report and seminar talk</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Report outline -->
+      <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios space-y-4">
+        <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Report outline</h3>
+        <ol class="space-y-3 text-ios-secondary leading-relaxed">
+          <li><b class="text-ios-text dark:text-ios-darkText">1 &middot; Introduction.</b> Explanations of robot policies are usually imposed (SIR's explicit kept set). Question: does an unconstrained image policy select objects internally, and can we prove it causally? Contributions in three bullets.</li>
+          <li><b class="text-ios-text dark:text-ios-darkText">2 &middot; Background &amp; related work.</b>
+            <ul class="list-disc pl-5 mt-1 space-y-0.5">
+              <li>2.1 SIR and the ILSE conditions (Discovery, Removal, Consequence).</li>
+              <li>2.2 Superposition and sparse autoencoders (TopK, error term): P3, P4.</li>
+              <li>2.3 SAEs on vision models and concept grounding: P6, P8, P9.</li>
+              <li>2.4 Mechanistic interpretability of robot policies: P1, P2, P5, P7, and the gap we fill.</li>
+            </ul>
+          </li>
+          <li><b class="text-ios-text dark:text-ios-darkText">3 &middot; Method.</b>
+            <ul class="list-disc pl-5 mt-1 space-y-0.5">
+              <li>3.1 Image policy: per-camera ResNet-18 + MDT, single-task training.</li>
+              <li>3.2 Activation recording at layer 3 and layer 4.</li>
+              <li>3.3 Per-camera TopK SAEs (AuxK, k sweep).</li>
+              <li>3.4 Grounding latents to objects via bounding-box IoU; naming protocol.</li>
+              <li>3.5 Splicing with error term; set ablation (which latents, which cells); zero vs. mean ablation.</li>
+              <li>3.6 Mapping D-R-C onto latent sets; comparison with SIR's kept set.</li>
+            </ul>
+          </li>
+          <li><b class="text-ios-text dark:text-ios-darkText">4 &middot; Experiments.</b>
+            <ul class="list-disc pl-5 mt-1 space-y-0.5">
+              <li>4.1 Setup: task, rollouts, seeds, compute.</li>
+              <li>4.2 SAE quality and spliced-policy fidelity.</li>
+              <li>4.3 Discovery: which objects the latents ground to; layer 3 (parts) vs. layer 4 (whole objects).</li>
+              <li>4.4 Removal and Consequence: success drop for object-grounded sets vs. random and irrelevant-object sets.</li>
+              <li>4.5 Implicit object set vs. SIR, VGIB and the hand-written relevance table.</li>
+            </ul>
+          </li>
+          <li><b class="text-ios-text dark:text-ios-darkText">5 &middot; Discussion.</b> Whole objects vs. parts, static fixtures as reference frames, camera-pose randomization, limitations (4 &times; 4 resolution, one task, box-level grounding).</li>
+          <li><b class="text-ios-text dark:text-ios-darkText">6 &middot; Conclusion &amp; future work.</b> Wrist camera, FiLM conditioning, multi-task policies.</li>
+        </ol>
+      </div>
+    </div>
+
+    <style>
+      .paper-chip { cursor: pointer; font-family: ui-monospace, monospace; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 9999px; background: rgba(0,113,227,0.12); color: #0071E3; }
+      .paper-chip:hover { background: rgba(0,113,227,0.25); }
+    </style>
+    <script>
+      const PAPERS = [
+        { id: 'p-event', n: 'P1', arxiv: '2605.17204', score: 9, cls: 'Robot-policy SAE',
+          title: 'Event-Grounded Sparse Autoencoders for Vision-Language-Action Policies', meta: 'Jin, Chatterjee, Kumar, Paleja (Purdue), 2026',
+          problem: 'Ranking SAE features by activation says nothing about whether they matter for behavior.',
+          method: 'BatchTopK SAEs (k = 64) with AuxK on OpenVLA and π0.5 residual streams. Features are scored against kinematic task events and edited in closed loop while the residual is preserved.',
+          finding: 'Splicing the SAE reconstruction dropped success to near 0 % at several OpenVLA layers, even though reconstruction looked fine. Event-aligned feature removal lowers success against a random-latent baseline.',
+          take: 'Measure spliced success before any ablation. Use a random-alive-latent baseline.',
+          caveat: 'Transformer VLA tokens; events are motions, not objects.' },
+        { id: 'p-notall', n: 'P2', arxiv: '2603.19233', score: 9, cls: 'Robot-policy SAE',
+          title: 'Not All Features Are Created Equal: A Mechanistic Study of Vision-Language-Action Models', meta: 'Grant, Zhao, Wang (Case Western), 2026',
+          problem: 'Do VLAs represent task concepts or coordinate-bound motor programs?',
+          method: '520+ TopK SAEs (k = 64) across six architectures. Activation injection, single-feature ablation, and SAE write-back as a residual edit h + Wᵀ(z′ − z), which keeps the error term.',
+          finding: 'A mean-pooled SAE cut π0.5 success from 89.9 % to 3.3 %. Ablating a single feature had no effect on 28 to 92 % of concept/task pairs.',
+          take: 'Write back edits as residual corrections, ablate sets of latents, and keep spatial resolution.',
+          caveat: 'Mostly simulation; transformer policies.' },
+        { id: 'p-gao', n: 'P3', arxiv: '2406.04093', score: 9, cls: 'SAE method',
+          title: 'Scaling and Evaluating Sparse Autoencoders', meta: 'Gao et al. (OpenAI), 2024 / ICLR 2025',
+          problem: 'L1 SAEs are hard to tune and accumulate dead latents at scale.',
+          method: 'TopK activation (sparsity set directly by k), MSE loss only, AuxK loss on dead latents, tied initialization, unit-norm decoder.',
+          finding: 'Better sparsity/MSE frontier than ReLU, Gated and ProLU SAEs. Dead latents 7 % instead of up to 90 %. Dense solutions appear once k approaches about a third of the width.',
+          take: 'This is our SAE recipe. Sweep k well below 256 (layer 3) and 512 (layer 4).',
+          caveat: 'Language models only.' },
+        { id: 'p-marks', n: 'P4', arxiv: '2403.19647', score: 9, cls: 'SAE method',
+          title: 'Sparse Feature Circuits: Discovering and Editing Interpretable Causal Graphs in Language Models', meta: 'Marks, Rager, Michaud, Belinkov, Bau, Mueller, 2024 / ICLR 2025',
+          problem: 'Neuron-level circuits are polysemantic and huge.',
+          method: 'Activation = sum of SAE features + error term, which stays in the graph. Effects estimated with attribution patching or integrated gradients; zero vs. mean ablation; faithfulness and completeness metrics.',
+          finding: 'About 100 features explain behavior that needs about 1,500 neurons. Ablating a few features removes the behavior; random ablations do nothing.',
+          take: 'Keep the error term when splicing. Use attribution to preselect latents before expensive rollouts. Report faithfulness.',
+          caveat: 'Language models; open-loop metrics.' },
+        { id: 'p-drvla', n: 'P5', arxiv: '2603.19183', score: 8, cls: 'Robot-policy SAE',
+          title: 'Sparse Autoencoders Reveal Interpretable and Steerable Features in VLA Models', meta: 'Swann, McGranahan, Buurmeijer, Kennedy, Schwager (Stanford), 2026',
+          problem: 'Are VLA SAE features interpretable, general and causally steerable?',
+          method: 'TopK + AuxK SAEs on mean-pooled residual streams of π0.5 and OpenVLA. A classifier separates general from memorized features. Ablation by projecting out decoder directions, plus additive steering.',
+          finding: '79 % of sampled features were interpretable vs. 30 % of neurons. Ablating the top-4 general features: 0/40 successes; ablating random memorized ones: 37/40.',
+          take: 'Tiered ablations with random controls. Check whether our latents encode memorized demos rather than objects.',
+          caveat: 'Pooled vectors, no spatial grounding.' },
+        { id: 'p-netdissect', n: 'P6', arxiv: '1704.05796', score: 8, cls: 'Grounding',
+          title: 'Network Dissection: Quantifying Interpretability of Deep Visual Representations', meta: 'Bau, Zhou, Khosla, Oliva, Torralba (MIT), CVPR 2017',
+          problem: 'How well do individual CNN units align with human concepts?',
+          method: 'Threshold each unit at its top 0.5 % activation, upsample bilinearly, compute dataset-wide IoU against segmentation masks. A unit is a detector if IoU > 0.04.',
+          finding: 'Object and part detectors appear in late layers; ResNets are the most interpretable architecture tested. Rotating the basis destroys most detectors.',
+          take: 'Our grounding protocol: IoU between upsampled latent maps and RoboCasa bounding boxes.',
+          caveat: 'Classifiers; our 4 × 4 maps make upsampling coarse; limited by the label vocabulary.' },
+        { id: 'p-mind', n: 'P7', arxiv: '2611.10400', score: 7, cls: 'Robot-policy SAE',
+          title: 'Detecting and Explaining Robot Policy Failures from Sparse Internal Features (MIND)', meta: 'Ahmed, Nag, Akash, Begum (UNH), Nov 2026',
+          problem: 'Explain why visuomotor policies fail, using named SAE features.',
+          method: 'L1 SAEs (4× width) on per-token mid-layer activations of OpenVLA and π0.5. Features are named from a concept set only if precision and recall floors hold on held-out episodes; names are verified by clamping.',
+          finding: 'Clamping a named feature moved the arm along its concept in 12 of 14 cases. Failure monitor AUROC 0.991.',
+          take: 'A rigorous naming protocol for our latents (held-out precision/recall).',
+          caveat: 'Concepts are robot states, not objects.' },
+        { id: 'p-aircraft', n: 'P8', arxiv: '2606.15468', score: 7, cls: 'Vision SAE (CNN)',
+          title: 'Analyzing Visual Aircraft Representations with Sparse Autoencoders', meta: 'Sharma, 2026',
+          problem: 'Can SAEs expose interpretable features in a CNN classifier?',
+          method: 'SAE (768 → 8192) on the ConvNeXt-Tiny final stage before pooling, 7 × 7 spatial. Input blur and feature suppression (local vs. global) against random controls.',
+          finding: 'Blurring the feature region flips 22 % of predictions vs. 4.5 % for random regions. Suppressing a single feature flipped nothing.',
+          take: 'Closest analogue to our spatial CNN tap. Ablate globally and in sets.',
+          caveat: 'Classifier, one layer, hand-picked features.' },
+        { id: 'p-patchsae', n: 'P9', arxiv: '2412.05276', score: 7, cls: 'Vision SAE',
+          title: 'PatchSAE: Sparse Autoencoders Reveal Selective Remapping of Visual Concepts During Adaptation', meta: 'Lim, Choi, Choo, Schneider, 2024',
+          problem: 'Does prompt adaptation create new visual concepts or remap existing ones?',
+          method: 'Per-patch SAE (64×) on CLIP ViT-B/16 layer 11. Reconstruction spliced back in; top latents kept or masked.',
+          finding: 'Splicing the reconstruction alone cost accuracy (68.25 → 64.82 %). Patch activations work as spatial soft masks.',
+          take: 'Report the cost of splicing; visualize latents as spatial masks.',
+          caveat: 'ViT classification, not control.' },
+      ];
+
+      (function renderPapers() {
+        const list = document.getElementById('paperList');
+        if (!list) return;
+        const row = (label, text) => `<div><span class="font-semibold text-ios-text dark:text-ios-darkText">${label}:</span> ${text}</div>`;
+        list.innerHTML = PAPERS.map(p => `
+          <div id="${p.id}" class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios space-y-3">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+              <div>
+                <div class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary">${p.n} &middot; ${p.cls}</div>
+                <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-0.5">${p.title}</h3>
+                <div class="text-ios-secondary mt-0.5">${p.meta} &middot; arXiv ${p.arxiv}</div>
+              </div>
+              <span class="font-mono font-bold ${p.score >= 8 ? 'text-ios-green' : 'text-ios-orange'}">${p.score}/10</span>
+            </div>
+            <div class="space-y-1.5 text-ios-secondary leading-relaxed">
+              ${row('Problem', p.problem)}${row('Method', p.method)}${row('Key finding', p.finding)}${row('What we take', p.take)}${row('Caveat', p.caveat)}
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+              <a href="https://arxiv.org/abs/${p.arxiv}" target="_blank" class="text-ios-blue hover:underline">arXiv page ↗</a>
+              <a href="https://arxiv.org/pdf/${p.arxiv}" target="_blank" class="text-ios-blue hover:underline">PDF ↗</a>
+            </div>
+            <details class="paper-embed">
+              <summary class="cursor-pointer text-ios-blue font-semibold">Show embedded PDF</summary>
+              <iframe data-src="https://arxiv.org/pdf/${p.arxiv}" title="${p.title}" class="w-full mt-3 rounded-2xl border border-ios-border dark:border-ios-darkBorder bg-white" style="height: 75vh;"></iframe>
+            </details>
+          </div>`).join('');
+
+        // Load each PDF only when its embed is opened.
+        list.querySelectorAll('details.paper-embed').forEach(d => {
+          d.addEventListener('toggle', () => {
+            const frame = d.querySelector('iframe');
+            if (d.open && !frame.getAttribute('src')) frame.src = frame.dataset.src;
+          });
+        });
+
+        document.querySelectorAll('.paper-chip').forEach(chip => {
+          chip.addEventListener('click', () => {
+            const target = document.getElementById(chip.dataset.target);
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        });
+      })();
+    </script>
+
+    <!-- ======================================================== -->
+    <!-- VIEW 5: WEEKLY PROGRESS LOG -->
+    <!-- ======================================================== -->
+    <div id="view-progress" class="spa-view hidden space-y-6">
+      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4">
+        <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-green">Progress Tracking</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
+          Weekly Progress Log
+        </h2>
+        <p class="text-xs text-ios-secondary dark:text-ios-darkSecondary mt-1">
+          What we did each week. Newest first. Detailed meeting logs live in the repository's <code>progress/</code> folder.
+        </p>
+      </div>
+
+      <div class="space-y-4 text-xs">
+
+        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Week 4 &middot; Nov 23 to Nov 29, 2026</h3>
+            <span class="font-bold text-ios-blue font-mono uppercase text-[11px]">In Progress</span>
+          </div>
+          <ul class="list-disc pl-5 mt-3 space-y-1.5 text-ios-secondary leading-relaxed">
+            <li>Second supervisor sync with Paul Mattes (Nov 26, 13:00 to 14:00), presenting the intro deck and open questions.</li>
+            <li>Added this weekly progress page to the project portal.</li>
+          </ul>
+        </div>
+
+        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Week 3 &middot; Nov 16 to Nov 22, 2026</h3>
+            <span class="font-bold text-ios-green font-mono uppercase text-[11px]">Completed</span>
+          </div>
+          <ul class="list-disc pl-5 mt-3 space-y-1.5 text-ios-secondary leading-relaxed">
+            <li>Updated <code>SIR_Model/</code> to upstream intuitive-robots/sir (<code>49321d0</code>): VGIB sparsification, parallel evaluation, node-score tooling and a test suite.</li>
+            <li>Corrected the ResNet-18 <code>layer4</code> shape: 128 &times; 128 RoboCasa cameras give a 4 &times; 4 &times; 512 map (16 cells), not 7 &times; 7.</li>
+            <li>Wrote the SIR code mind map as an orientation guide to the codebase.</li>
+            <li>Rebuilt the portal as a single-page app with an interactive Tensor Studio (9-stage gallery, RoboCasa scene graphics), core theory FAQs and a slides view.</li>
+            <li>Created the seminar slide template and the intro presentation.</li>
+            <li>Adjusted the timeline to a realistic bi-weekly cadence including the winter recess.</li>
+            <li>Designed MIS logo options for the website and presentations.</li>
+          </ul>
+        </div>
+
+        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Week 2 &middot; Nov 9 to Nov 15, 2026</h3>
+            <span class="font-bold text-ios-green font-mono uppercase text-[11px]">Completed</span>
+          </div>
+          <ul class="list-disc pl-5 mt-3 space-y-1.5 text-ios-secondary leading-relaxed">
+            <li>Kickoff meeting with the supervisor (Nov 13): finalized Topic 2, Mechanistic Interpretability with Object Sets.</li>
+            <li>Read the SIR and ILSE papers; formalized the Discovery, Removal and Consequence evaluation criteria.</li>
+            <li>Mapped the policy architecture (ResNet-18 backbone, MDT action generator) and wrote the architecture deep dive.</li>
+            <li>Designed the SAE tap on <code>layer4</code> and the whole-object vs. object-part research direction.</li>
+            <li>Restructured the repository, added the GitHub Pages workflow, the documentation portal and the tensor walkthrough.</li>
+            <li>Scaffolded <code>src/</code> modules: activation recorder, SAE, grounding and causal intervention.</li>
+            <li>Collected open questions for the supervisor (static objects, attention over time, camera view fusion).</li>
+          </ul>
+        </div>
+
+        <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Week 1 &middot; Nov 2 to Nov 8, 2026</h3>
+            <span class="font-bold text-ios-green font-mono uppercase text-[11px]">Completed</span>
+          </div>
+          <ul class="list-disc pl-5 mt-3 space-y-1.5 text-ios-secondary leading-relaxed">
+            <li>Created the team repository with a project overview.</li>
+            <li>Imported the official SIR codebase as the base for our interpretability work.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
     <!-- ============================================================ -->
     <!-- SLIDE SETS (generated from templates/*.pptx on deploy) -->
     <!-- ============================================================ -->
@@ -795,7 +1218,7 @@
   <!-- JAVASCRIPT: ADVANCED INTERACTIVE ENGINE -->
   <!-- ============================================================ -->
   <script>
-    const routes = ['overview', 'tensor-studio', 'core-theory', 'causal-lab', 'roadmap', 'slides'];
+    const routes = ['overview', 'tensor-studio', 'core-theory', 'causal-lab', 'roadmap', 'plan', 'papers', 'seminar', 'progress', 'slides'];
 
     function navigate(viewId) {
       routes.forEach(id => {
