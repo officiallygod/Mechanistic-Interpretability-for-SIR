@@ -857,43 +857,43 @@
       <!-- Pipeline context -->
       <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-2">
-          <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Where each paper fits in our ResNet-18 + SAE kept-set pipeline</h3>
+          <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Where each 9/10 core paper fits in our ResNet-18 + SAE kept-set pipeline</h3>
           <span class="font-mono text-[10px] text-ios-secondary">Click any chip to jump to card</span>
         </div>
         <div class="flex flex-col lg:flex-row lg:items-stretch gap-2">
           <div class="flex-1 p-3 rounded-2xl bg-black/5 dark:bg-white/5">
             <div class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary">1 &middot; Visual Backbone</div>
             <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">RoboCasa &rarr; ResNet-18</div>
-            <div class="text-ios-secondary mt-1">128&times;128 &rarr; 4&times;4 ERF &amp; biases</div>
-            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-base">SIR</span><span class="paper-chip" data-target="p-erf">P17</span><span class="paper-chip" data-target="p-causal">P18</span></div>
+            <div class="text-ios-secondary mt-1">Tap layer 3 / layer 4, one per camera</div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-base">SIR</span></div>
           </div>
           <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
           <div class="flex-1 p-3 rounded-2xl bg-ios-blue/10">
             <div class="font-mono text-[10px] uppercase tracking-wider text-ios-blue">2 &middot; Decompose</div>
             <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Spatial SAE per camera</div>
-            <div class="text-ios-secondary mt-1">Dynamic sparsity, stability, CNNs</div>
-            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-gao">P3</span><span class="paper-chip" data-target="p-batchtopk">P10</span><span class="paper-chip" data-target="p-jumprelu">P11</span><span class="paper-chip" data-target="p-salve">P12</span><span class="paper-chip" data-target="p-inception">P13</span><span class="paper-chip" data-target="p-archetypal">P14</span><span class="paper-chip" data-target="p-craft">P20</span><span class="paper-chip" data-target="p-matryoshka">P21</span><span class="paper-chip" data-target="p-aircraft">P8</span><span class="paper-chip" data-target="p-patchsae">P9</span></div>
+            <div class="text-ios-secondary mt-1">TopK, BatchTopK, JumpReLU, ResNet-18</div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-gao">P3</span><span class="paper-chip" data-target="p-batchtopk">P5</span><span class="paper-chip" data-target="p-jumprelu">P6</span><span class="paper-chip" data-target="p-salve">P7</span></div>
           </div>
           <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
           <div class="flex-1 p-3 rounded-2xl bg-ios-purple/10">
             <div class="font-mono text-[10px] uppercase tracking-wider text-ios-purple">3 &middot; Splice &amp; Error</div>
             <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Reconstruct + dark matter</div>
             <div class="text-ios-secondary mt-1">Fidelity vs. residual leakage</div>
-            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-event">P1</span><span class="paper-chip" data-target="p-notall">P2</span><span class="paper-chip" data-target="p-marks">P4</span><span class="paper-chip" data-target="p-darkmatter">P16</span><span class="paper-chip" data-target="p-patchsae">P9</span></div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-event">P1</span><span class="paper-chip" data-target="p-notall">P2</span><span class="paper-chip" data-target="p-marks">P4</span><span class="paper-chip" data-target="p-darkmatter">P9</span></div>
           </div>
           <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
           <div class="flex-1 p-3 rounded-2xl bg-ios-green/10">
             <div class="font-mono text-[10px] uppercase tracking-wider text-ios-green">4 &middot; Discovery</div>
             <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Ground &amp; name kept set</div>
-            <div class="text-ios-secondary mt-1">Box IoU, precision/recall, parts</div>
-            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-netdissect">P6</span><span class="paper-chip" data-target="p-mind">P7</span><span class="paper-chip" data-target="p-salve">P12</span><span class="paper-chip" data-target="p-event">P1</span><span class="paper-chip" data-target="p-saebench">P19</span></div>
+            <div class="text-ios-secondary mt-1">Spatial grounding &amp; behavior check</div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-event">P1</span><span class="paper-chip" data-target="p-salve">P7</span></div>
           </div>
           <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
           <div class="flex-1 p-3 rounded-2xl bg-ios-orange/10">
             <div class="font-mono text-[10px] uppercase tracking-wider text-ios-orange">5 &middot; Removal &amp; Consequence</div>
             <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Ablate kept vs. excluded</div>
             <div class="text-ios-secondary mt-1">Absorption, dark matter, controls</div>
-            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-drvla">P5</span><span class="paper-chip" data-target="p-marks">P4</span><span class="paper-chip" data-target="p-notall">P2</span><span class="paper-chip" data-target="p-absorption">P15</span><span class="paper-chip" data-target="p-darkmatter">P16</span><span class="paper-chip" data-target="p-aircraft">P8</span><span class="paper-chip" data-target="p-saebench">P19</span></div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-notall">P2</span><span class="paper-chip" data-target="p-marks">P4</span><span class="paper-chip" data-target="p-absorption">P8</span><span class="paper-chip" data-target="p-darkmatter">P9</span></div>
           </div>
           <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
           <div class="flex-1 p-3 rounded-2xl bg-ios-red/10">
@@ -903,7 +903,7 @@
             <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-base">SIR</span><span class="paper-chip" data-target="p-base">ILSE</span></div>
           </div>
         </div>
-        <p class="text-ios-secondary leading-relaxed"><b class="text-ios-text dark:text-ios-darkText">Our gap:</b> robot-policy SAE papers (P1, P2, P5, P7) study transformer VLAs and ground features to motion or robot state; vision CNN SAE papers (P8, P12, P13, P20) study single-step classifiers; LLM SAE papers (P3, P10, P11, P15, P16, P19, P21) assume discrete text tokens. Nobody has combined spatial CNN SAEs on a RoboCasa ResNet-18 backbone with object-level kept-set grounding and ILSE's D-R-C evaluation.</p>
+        <p class="text-ios-secondary leading-relaxed"><b class="text-ios-text dark:text-ios-darkText">Our gap:</b> robot-policy SAE papers (P1, P2) study transformer VLAs; ResNet-18 SAE work (P7) studies single-step classification; LLM SAE papers (P3, P4, P5, P6, P8, P9) assume discrete text tokens. Nobody has combined spatial SAEs on a RoboCasa ResNet-18 backbone with object-level kept-set grounding and ILSE's D-R-C evaluation.</p>
       </div>
 
       <!-- Base papers -->
@@ -921,7 +921,7 @@
         </ul>
       </div>
 
-      <!-- iOS Filter & Sort Bar -->
+      <!-- iOS Filter Bar -->
       <div class="bg-ios-card/90 dark:bg-ios-darkCard/90 ios-glass border border-ios-border dark:border-ios-darkBorder rounded-3xl p-4 shadow-ios flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div class="flex flex-wrap items-center gap-2">
           <span class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary mr-1">Added by</span>
@@ -937,14 +937,9 @@
           <div class="inline-flex flex-wrap bg-black/5 dark:bg-white/10 p-1 rounded-full gap-0.5" id="catFilterBar">
             <button onclick="setPaperFilter('cat','all')" data-val="all" class="paper-filter-btn active">All Focus</button>
             <button onclick="setPaperFilter('cat','sae')" data-val="sae" class="paper-filter-btn">SAE &amp; Failure Modes</button>
-            <button onclick="setPaperFilter('cat','vision')" data-val="vision" class="paper-filter-btn">Vision / CNN</button>
+            <button onclick="setPaperFilter('cat','vision')" data-val="vision" class="paper-filter-btn">Vision / ResNet-18</button>
             <button onclick="setPaperFilter('cat','robot')" data-val="robot" class="paper-filter-btn">Robot Policy</button>
-            <button onclick="setPaperFilter('cat','grounding')" data-val="grounding" class="paper-filter-btn">Grounding &amp; Theory</button>
           </div>
-
-          <button id="paperSortBtn" onclick="togglePaperSort()" class="btn-ios px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 text-ios-text dark:text-ios-darkText font-mono text-[11px] font-semibold transition flex items-center gap-1.5">
-            <span>Sort: Score</span>
-          </button>
         </div>
       </div>
 
@@ -964,7 +959,7 @@
         <p class="text-ios-secondary dark:text-ios-darkSecondary mt-1 leading-relaxed max-w-3xl">
           The seminar is a literature study: no implementation or experiments (those belong to the Praktikum).
           Working title: <b class="text-ios-text dark:text-ios-darkText">"Remove the Oven, Break the Robot? Testing Object Explanations with Sparse Autoencoders"</b>
-          Sources are listed on the <a href="#papers" class="text-ios-blue hover:underline">Papers</a> page (P1 to P21) plus SIR and ILSE.
+          Sources are listed on the <a href="#papers" class="text-ios-blue hover:underline">Papers</a> page (P1 to P9, all 9/10 core papers) plus SIR and ILSE.
         </p>
       </div>
 
@@ -1166,7 +1161,7 @@
           method: 'TopK activation (sparsity set directly by k), MSE loss only, AuxK auxiliary loss on dead latents, tied encoder/decoder init, unit-norm decoder columns.',
           finding: 'Dominates ReLU, Gated, and ProLU SAEs on the sparsity/MSE frontier; cuts dead latents from up to 90% down to ~7%. Dense collapse starts when k approaches ~1/3 of input width.',
           take: 'Baseline SAE recipe for layer3 (256-D) and layer4 (512-D); keep k well below 1/3 of channel width.',
-          caveat: 'LLM tokens only; fixed per-cell k wastes capacity on empty RoboCasa background cells (see P10, P11).' },
+          caveat: 'LLM tokens only; fixed per-cell k wastes capacity on empty RoboCasa background cells (see P5, P6).' },
         { id: 'p-marks', n: 'P4', arxiv: '2403.19647', score: 9, cls: 'SAE & Causality', cat: 'sae', addedBy: 'both',
           title: 'Sparse Feature Circuits: Discovering and Editing Interpretable Causal Graphs in Language Models', meta: 'Marks, Rager, Michaud, Belinkov, Bau, Mueller, 2024 / ICLR 2025',
           context: 'Language models in open-loop classification/completion tasks.',
@@ -1174,8 +1169,8 @@
           method: 'Keeps the SAE error term in the computation graph; estimates feature effects via attribution patching and integrated gradients; compares zero vs. mean ablation.',
           finding: 'Roughly 100 sparse features explain behavior that requires ~1,500 polysemantic neurons; ablating discovered features removes the behavior while random ablations do not.',
           take: 'Track the error term explicitly when splicing; use attribution patching to bridge language-blind layer4 features to task actions.',
-          caveat: 'Open-loop language tasks; keeping the error term can hide excluded-object leakage (see P16).' },
-        { id: 'p-batchtopk', n: 'P10', arxiv: '2412.06410', score: 9, cls: 'SAE Architecture', cat: 'sae', addedBy: 'allen',
+          caveat: 'Open-loop language tasks; keeping the error term can hide excluded-object leakage (see P9).' },
+        { id: 'p-batchtopk', n: 'P5', arxiv: '2412.06410', score: 9, cls: 'SAE Architecture', cat: 'sae', addedBy: 'allen',
           title: 'BatchTopK Sparse Autoencoders', meta: 'Bussmann, Leask, Nanda, 2024',
           context: 'LLM activations where different tokens carry different amounts of information.',
           whyUs: 'Solves a major flaw of standard TopK (P3) on our 4x4 RoboCasa grid: empty wall or countertop cells should fire ~0 object latents, while cluttered cells around the drawer handle and gripper need more active latents. BatchTopK stops empty cells from polluting our kept set with noise.',
@@ -1183,7 +1178,7 @@
           finding: 'Better reconstruction at the same average L0 than standard TopK without forcing sparse or empty inputs to activate spurious features.',
           take: 'Preferred upgrade over fixed per-cell TopK for our 4x4 and 8x8 RoboCasa spatial grids.',
           caveat: 'Evaluated on LLMs; global inference threshold must be calibrated across all 16 spatial cells.' },
-        { id: 'p-jumprelu', n: 'P11', arxiv: '2407.14435', score: 9, cls: 'SAE Architecture', cat: 'sae', addedBy: 'allen',
+        { id: 'p-jumprelu', n: 'P6', arxiv: '2407.14435', score: 9, cls: 'SAE Architecture', cat: 'sae', addedBy: 'allen',
           title: 'Jumping Ahead: Improving Reconstruction Fidelity with JumpReLU Sparse Autoencoders', meta: 'Rajamanoharan et al. (Google DeepMind), 2024',
           context: 'Gemma-2 LLM residual streams.',
           whyUs: 'Directly closes ILSE leak class R3 (survivor distortion) inside the SAE: under fixed-k TopK, a loud distractor object in a spatial cell can steal slots and suppress a kept object. JumpReLU gives each latent its own independent firing threshold.',
@@ -1191,7 +1186,7 @@
           finding: 'Matches or beats TopK and Gated SAEs on reconstruction fidelity while eliminating L1 shrinkage and fixed-k slot competition.',
           take: 'Strong candidate when testing strict Removal (R-C), because dropping distractor features does not alter kept-feature thresholds.',
           caveat: 'Requires tuning the L0 penalty and bandwidth hyperparameter; originally validated on LLMs.' },
-        { id: 'p-salve', n: 'P12', arxiv: '2512.15938', score: 9, cls: 'Vision SAE (ResNet-18)', cat: 'vision', addedBy: 'allen',
+        { id: 'p-salve', n: 'P7', arxiv: '2512.15938', score: 9, cls: 'Vision SAE (ResNet-18)', cat: 'vision', addedBy: 'allen',
           title: 'SALVE: Sparse Autoencoder-Latent Vector Editing for Mechanistic Control of Neural Networks', meta: 'Flovik, 2025',
           context: 'Single-step image classification on ResNet-18 and ViT-B/16.',
           whyUs: 'Directly validated on ResNet-18 (our exact visual backbone!). Pairs SAE latents with spatial grounding (Grad-FAM) and measures the suppression threshold alpha_crit needed to flip outputs, giving us a concrete ResNet-18 SAE reference.',
@@ -1199,7 +1194,7 @@
           finding: 'Demonstrates that ResNet-18 intermediate representations decompose cleanly into spatially grounded, causally editable SAE features.',
           take: 'Direct ResNet-18 validation blueprint; combine its spatial localization check with our RoboCasa box-IoU grounding.',
           caveat: 'Single-step image classification rather than closed-loop 10-step robotics rollouts.' },
-        { id: 'p-absorption', n: 'P15', arxiv: '2409.14507', score: 9, cls: 'SAE Failure Modes', cat: 'sae', addedBy: 'allen',
+        { id: 'p-absorption', n: 'P8', arxiv: '2409.14507', score: 9, cls: 'SAE Failure Modes', cat: 'sae', addedBy: 'allen',
           title: 'A is for Absorption: Studying Feature Splitting and Absorption in Sparse Autoencoders', meta: 'Chanin, Wilken-Smith, Dulka, Bhatnagar, Bloom, 2024',
           context: 'LLM SAEs (Gemma Scope) studying hierarchical concept splitting.',
           whyUs: 'Exposes a critical trap for our kept-set Removal test (R-C): a narrow feature ("drawer-handle-on-left") can absorb the general "drawer" direction. Zeroing the general "drawer" latent still leaves absorbed copies firing, causing false Removal failures.',
@@ -1207,7 +1202,7 @@
           finding: 'Feature absorption occurs widely across L1, TopK, and JumpReLU SAEs and increases with dictionary width M.',
           take: 'When testing Removal of an object from K_latent, ablate the full cluster of co-grounded latents (not just the single top-IoU feature).',
           caveat: 'Studied in LLMs; in RoboCasa, absorption likely manifests as viewpoint-specific or kitchen-layout-specific object copies.' },
-        { id: 'p-darkmatter', n: 'P16', arxiv: '2410.14670', score: 9, cls: 'SAE Failure Modes', cat: 'sae', addedBy: 'allen',
+        { id: 'p-darkmatter', n: 'P9', arxiv: '2410.14670', score: 9, cls: 'SAE Failure Modes', cat: 'sae', addedBy: 'allen',
           title: 'Decomposing The Dark Matter of Sparse Autoencoders', meta: 'Engels, Smith, Tegmark (MIT), TMLR 2025',
           context: 'LLM residual streams analyzing SAE reconstruction error e = x - x_hat.',
           whyUs: 'Defines the central catch-22 of our ResNet-18 SAE Removal test: SAE error e is NOT random noise, it is structured uncaptured signal. Dropping e breaks the policy off-manifold; keeping e lets excluded objects leak straight past our kept set.',
@@ -1215,102 +1210,6 @@
           finding: 'Roughly half of SAE error variance is linearly predictable from input activations, proving real semantic information hides inside the residual error.',
           take: 'Report BOTH Mode A (pure reconstruction x_hat, strict removal) and Mode B (residual-preserving x_hat + e) so we bound dark-matter leakage.',
           caveat: 'Measured on LLMs; our 128x128 ResNet-18 layer4 has far lower intrinsic dimensionality, so we should measure how much variance stays in e.' },
-        { id: 'p-drvla', n: 'P5', arxiv: '2603.19183', score: 8, cls: 'Robot-Policy SAE', cat: 'robot', addedBy: 'both',
-          title: 'Sparse Autoencoders Reveal Interpretable and Steerable Features in VLA Models', meta: 'Swann, McGranahan, Buurmeijer, Kennedy, Schwager (Stanford), 2026',
-          context: 'Mean-pooled residual streams of pi0.5 and OpenVLA on LIBERO and DROID.',
-          whyUs: 'Teaches us a crucial diagnostic for Discovery (D-C): distinguish generalizable object features from episode-memorization latents that only fire on one specific RoboCasa kitchen layout.',
-          method: 'TopK + AuxK SAEs on pooled VLA states; classifies general vs. memorized features and tests tiered ablations against random controls.',
-          finding: '79% of sampled features were interpretable vs. 30% of raw neurons. Ablating the top-4 general features dropped success to 0/40; ablating memorized ones kept 37/40.',
-          take: 'Measure cross-scene generality of every grounded ResNet-18 latent so our kept set reflects true object concepts rather than memorized scenes.',
-          caveat: 'Uses pooled vectors with no spatial grid; relies on VLA transformer states.' },
-        { id: 'p-netdissect', n: 'P6', arxiv: '1704.05796', score: 8, cls: 'Grounding & Theory', cat: 'grounding', addedBy: 'both',
-          title: 'Network Dissection: Quantifying Interpretability of Deep Visual Representations', meta: 'Bau, Zhou, Khosla, Oliva, Torralba (MIT), CVPR 2017',
-          context: 'Supervised CNN classifiers (including ResNet) on ImageNet/Broden segmentation masks.',
-          whyUs: 'Provides the exact mathematical protocol we adapt to turn 4x4 ResNet-18 SAE activation maps into an object kept set: threshold activation maps, upsample bilinearly, and compute dataset-wide IoU against RoboCasa object masks.',
-          method: 'Thresholds each spatial unit at its top 0.5% activation, upsamples bilinearly, and computes IoU against pixel segmentation masks (detector threshold IoU > 0.04).',
-          finding: 'Object and part detectors emerge naturally in late ResNet layers; random basis rotations destroy them, proving axis alignment matters.',
-          take: 'Core IoU grounding formula for Discovery (D-C), extended with precision-in-mask to catch affordance parts like drawer handles.',
-          caveat: 'Single-step classifiers; 4x4 maps on 128x128 frames make bilinear upsampling coarse.' },
-        { id: 'p-inception', n: 'P13', arxiv: '2406.03662', score: 8, cls: 'Vision SAE (CNN)', cat: 'vision', addedBy: 'allen',
-          title: 'The Missing Curve Detectors of InceptionV1: Applying Sparse Autoencoders to InceptionV1 Early Vision', meta: 'Gorton, 2024',
-          context: 'InceptionV1 CNN spatial convolutional feature maps on ImageNet.',
-          whyUs: 'Direct blueprint for training SAEs on per-(h, w) CNN spatial vectors rather than pooled embeddings, proving CNN channels hide cleaner visual detectors in superposition.',
-          method: 'Treats each spatial location (h, w) in a convolutional activation map as an independent training vector for an overcomplete SAE.',
-          finding: 'Uncovers missing orientation and curve detectors that were invisible in individual CNN channels due to polysemantic superposition.',
-          take: 'Validates our exact spatial tapping strategy on ResNet-18 layer3 (8x8) and layer4 (4x4).',
-          caveat: 'Early-layer textures on ImageNet classifiers, not late-layer kitchen objects in closed-loop control.' },
-        { id: 'p-archetypal', n: 'P14', arxiv: '2502.12892', score: 8, cls: 'Vision SAE', cat: 'vision', addedBy: 'allen',
-          title: 'Archetypal SAE: Adaptive and Stable Dictionary Learning for Concept Extraction in Large Vision Models', meta: 'Fel et al. (Kempner / Harvard), ICML 2025',
-          context: 'Large vision backbones (ViT, CLIP, DINOv2) on ImageNet.',
-          whyUs: 'Addresses a silent risk for our kept set: standard SAEs trained with different random seeds discover different dictionaries (and therefore different kept sets!). Anchoring atoms to real activation archetypes stabilizes concepts and keeps reconstructions on-manifold.',
-          method: 'Constrains SAE dictionary atoms to lie inside the convex hull of real visual activations (relaxed archetypal analysis, RA-SAE).',
-          finding: 'Dramatically improves cross-seed dictionary stability and concept identifiability while maintaining strong reconstruction fidelity.',
-          take: 'Always train our ResNet-18 SAE across multiple seeds and check kept-set Jaccard stability; consider RA-SAE if standard SAE reconstructions drift off-manifold.',
-          caveat: 'Evaluated on ViT vision encoders on ImageNet, not ResNet-18 robot policies.' },
-        { id: 'p-erf', n: 'P17', arxiv: '1701.04128', score: 8, cls: 'Grounding & Theory', cat: 'grounding', addedBy: 'allen',
-          title: 'Understanding the Effective Receptive Field in Deep Convolutional Neural Networks', meta: 'Luo, Li, Urtasun, Zemel (Toronto), NeurIPS 2016',
-          context: 'Deep convolutional networks including ResNets on image benchmarks.',
-          whyUs: 'Explains a fundamental limit of ResNet-18 layer4 for ILSE Removal (R-C): a 4x4 cell is NOT an isolated 32x32 pixel crop. Its Gaussian Effective Receptive Field bleeds across neighboring objects before our SAE even sees the tensor (violating ILSE R1).',
-          method: 'Analytically and empirically measures the gradient of a deep spatial unit with respect to input pixels.',
-          finding: 'Effective receptive fields follow a 2D Gaussian that grows with depth and overlaps heavily across adjacent grid cells.',
-          take: 'Compare layer3 (8x8, tighter ERF) vs. layer4 (4x4, wide overlapping ERF) and verify top SAE features with gradient ERF maps.',
-          caveat: 'General CNN analysis; exact RoboCasa ERF overlap depends on our fine-tuned ResNet-18 weights.' },
-        { id: 'p-causal', n: 'P18', arxiv: '1905.11979', score: 8, cls: 'Grounding & Theory', cat: 'grounding', addedBy: 'allen',
-          title: 'Causal Confusion in Imitation Learning', meta: 'de Haan, Jayaraman, Levine (UC Berkeley), NeurIPS 2019',
-          context: 'Behavioral cloning policies trained on visual demonstrations.',
-          whyUs: 'Explains WHY our ResNet-18 kept set might legitimately select static background fixtures (Oven, Window, Microwave) instead of the target drawer: imitation policies latch onto correlated background cues as spatial shortcuts.',
-          method: 'Shows how richer visual inputs allow BC policies to exploit nuisance correlates instead of true causal variables, and tests interventions to separate them.',
-          finding: 'Adding more visual information can worsen imitation learning when nuisance correlations exist in demonstrations.',
-          take: 'If ablating a "distractor" fixture latent breaks the policy, do not assume the SAE failed: the image policy may genuinely rely on that shortcut (just like SIR did).',
-          caveat: 'Focuses on policy training interventions rather than post-hoc SAE interpretability.' },
-        { id: 'p-saebench', n: 'P19', arxiv: '2503.09532', score: 8, cls: 'SAE Evaluation', cat: 'sae', addedBy: 'allen',
-          title: 'SAEBench: A Comprehensive Benchmark for Sparse Autoencoders in Language Model Interpretability', meta: 'Karvonen et al., 2025',
-          context: 'Large-scale evaluation of 8 SAE architectures across LLMs.',
-          whyUs: 'Proves that unsupervised proxy metrics (low MSE, low L0) do NOT predict whether an SAE cleanly separates concepts or passes causal removal/unlearning. Directly justifies why our project must evaluate ResNet-18 SAEs using ILSE D-C, R-C, and C-C.',
-          method: 'Benchmarks ReLU, TopK, BatchTopK, JumpReLU, Gated, and Matryoshka SAEs across 8 downstream tasks including feature absorption and targeted concept unlearning.',
-          finding: 'Architectures that win on MSE/L0 often lose on concept disentanglement and causal unlearning; Matryoshka SAEs reduce absorption.',
-          take: 'Never pick our final ResNet-18 SAE purely by lowest MSE; evaluate grounding purity and causal Removal directly.',
-          caveat: 'LLM benchmark suite; we translate its evaluation discipline to RoboCasa object sets.' },
-        { id: 'p-mind', n: 'P7', arxiv: '2611.10400', score: 7, cls: 'Robot-Policy SAE', cat: 'robot', addedBy: 'both',
-          title: 'Detecting and Explaining Robot Policy Failures from Sparse Internal Features (MIND)', meta: 'Ahmed, Nag, Akash, Begum (UNH), Nov 2026',
-          context: 'Per-token mid-layer activations of OpenVLA and pi0.5 in sim and physical manipulation.',
-          whyUs: 'Gives us a strict, non-cherry-picked naming protocol for our ResNet-18 latents: only assign an object label to a feature if precision and recall floors hold on held-out episodes.',
-          method: 'L1 SAEs (4x width) with held-out precision/recall concept naming and causal clamping verification.',
-          finding: 'Clamping named features shifted arm behavior along the named concept in 12 of 14 cases; failure detection reached 0.991 AUROC.',
-          take: 'Adopt held-out precision and recall floors before admitting any SAE latent into our named kept set.',
-          caveat: 'Transformer VLAs; concepts are mostly robot states rather than scene objects.' },
-        { id: 'p-aircraft', n: 'P8', arxiv: '2606.15468', score: 7, cls: 'Vision SAE (CNN)', cat: 'vision', addedBy: 'luca',
-          title: 'Analyzing Visual Aircraft Representations with Sparse Autoencoders', meta: 'Sharma, 2026',
-          context: 'ConvNeXt-Tiny final spatial stage (7x7) on fine-grained aircraft image classification.',
-          whyUs: 'Close spatial CNN analogue to our pre-GAP ResNet-18 tap, confirming that single-feature suppression does nothing while spatially grounded set ablation flips predictions vs. random controls.',
-          method: 'SAE (768 to 8192) on the final CNN stage before pooling; compares local vs. global feature suppression and region blur against random controls.',
-          finding: 'Blurring the feature region flipped 22% of predictions vs. 4.5% for random regions; suppressing a single feature flipped nothing.',
-          take: 'Supports ablating object feature sets globally across spatial cells rather than single latents.',
-          caveat: 'Single-step classifier, one layer, hand-picked features.' },
-        { id: 'p-patchsae', n: 'P9', arxiv: '2412.05276', score: 7, cls: 'Vision SAE', cat: 'vision', addedBy: 'both',
-          title: 'PatchSAE: Sparse Autoencoders Reveal Selective Remapping of Visual Concepts During Adaptation', meta: 'Lim, Choi, Choo, Schneider, CVPR 2025',
-          context: 'CLIP ViT-B/16 patch tokens (layer 11) on natural image classification.',
-          whyUs: 'Shows how per-patch SAE activations act as interpretable spatial soft masks and proves that even unablated SAE splicing carries a measurable accuracy cost that must be reported as a baseline.',
-          method: 'Per-patch SAE (64x expansion) on CLIP ViT layer 11; splices reconstruction back in and masks top concept latents.',
-          finding: 'Unablated SAE splicing dropped accuracy from 68.25% to 64.82%; patch-level latents cleanly localize semantic objects.',
-          take: 'Report unablated SAE splicing cost on ResNet-18 before interpreting any ablation drop as Consequence (C-C).',
-          caveat: 'ViT patches with global self-attention (not CNN receptive fields) in 1-step classification.' },
-        { id: 'p-craft', n: 'P20', arxiv: '2211.10154', score: 7, cls: 'Vision / CNN Baseline', cat: 'vision', addedBy: 'allen',
-          title: 'CRAFT: Concept Recursive Activation FacTorization for Explainability', meta: 'Fel, Picard, Bethune, Boissin, Vigouroux, Colin, Cadene, Serre, CVPR 2023',
-          context: 'ResNet image classifiers on ImageNet.',
-          whyUs: 'Because ResNet-18 layer4 is post-ReLU (strictly non-negative), CRAFT (recursive NMF + Sobol sensitivity) is our strongest non-SAE baseline to test whether overcomplete SAEs actually beat undercomplete NMF for object kept sets.',
-          method: 'Applies Non-negative Matrix Factorization (NMF) to post-ReLU CNN activations and estimates concept causal importance via Sobol indices.',
-          finding: 'Extracts coherent object and part concepts directly from ResNet feature maps with high human interpretability.',
-          take: 'Ideal Seminar comparison baseline (Family 2 vs. Family 3) to justify why we need overcomplete SAEs over NMF.',
-          caveat: 'Undercomplete factorization (fewer factors than channels) cannot resolve superposition across dozens of kitchen objects.' },
-        { id: 'p-matryoshka', n: 'P21', arxiv: '2503.17547', score: 7, cls: 'SAE Architecture', cat: 'sae', addedBy: 'allen',
-          title: 'Learning Multi-Level Features with Matryoshka Sparse Autoencoders', meta: 'Bussmann, Nabeshima, Karvonen, Nanda, 2025',
-          context: 'LLMs only (Gemma-2-2B and TinyStories); NOT yet tested on vision CNNs.',
-          whyUs: 'Directly targets our whole-object vs. object-part question: nested dictionary prefixes force early latents to capture coarse whole objects ("drawer") while later latents refine fine affordance parts ("drawer handle"), cutting feature absorption.',
-          method: 'Trains multiple nested prefix reconstructions simultaneously inside one SAE so smaller prefixes must reconstruct coarse structure first.',
-          finding: 'Substantially reduces feature absorption and preserves hierarchical concept structure compared to flat TopK/BatchTopK SAEs.',
-          take: 'High-upside theoretical extension for our Seminar blueprint on whole-object vs. part granularity.',
-          caveat: 'LLM-only in the original paper; applying it to ResNet-18 spatial grids is an untested adaptation.' },
       ];
 
       let paperState = { author: 'all', cat: 'all', sort: 'score' };
