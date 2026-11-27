@@ -258,28 +258,18 @@
           Does an end-to-end vision policy form an internal representation of objects without explicit supervision? Uncovering emergent latent kept sets via Sparse Autoencoders on robot manipulation.
         </p>
 
-        <!-- Primary Action Buttons (Large iOS Style) -->
+        <!-- Primary Action Buttons (Focused iOS Style, No Duplication) -->
         <div class="pt-2 flex flex-wrap justify-center items-center gap-3 sm:gap-4">
           <button onclick="navigate('tensor-studio')"
              class="btn-ios px-6 py-3.5 rounded-full bg-ios-blue hover:bg-ios-blueHover text-white font-semibold text-sm transition shadow-ios-button flex items-center space-x-2">
             <span>Explore Interactive Lab</span>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
           </button>
-          <a href="https://docs.google.com/presentation/d/1mFDo7Pkut4FRN9KIvGs0BECcrez3ElA9oxkdym2P1z8/edit?usp=sharing" target="_blank"
+          <button onclick="navigate('papers')"
              class="btn-ios px-6 py-3.5 rounded-full bg-ios-card dark:bg-ios-darkCard hover:bg-ios-cardHover border border-ios-border dark:border-ios-darkBorder text-ios-text dark:text-ios-darkText font-semibold text-sm transition shadow-ios flex items-center space-x-2">
-            <svg class="w-4 h-4 text-ios-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
-            <span>Google Slides</span>
-          </a>
-          <a href="https://miro.com/welcomeonboard/Q3BMR0hTZ09UditVS2hqUU1zZGRBZ0RnTlVVRGc4OGtyYzZieUkycDkxakRtYm5YWnZSZ0lodTQ2N0o4Nys4bG5ra0xHMEMrSVpaVTFCVkNPYllQd21yRE5KcTdYZDZxNXNFdFF3Mnd1ZWVHV1VHSFdxN25DNEtCOW1uVXdjNnp3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=911869718076" target="_blank"
-             class="btn-ios px-6 py-3.5 rounded-full bg-ios-card dark:bg-ios-darkCard hover:bg-ios-cardHover border border-ios-border dark:border-ios-darkBorder text-ios-text dark:text-ios-darkText font-semibold text-sm transition shadow-ios flex items-center space-x-2">
-            <svg class="w-4 h-4 text-ios-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
-            <span>Miro Canvas</span>
-          </a>
-          <a href="sir_code_mindmap.md"
-             class="btn-ios px-6 py-3.5 rounded-full bg-ios-purple/10 hover:bg-ios-purple/20 text-ios-purple font-semibold text-sm transition border border-ios-purple/30 flex items-center space-x-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
-            <span>Code Mind Map</span>
-          </a>
+            <svg class="w-4 h-4 text-ios-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Literature &amp; Papers</span>
+          </button>
           <a href="heatmap_explained.html"
              class="btn-ios px-6 py-3.5 rounded-full bg-ios-orange/10 hover:bg-ios-orange/20 text-ios-orange font-semibold text-sm transition border border-ios-orange/30 flex items-center space-x-2">
             <span>Heatmap Walkthrough</span>
@@ -851,76 +841,111 @@
     <!-- VIEW: RELATED PAPERS -->
     <!-- ======================================================== -->
     <div id="view-papers" class="spa-view hidden space-y-6 text-xs">
-      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4">
-        <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-cyan">Literature</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
-          Most Relevant Papers
-        </h2>
-        <p class="text-ios-secondary dark:text-ios-darkSecondary mt-1 leading-relaxed max-w-3xl">
-          The nine papers that shape our method, placed in our pipeline. Relevance (1 to 10) means how directly a paper informs our setup:
-          per-camera TopK SAEs on ResNet-18 layer 3 / 4, spliced back into the MDT, with Discovery, Removal and Consequence tested in closed-loop RoboCasa rollouts.
-        </p>
+      <div class="border-b border-ios-border dark:border-ios-darkBorder pb-4 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs uppercase font-mono tracking-widest font-semibold text-ios-cyan">Literature &amp; Research Base</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-ios-text dark:text-ios-darkText tracking-tight mt-1">
+            Most Relevant Papers
+          </h2>
+          <p class="text-ios-secondary dark:text-ios-darkSecondary mt-1 leading-relaxed max-w-3xl">
+            Curated papers shaping our <b class="text-ios-text dark:text-ios-darkText">ResNet-18 + SAE implicit kept-set</b> investigation: understanding <em>what</em> the visual encoder learns, <em>how</em> sparse features bind to objects, and <em>why</em> specific objects are selected. Every entry contrasts the paper's original context against our exact RoboCasa 128&times;128 ResNet-18 setup.
+          </p>
+        </div>
+        <div id="paperStatsStrip" class="flex flex-wrap items-center gap-1.5 font-mono text-[10px] flex-shrink-0"></div>
       </div>
 
       <!-- Pipeline context -->
       <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios space-y-4">
-        <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Where each paper fits in our pipeline</h3>
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Where each paper fits in our ResNet-18 + SAE kept-set pipeline</h3>
+          <span class="font-mono text-[10px] text-ios-secondary">Click any chip to jump to card</span>
+        </div>
         <div class="flex flex-col lg:flex-row lg:items-stretch gap-2">
           <div class="flex-1 p-3 rounded-2xl bg-black/5 dark:bg-white/5">
-            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary">1 &middot; Policy</div>
-            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Cameras &rarr; ResNet-18</div>
-            <div class="text-ios-secondary mt-1">Tap layer 3 / layer 4, one per camera</div>
-            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-base">SIR</span></div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary">1 &middot; Visual Backbone</div>
+            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">RoboCasa &rarr; ResNet-18</div>
+            <div class="text-ios-secondary mt-1">128&times;128 &rarr; 4&times;4 ERF &amp; biases</div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-base">SIR</span><span class="paper-chip" data-target="p-erf">P17</span><span class="paper-chip" data-target="p-causal">P18</span></div>
           </div>
           <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
           <div class="flex-1 p-3 rounded-2xl bg-ios-blue/10">
             <div class="font-mono text-[10px] uppercase tracking-wider text-ios-blue">2 &middot; Decompose</div>
-            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">TopK SAE per camera</div>
-            <div class="text-ios-secondary mt-1">Spatial latents per grid cell</div>
-            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-gao">P3</span><span class="paper-chip" data-target="p-aircraft">P8</span><span class="paper-chip" data-target="p-patchsae">P9</span></div>
+            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Spatial SAE per camera</div>
+            <div class="text-ios-secondary mt-1">Dynamic sparsity, stability, CNNs</div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-gao">P3</span><span class="paper-chip" data-target="p-batchtopk">P10</span><span class="paper-chip" data-target="p-jumprelu">P11</span><span class="paper-chip" data-target="p-salve">P12</span><span class="paper-chip" data-target="p-inception">P13</span><span class="paper-chip" data-target="p-archetypal">P14</span><span class="paper-chip" data-target="p-craft">P20</span><span class="paper-chip" data-target="p-matryoshka">P21</span><span class="paper-chip" data-target="p-aircraft">P8</span><span class="paper-chip" data-target="p-patchsae">P9</span></div>
           </div>
           <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
           <div class="flex-1 p-3 rounded-2xl bg-ios-purple/10">
-            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-purple">3 &middot; Splice</div>
-            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">SAE output + error &rarr; MDT</div>
-            <div class="text-ios-secondary mt-1">Check spliced success first</div>
-            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-event">P1</span><span class="paper-chip" data-target="p-notall">P2</span><span class="paper-chip" data-target="p-marks">P4</span><span class="paper-chip" data-target="p-patchsae">P9</span></div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-ios-purple">3 &middot; Splice &amp; Error</div>
+            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Reconstruct + dark matter</div>
+            <div class="text-ios-secondary mt-1">Fidelity vs. residual leakage</div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-event">P1</span><span class="paper-chip" data-target="p-notall">P2</span><span class="paper-chip" data-target="p-marks">P4</span><span class="paper-chip" data-target="p-darkmatter">P16</span><span class="paper-chip" data-target="p-patchsae">P9</span></div>
           </div>
           <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
           <div class="flex-1 p-3 rounded-2xl bg-ios-green/10">
             <div class="font-mono text-[10px] uppercase tracking-wider text-ios-green">4 &middot; Discovery</div>
-            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Ground &amp; name latents</div>
-            <div class="text-ios-secondary mt-1">Bounding-box IoU, held-out naming</div>
-            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-netdissect">P6</span><span class="paper-chip" data-target="p-mind">P7</span><span class="paper-chip" data-target="p-event">P1</span></div>
+            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Ground &amp; name kept set</div>
+            <div class="text-ios-secondary mt-1">Box IoU, precision/recall, parts</div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-netdissect">P6</span><span class="paper-chip" data-target="p-mind">P7</span><span class="paper-chip" data-target="p-salve">P12</span><span class="paper-chip" data-target="p-event">P1</span><span class="paper-chip" data-target="p-saebench">P19</span></div>
           </div>
           <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
           <div class="flex-1 p-3 rounded-2xl bg-ios-orange/10">
             <div class="font-mono text-[10px] uppercase tracking-wider text-ios-orange">5 &middot; Removal &amp; Consequence</div>
-            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Ablate latent sets in closed loop</div>
-            <div class="text-ios-secondary mt-1">vs. random and irrelevant-object controls</div>
-            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-drvla">P5</span><span class="paper-chip" data-target="p-marks">P4</span><span class="paper-chip" data-target="p-notall">P2</span><span class="paper-chip" data-target="p-aircraft">P8</span></div>
+            <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Ablate kept vs. excluded</div>
+            <div class="text-ios-secondary mt-1">Absorption, dark matter, controls</div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-drvla">P5</span><span class="paper-chip" data-target="p-marks">P4</span><span class="paper-chip" data-target="p-notall">P2</span><span class="paper-chip" data-target="p-absorption">P15</span><span class="paper-chip" data-target="p-darkmatter">P16</span><span class="paper-chip" data-target="p-aircraft">P8</span><span class="paper-chip" data-target="p-saebench">P19</span></div>
           </div>
           <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
           <div class="flex-1 p-3 rounded-2xl bg-ios-red/10">
             <div class="font-mono text-[10px] uppercase tracking-wider text-ios-red">6 &middot; Compare</div>
             <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Implicit object set vs. SIR</div>
-            <div class="text-ios-secondary mt-1">The gap no paper covers yet</div>
+            <div class="text-ios-secondary mt-1">What was selected &amp; why</div>
             <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-base">SIR</span><span class="paper-chip" data-target="p-base">ILSE</span></div>
           </div>
         </div>
-        <p class="text-ios-secondary leading-relaxed"><b class="text-ios-text dark:text-ios-darkText">Our gap:</b> robot-policy SAE papers (P1, P2, P5, P7) use transformer VLAs with token or pooled vectors and ground features to motion or state concepts. Vision SAE papers (P8, P9) are spatial but study classifiers. Nobody combines spatial CNN SAEs inside a robot policy with object-level grounding and closed-loop D-R-C.</p>
+        <p class="text-ios-secondary leading-relaxed"><b class="text-ios-text dark:text-ios-darkText">Our gap:</b> robot-policy SAE papers (P1, P2, P5, P7) study transformer VLAs and ground features to motion or robot state; vision CNN SAE papers (P8, P12, P13, P20) study single-step classifiers; LLM SAE papers (P3, P10, P11, P15, P16, P19, P21) assume discrete text tokens. Nobody has combined spatial CNN SAEs on a RoboCasa ResNet-18 backbone with object-level kept-set grounding and ILSE's D-R-C evaluation.</p>
       </div>
 
       <!-- Base papers -->
       <div id="p-base" class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios">
-        <div class="flex flex-wrap items-baseline justify-between gap-2">
-          <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Base papers (lab-internal, not embedded)</h3>
-          <span class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary">Foundation</span>
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Base Papers (Lab-Internal)</h3>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-ios-green/12 text-ios-green border border-ios-green/25">Allen &amp; Luca</span>
+          </div>
+          <span class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary">Foundation &middot; 10/10</span>
         </div>
         <ul class="list-disc pl-5 mt-3 space-y-1.5 text-ios-secondary leading-relaxed">
-          <li><b class="text-ios-text dark:text-ios-darkText">SIR</b> (Mattes et al., CVPR 2026): scene-graph policy that learns an explicit, sparse kept set of objects. Our comparison target.</li>
-          <li><b class="text-ios-text dark:text-ios-darkText">ILSE</b> (under review, ICLR 2027): defines the Discovery, Removal and Consequence conditions we test on an implicit, SAE-based object set.</li>
+          <li><b class="text-ios-text dark:text-ios-darkText">SIR</b> (Mattes et al., CVPR 2026): scene-graph policy that learns an explicit, sparse kept set of objects. Our direct comparison target to see whether an unconstrained ResNet-18 image policy attends to the same objects or shortcuts.</li>
+          <li><b class="text-ios-text dark:text-ios-darkText">ILSE</b> (under review, ICLR 2027): formalizes the Discovery (D-C), Removal (R-C), and Consequence (C-C) criteria and leak taxonomy we test on our implicit SAE kept set.</li>
         </ul>
+      </div>
+
+      <!-- iOS Filter & Sort Bar -->
+      <div class="bg-ios-card/90 dark:bg-ios-darkCard/90 ios-glass border border-ios-border dark:border-ios-darkBorder rounded-3xl p-4 shadow-ios flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary mr-1">Added by</span>
+          <div class="inline-flex bg-black/5 dark:bg-white/10 p-1 rounded-full gap-0.5" id="authorFilterBar">
+            <button onclick="setPaperFilter('author','all')" data-val="all" class="paper-filter-btn active">All</button>
+            <button onclick="setPaperFilter('author','both')" data-val="both" class="paper-filter-btn">Both</button>
+            <button onclick="setPaperFilter('author','allen')" data-val="allen" class="paper-filter-btn">Allen</button>
+            <button onclick="setPaperFilter('author','luca')" data-val="luca" class="paper-filter-btn">Luca</button>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="inline-flex flex-wrap bg-black/5 dark:bg-white/10 p-1 rounded-full gap-0.5" id="catFilterBar">
+            <button onclick="setPaperFilter('cat','all')" data-val="all" class="paper-filter-btn active">All Focus</button>
+            <button onclick="setPaperFilter('cat','sae')" data-val="sae" class="paper-filter-btn">SAE &amp; Failure Modes</button>
+            <button onclick="setPaperFilter('cat','vision')" data-val="vision" class="paper-filter-btn">Vision / CNN</button>
+            <button onclick="setPaperFilter('cat','robot')" data-val="robot" class="paper-filter-btn">Robot Policy</button>
+            <button onclick="setPaperFilter('cat','grounding')" data-val="grounding" class="paper-filter-btn">Grounding &amp; Theory</button>
+          </div>
+
+          <button id="paperSortBtn" onclick="togglePaperSort()" class="btn-ios px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 text-ios-text dark:text-ios-darkText font-mono text-[11px] font-semibold transition flex items-center gap-1.5">
+            <span>Sort: Score</span>
+          </button>
+        </div>
       </div>
 
       <!-- Paper cards -->
@@ -939,7 +964,7 @@
         <p class="text-ios-secondary dark:text-ios-darkSecondary mt-1 leading-relaxed max-w-3xl">
           The seminar is a literature study: no implementation or experiments (those belong to the Praktikum).
           Working title: <b class="text-ios-text dark:text-ios-darkText">"Remove the Oven, Break the Robot? Testing Object Explanations with Sparse Autoencoders"</b>
-          Sources are listed on the <a href="#papers" class="text-ios-blue hover:underline">Papers</a> page (P1 to P9) plus SIR and ILSE.
+          Sources are listed on the <a href="#papers" class="text-ios-blue hover:underline">Papers</a> page (P1 to P21) plus SIR and ILSE.
         </p>
       </div>
 
@@ -1081,118 +1106,388 @@
     </div>
 
     <style>
-      .paper-chip { cursor: pointer; font-family: ui-monospace, monospace; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 9999px; background: rgba(0,113,227,0.12); color: #0071E3; }
-      .paper-chip:hover { background: rgba(0,113,227,0.25); }
+      .paper-chip { cursor: pointer; font-family: ui-monospace, monospace; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 9999px; background: rgba(0,113,227,0.12); color: #0071E3; transition: background 0.15s, transform 0.15s; }
+      .paper-chip:hover { background: rgba(0,113,227,0.24); transform: translateY(-1px); }
+      .paper-filter-btn { padding: 5px 12px; border-radius: 9999px; font-size: 11px; font-weight: 600; color: #86868B; transition: all 0.16s ease; cursor: pointer; }
+      .paper-filter-btn:hover { color: #1D1D1F; }
+      .dark .paper-filter-btn:hover { color: #F5F5F7; }
+      .paper-filter-btn.active { background: #FFFFFF; color: #0071E3; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+      .dark .paper-filter-btn.active { background: #131824; color: #00A3FF; box-shadow: 0 2px 8px rgba(0,0,0,0.35); }
+      .paper-card { transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease; }
+      .paper-card:hover { transform: translateY(-1px); }
     </style>
+
+    <!-- Single Shared iOS PDF Reader Modal (Fast: zero inline iframes in card list) -->
+    <div id="pdfModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/55 ios-glass" onclick="if(event.target===this) closePdfModal()">
+      <div class="w-full max-w-5xl h-[88vh] bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+        <div class="px-5 py-3.5 border-b border-ios-border dark:border-ios-darkBorder flex flex-wrap items-center justify-between gap-3 bg-ios-bg/70 dark:bg-ios-darkBg/70">
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-2 text-[10px] font-mono">
+              <span id="pdfModalId" class="font-bold text-ios-blue"></span>
+              <span id="pdfModalAuthor"></span>
+              <span id="pdfModalScore" class="font-bold"></span>
+            </div>
+            <h4 id="pdfModalTitle" class="text-xs sm:text-sm font-bold text-ios-text dark:text-ios-darkText truncate mt-0.5"></h4>
+          </div>
+          <div class="flex items-center gap-2 flex-shrink-0 text-xs">
+            <a id="pdfModalAbsLink" href="#" target="_blank" rel="noopener" class="btn-ios px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 text-ios-text dark:text-ios-darkText font-medium">arXiv Abstract</a>
+            <a id="pdfModalOpenLink" href="#" target="_blank" rel="noopener" class="btn-ios px-3 py-1.5 rounded-full bg-ios-blue hover:bg-ios-blueHover text-white font-semibold shadow-ios-button">Open Tab</a>
+            <button onclick="closePdfModal()" class="btn-ios w-8 h-8 rounded-full bg-black/5 dark:bg-white/10 hover:bg-ios-red/15 hover:text-ios-red flex items-center justify-center font-bold text-sm" title="Close (Esc)">&times;</button>
+          </div>
+        </div>
+        <div class="flex-1 bg-white relative">
+          <iframe id="pdfModalFrame" src="about:blank" title="PDF Reader" class="w-full h-full border-0"></iframe>
+        </div>
+      </div>
+    </div>
+
     <script>
       const PAPERS = [
-        { id: 'p-event', n: 'P1', arxiv: '2605.17204', score: 9, cls: 'Robot-policy SAE',
+        { id: 'p-event', n: 'P1', arxiv: '2605.17204', score: 9, cls: 'Robot-Policy SAE', cat: 'robot', addedBy: 'luca',
           title: 'Event-Grounded Sparse Autoencoders for Vision-Language-Action Policies', meta: 'Jin, Chatterjee, Kumar, Paleja (Purdue), 2026',
-          problem: 'Ranking SAE features by activation says nothing about whether they matter for behavior.',
-          method: 'BatchTopK SAEs (k = 64) with AuxK on OpenVLA and π0.5 residual streams. Features are scored against kinematic task events and edited in closed loop while the residual is preserved.',
-          finding: 'Splicing the SAE reconstruction dropped success to near 0 % at several OpenVLA layers, even though reconstruction looked fine. Event-aligned feature removal lowers success against a random-latent baseline.',
-          take: 'Measure spliced success before any ablation. Use a random-alive-latent baseline.',
-          caveat: 'Transformer VLA tokens; events are motions, not objects.' },
-        { id: 'p-notall', n: 'P2', arxiv: '2603.19233', score: 9, cls: 'Robot-policy SAE',
+          context: 'Transformer VLA residual streams (OpenVLA, pi0.5) grounded to kinematic motion events.',
+          whyUs: 'Shows why high SAE activation alone never proves an object belongs in our kept set: you must verify spliced policy fidelity first and compare feature removal against a random-alive-latent baseline.',
+          method: 'BatchTopK SAEs (k = 64) with AuxK on OpenVLA and pi0.5. Features scored against kinematic task events and edited in closed loop while preserving the residual.',
+          finding: 'Splicing the SAE reconstruction dropped success to near 0% at several OpenVLA layers despite good MSE. Event-aligned feature removal lowers success vs. random latents.',
+          take: 'Always measure spliced ResNet-18 fidelity before ablation; always run a random-alive-latent baseline.',
+          caveat: 'Transformer VLA tokens; grounds to motions, not spatial kitchen objects.' },
+        { id: 'p-notall', n: 'P2', arxiv: '2603.19233', score: 9, cls: 'Robot-Policy SAE', cat: 'robot', addedBy: 'both',
           title: 'Not All Features Are Created Equal: A Mechanistic Study of Vision-Language-Action Models', meta: 'Grant, Zhao, Wang (Case Western), 2026',
-          problem: 'Do VLAs represent task concepts or coordinate-bound motor programs?',
-          method: '520+ TopK SAEs (k = 64) across six architectures. Activation injection, single-feature ablation, and SAE write-back as a residual edit h + Wᵀ(z′ − z), which keeps the error term.',
-          finding: 'A mean-pooled SAE cut π0.5 success from 89.9 % to 3.3 %. Ablating a single feature had no effect on 28 to 92 % of concept/task pairs.',
-          take: 'Write back edits as residual corrections, ablate sets of latents, and keep spatial resolution.',
-          caveat: 'Mostly simulation; transformer policies.' },
-        { id: 'p-gao', n: 'P3', arxiv: '2406.04093', score: 9, cls: 'SAE method',
+          context: '520+ TopK SAEs across 6 transformer VLA architectures on LIBERO, MetaWorld, and ALOHA.',
+          whyUs: 'Directly validates two core findings for our ResNet-18 kept set: (1) pooling before the SAE destroys control (supporting our pre-GAP layer3/layer4 tap), and (2) ablating a single latent rarely moves behavior, so kept-set removal must ablate object feature sets.',
+          method: 'TopK SAEs (k = 64) with activation injection, single-feature ablation, and residual write-back h + W_dec(z_new - z) that preserves the error term.',
+          finding: 'A mean-pooled SAE cut pi0.5 success from 89.9% to 3.3%. Single-feature ablation had no effect on 28 to 92% of concept/task pairs; motor programs bind to workspace coordinates.',
+          take: 'Keep spatial resolution before GAP, write back edits as residual deltas, and ablate object latent sets.',
+          caveat: 'Transformer VLAs rather than a language-blind ResNet-18 CNN.' },
+        { id: 'p-gao', n: 'P3', arxiv: '2406.04093', score: 9, cls: 'SAE Architecture', cat: 'sae', addedBy: 'both',
           title: 'Scaling and Evaluating Sparse Autoencoders', meta: 'Gao et al. (OpenAI), 2024 / ICLR 2025',
-          problem: 'L1 SAEs are hard to tune and accumulate dead latents at scale.',
-          method: 'TopK activation (sparsity set directly by k), MSE loss only, AuxK loss on dead latents, tied initialization, unit-norm decoder.',
-          finding: 'Better sparsity/MSE frontier than ReLU, Gated and ProLU SAEs. Dead latents 7 % instead of up to 90 %. Dense solutions appear once k approaches about a third of the width.',
-          take: 'This is our SAE recipe. Sweep k well below 256 (layer 3) and 512 (layer 4).',
-          caveat: 'Language models only.' },
-        { id: 'p-marks', n: 'P4', arxiv: '2403.19647', score: 9, cls: 'SAE method',
+          context: 'LLM residual streams (GPT-4 / GPT-2) with discrete text tokens.',
+          whyUs: 'Gives our baseline TopK + AuxK SAE training recipe (unit-norm decoder, tied init, dead-latent revival) so our 4096-D ResNet-18 dictionary avoids dead latents without fragile L1 tuning.',
+          method: 'TopK activation (sparsity set directly by k), MSE loss only, AuxK auxiliary loss on dead latents, tied encoder/decoder init, unit-norm decoder columns.',
+          finding: 'Dominates ReLU, Gated, and ProLU SAEs on the sparsity/MSE frontier; cuts dead latents from up to 90% down to ~7%. Dense collapse starts when k approaches ~1/3 of input width.',
+          take: 'Baseline SAE recipe for layer3 (256-D) and layer4 (512-D); keep k well below 1/3 of channel width.',
+          caveat: 'LLM tokens only; fixed per-cell k wastes capacity on empty RoboCasa background cells (see P10, P11).' },
+        { id: 'p-marks', n: 'P4', arxiv: '2403.19647', score: 9, cls: 'SAE & Causality', cat: 'sae', addedBy: 'both',
           title: 'Sparse Feature Circuits: Discovering and Editing Interpretable Causal Graphs in Language Models', meta: 'Marks, Rager, Michaud, Belinkov, Bau, Mueller, 2024 / ICLR 2025',
-          problem: 'Neuron-level circuits are polysemantic and huge.',
-          method: 'Activation = sum of SAE features + error term, which stays in the graph. Effects estimated with attribution patching or integrated gradients; zero vs. mean ablation; faithfulness and completeness metrics.',
-          finding: 'About 100 features explain behavior that needs about 1,500 neurons. Ablating a few features removes the behavior; random ablations do nothing.',
-          take: 'Keep the error term when splicing. Use attribution to preselect latents before expensive rollouts. Report faithfulness.',
-          caveat: 'Language models; open-loop metrics.' },
-        { id: 'p-drvla', n: 'P5', arxiv: '2603.19183', score: 8, cls: 'Robot-policy SAE',
+          context: 'Language models in open-loop classification/completion tasks.',
+          whyUs: 'Formalizes the exact decomposition x = sum(SAE features) + error term and attribution patching, letting us pre-rank which ResNet-18 spatial latents actually drive downstream actions before running expensive RoboCasa rollouts.',
+          method: 'Keeps the SAE error term in the computation graph; estimates feature effects via attribution patching and integrated gradients; compares zero vs. mean ablation.',
+          finding: 'Roughly 100 sparse features explain behavior that requires ~1,500 polysemantic neurons; ablating discovered features removes the behavior while random ablations do not.',
+          take: 'Track the error term explicitly when splicing; use attribution patching to bridge language-blind layer4 features to task actions.',
+          caveat: 'Open-loop language tasks; keeping the error term can hide excluded-object leakage (see P16).' },
+        { id: 'p-batchtopk', n: 'P10', arxiv: '2412.06410', score: 9, cls: 'SAE Architecture', cat: 'sae', addedBy: 'allen',
+          title: 'BatchTopK Sparse Autoencoders', meta: 'Bussmann, Leask, Nanda, 2024',
+          context: 'LLM activations where different tokens carry different amounts of information.',
+          whyUs: 'Solves a major flaw of standard TopK (P3) on our 4x4 RoboCasa grid: empty wall or countertop cells should fire ~0 object latents, while cluttered cells around the drawer handle and gripper need more active latents. BatchTopK stops empty cells from polluting our kept set with noise.',
+          method: 'Replaces per-sample TopK with a batch-wide Top(B*k) selection during training, then uses a calibrated global threshold at inference so each spatial cell fires a variable number of features.',
+          finding: 'Better reconstruction at the same average L0 than standard TopK without forcing sparse or empty inputs to activate spurious features.',
+          take: 'Preferred upgrade over fixed per-cell TopK for our 4x4 and 8x8 RoboCasa spatial grids.',
+          caveat: 'Evaluated on LLMs; global inference threshold must be calibrated across all 16 spatial cells.' },
+        { id: 'p-jumprelu', n: 'P11', arxiv: '2407.14435', score: 9, cls: 'SAE Architecture', cat: 'sae', addedBy: 'allen',
+          title: 'Jumping Ahead: Improving Reconstruction Fidelity with JumpReLU Sparse Autoencoders', meta: 'Rajamanoharan et al. (Google DeepMind), 2024',
+          context: 'Gemma-2 LLM residual streams.',
+          whyUs: 'Directly closes ILSE leak class R3 (survivor distortion) inside the SAE: under fixed-k TopK, a loud distractor object in a spatial cell can steal slots and suppress a kept object. JumpReLU gives each latent its own independent firing threshold.',
+          method: 'Replaces ReLU + L1 or TopK with a per-feature learnable threshold theta_j trained via straight-through estimators, optimizing L0 directly.',
+          finding: 'Matches or beats TopK and Gated SAEs on reconstruction fidelity while eliminating L1 shrinkage and fixed-k slot competition.',
+          take: 'Strong candidate when testing strict Removal (R-C), because dropping distractor features does not alter kept-feature thresholds.',
+          caveat: 'Requires tuning the L0 penalty and bandwidth hyperparameter; originally validated on LLMs.' },
+        { id: 'p-salve', n: 'P12', arxiv: '2512.15938', score: 9, cls: 'Vision SAE (ResNet-18)', cat: 'vision', addedBy: 'allen',
+          title: 'SALVE: Sparse Autoencoder-Latent Vector Editing for Mechanistic Control of Neural Networks', meta: 'Flovik, 2025',
+          context: 'Single-step image classification on ResNet-18 and ViT-B/16.',
+          whyUs: 'Directly validated on ResNet-18 (our exact visual backbone!). Pairs SAE latents with spatial grounding (Grad-FAM) and measures the suppression threshold alpha_crit needed to flip outputs, giving us a concrete ResNet-18 SAE reference.',
+          method: 'Trains an L1 SAE on ResNet-18 activations, localizes latent concepts spatially via Grad-FAM, and evaluates causal control by suppressing concept latents.',
+          finding: 'Demonstrates that ResNet-18 intermediate representations decompose cleanly into spatially grounded, causally editable SAE features.',
+          take: 'Direct ResNet-18 validation blueprint; combine its spatial localization check with our RoboCasa box-IoU grounding.',
+          caveat: 'Single-step image classification rather than closed-loop 10-step robotics rollouts.' },
+        { id: 'p-absorption', n: 'P15', arxiv: '2409.14507', score: 9, cls: 'SAE Failure Modes', cat: 'sae', addedBy: 'allen',
+          title: 'A is for Absorption: Studying Feature Splitting and Absorption in Sparse Autoencoders', meta: 'Chanin, Wilken-Smith, Dulka, Bhatnagar, Bloom, 2024',
+          context: 'LLM SAEs (Gemma Scope) studying hierarchical concept splitting.',
+          whyUs: 'Exposes a critical trap for our kept-set Removal test (R-C): a narrow feature ("drawer-handle-on-left") can absorb the general "drawer" direction. Zeroing the general "drawer" latent still leaves absorbed copies firing, causing false Removal failures.',
+          method: 'Measures how often a parent concept latent fails to fire when a specific child latent is active, even when the parent concept is clearly present.',
+          finding: 'Feature absorption occurs widely across L1, TopK, and JumpReLU SAEs and increases with dictionary width M.',
+          take: 'When testing Removal of an object from K_latent, ablate the full cluster of co-grounded latents (not just the single top-IoU feature).',
+          caveat: 'Studied in LLMs; in RoboCasa, absorption likely manifests as viewpoint-specific or kitchen-layout-specific object copies.' },
+        { id: 'p-darkmatter', n: 'P16', arxiv: '2410.14670', score: 9, cls: 'SAE Failure Modes', cat: 'sae', addedBy: 'allen',
+          title: 'Decomposing The Dark Matter of Sparse Autoencoders', meta: 'Engels, Smith, Tegmark (MIT), TMLR 2025',
+          context: 'LLM residual streams analyzing SAE reconstruction error e = x - x_hat.',
+          whyUs: 'Defines the central catch-22 of our ResNet-18 SAE Removal test: SAE error e is NOT random noise, it is structured uncaptured signal. Dropping e breaks the policy off-manifold; keeping e lets excluded objects leak straight past our kept set.',
+          method: 'Analyzes the linear predictability, scaling behavior, and nonlinear structure of SAE reconstruction residuals across dictionary widths and layers.',
+          finding: 'Roughly half of SAE error variance is linearly predictable from input activations, proving real semantic information hides inside the residual error.',
+          take: 'Report BOTH Mode A (pure reconstruction x_hat, strict removal) and Mode B (residual-preserving x_hat + e) so we bound dark-matter leakage.',
+          caveat: 'Measured on LLMs; our 128x128 ResNet-18 layer4 has far lower intrinsic dimensionality, so we should measure how much variance stays in e.' },
+        { id: 'p-drvla', n: 'P5', arxiv: '2603.19183', score: 8, cls: 'Robot-Policy SAE', cat: 'robot', addedBy: 'both',
           title: 'Sparse Autoencoders Reveal Interpretable and Steerable Features in VLA Models', meta: 'Swann, McGranahan, Buurmeijer, Kennedy, Schwager (Stanford), 2026',
-          problem: 'Are VLA SAE features interpretable, general and causally steerable?',
-          method: 'TopK + AuxK SAEs on mean-pooled residual streams of π0.5 and OpenVLA. A classifier separates general from memorized features. Ablation by projecting out decoder directions, plus additive steering.',
-          finding: '79 % of sampled features were interpretable vs. 30 % of neurons. Ablating the top-4 general features: 0/40 successes; ablating random memorized ones: 37/40.',
-          take: 'Tiered ablations with random controls. Check whether our latents encode memorized demos rather than objects.',
-          caveat: 'Pooled vectors, no spatial grounding.' },
-        { id: 'p-netdissect', n: 'P6', arxiv: '1704.05796', score: 8, cls: 'Grounding',
+          context: 'Mean-pooled residual streams of pi0.5 and OpenVLA on LIBERO and DROID.',
+          whyUs: 'Teaches us a crucial diagnostic for Discovery (D-C): distinguish generalizable object features from episode-memorization latents that only fire on one specific RoboCasa kitchen layout.',
+          method: 'TopK + AuxK SAEs on pooled VLA states; classifies general vs. memorized features and tests tiered ablations against random controls.',
+          finding: '79% of sampled features were interpretable vs. 30% of raw neurons. Ablating the top-4 general features dropped success to 0/40; ablating memorized ones kept 37/40.',
+          take: 'Measure cross-scene generality of every grounded ResNet-18 latent so our kept set reflects true object concepts rather than memorized scenes.',
+          caveat: 'Uses pooled vectors with no spatial grid; relies on VLA transformer states.' },
+        { id: 'p-netdissect', n: 'P6', arxiv: '1704.05796', score: 8, cls: 'Grounding & Theory', cat: 'grounding', addedBy: 'both',
           title: 'Network Dissection: Quantifying Interpretability of Deep Visual Representations', meta: 'Bau, Zhou, Khosla, Oliva, Torralba (MIT), CVPR 2017',
-          problem: 'How well do individual CNN units align with human concepts?',
-          method: 'Threshold each unit at its top 0.5 % activation, upsample bilinearly, compute dataset-wide IoU against segmentation masks. A unit is a detector if IoU > 0.04.',
-          finding: 'Object and part detectors appear in late layers; ResNets are the most interpretable architecture tested. Rotating the basis destroys most detectors.',
-          take: 'Our grounding protocol: IoU between upsampled latent maps and RoboCasa bounding boxes.',
-          caveat: 'Classifiers; our 4 × 4 maps make upsampling coarse; limited by the label vocabulary.' },
-        { id: 'p-mind', n: 'P7', arxiv: '2611.10400', score: 7, cls: 'Robot-policy SAE',
+          context: 'Supervised CNN classifiers (including ResNet) on ImageNet/Broden segmentation masks.',
+          whyUs: 'Provides the exact mathematical protocol we adapt to turn 4x4 ResNet-18 SAE activation maps into an object kept set: threshold activation maps, upsample bilinearly, and compute dataset-wide IoU against RoboCasa object masks.',
+          method: 'Thresholds each spatial unit at its top 0.5% activation, upsamples bilinearly, and computes IoU against pixel segmentation masks (detector threshold IoU > 0.04).',
+          finding: 'Object and part detectors emerge naturally in late ResNet layers; random basis rotations destroy them, proving axis alignment matters.',
+          take: 'Core IoU grounding formula for Discovery (D-C), extended with precision-in-mask to catch affordance parts like drawer handles.',
+          caveat: 'Single-step classifiers; 4x4 maps on 128x128 frames make bilinear upsampling coarse.' },
+        { id: 'p-inception', n: 'P13', arxiv: '2406.03662', score: 8, cls: 'Vision SAE (CNN)', cat: 'vision', addedBy: 'allen',
+          title: 'The Missing Curve Detectors of InceptionV1: Applying Sparse Autoencoders to InceptionV1 Early Vision', meta: 'Gorton, 2024',
+          context: 'InceptionV1 CNN spatial convolutional feature maps on ImageNet.',
+          whyUs: 'Direct blueprint for training SAEs on per-(h, w) CNN spatial vectors rather than pooled embeddings, proving CNN channels hide cleaner visual detectors in superposition.',
+          method: 'Treats each spatial location (h, w) in a convolutional activation map as an independent training vector for an overcomplete SAE.',
+          finding: 'Uncovers missing orientation and curve detectors that were invisible in individual CNN channels due to polysemantic superposition.',
+          take: 'Validates our exact spatial tapping strategy on ResNet-18 layer3 (8x8) and layer4 (4x4).',
+          caveat: 'Early-layer textures on ImageNet classifiers, not late-layer kitchen objects in closed-loop control.' },
+        { id: 'p-archetypal', n: 'P14', arxiv: '2502.12892', score: 8, cls: 'Vision SAE', cat: 'vision', addedBy: 'allen',
+          title: 'Archetypal SAE: Adaptive and Stable Dictionary Learning for Concept Extraction in Large Vision Models', meta: 'Fel et al. (Kempner / Harvard), ICML 2025',
+          context: 'Large vision backbones (ViT, CLIP, DINOv2) on ImageNet.',
+          whyUs: 'Addresses a silent risk for our kept set: standard SAEs trained with different random seeds discover different dictionaries (and therefore different kept sets!). Anchoring atoms to real activation archetypes stabilizes concepts and keeps reconstructions on-manifold.',
+          method: 'Constrains SAE dictionary atoms to lie inside the convex hull of real visual activations (relaxed archetypal analysis, RA-SAE).',
+          finding: 'Dramatically improves cross-seed dictionary stability and concept identifiability while maintaining strong reconstruction fidelity.',
+          take: 'Always train our ResNet-18 SAE across multiple seeds and check kept-set Jaccard stability; consider RA-SAE if standard SAE reconstructions drift off-manifold.',
+          caveat: 'Evaluated on ViT vision encoders on ImageNet, not ResNet-18 robot policies.' },
+        { id: 'p-erf', n: 'P17', arxiv: '1701.04128', score: 8, cls: 'Grounding & Theory', cat: 'grounding', addedBy: 'allen',
+          title: 'Understanding the Effective Receptive Field in Deep Convolutional Neural Networks', meta: 'Luo, Li, Urtasun, Zemel (Toronto), NeurIPS 2016',
+          context: 'Deep convolutional networks including ResNets on image benchmarks.',
+          whyUs: 'Explains a fundamental limit of ResNet-18 layer4 for ILSE Removal (R-C): a 4x4 cell is NOT an isolated 32x32 pixel crop. Its Gaussian Effective Receptive Field bleeds across neighboring objects before our SAE even sees the tensor (violating ILSE R1).',
+          method: 'Analytically and empirically measures the gradient of a deep spatial unit with respect to input pixels.',
+          finding: 'Effective receptive fields follow a 2D Gaussian that grows with depth and overlaps heavily across adjacent grid cells.',
+          take: 'Compare layer3 (8x8, tighter ERF) vs. layer4 (4x4, wide overlapping ERF) and verify top SAE features with gradient ERF maps.',
+          caveat: 'General CNN analysis; exact RoboCasa ERF overlap depends on our fine-tuned ResNet-18 weights.' },
+        { id: 'p-causal', n: 'P18', arxiv: '1905.11979', score: 8, cls: 'Grounding & Theory', cat: 'grounding', addedBy: 'allen',
+          title: 'Causal Confusion in Imitation Learning', meta: 'de Haan, Jayaraman, Levine (UC Berkeley), NeurIPS 2019',
+          context: 'Behavioral cloning policies trained on visual demonstrations.',
+          whyUs: 'Explains WHY our ResNet-18 kept set might legitimately select static background fixtures (Oven, Window, Microwave) instead of the target drawer: imitation policies latch onto correlated background cues as spatial shortcuts.',
+          method: 'Shows how richer visual inputs allow BC policies to exploit nuisance correlates instead of true causal variables, and tests interventions to separate them.',
+          finding: 'Adding more visual information can worsen imitation learning when nuisance correlations exist in demonstrations.',
+          take: 'If ablating a "distractor" fixture latent breaks the policy, do not assume the SAE failed: the image policy may genuinely rely on that shortcut (just like SIR did).',
+          caveat: 'Focuses on policy training interventions rather than post-hoc SAE interpretability.' },
+        { id: 'p-saebench', n: 'P19', arxiv: '2503.09532', score: 8, cls: 'SAE Evaluation', cat: 'sae', addedBy: 'allen',
+          title: 'SAEBench: A Comprehensive Benchmark for Sparse Autoencoders in Language Model Interpretability', meta: 'Karvonen et al., 2025',
+          context: 'Large-scale evaluation of 8 SAE architectures across LLMs.',
+          whyUs: 'Proves that unsupervised proxy metrics (low MSE, low L0) do NOT predict whether an SAE cleanly separates concepts or passes causal removal/unlearning. Directly justifies why our project must evaluate ResNet-18 SAEs using ILSE D-C, R-C, and C-C.',
+          method: 'Benchmarks ReLU, TopK, BatchTopK, JumpReLU, Gated, and Matryoshka SAEs across 8 downstream tasks including feature absorption and targeted concept unlearning.',
+          finding: 'Architectures that win on MSE/L0 often lose on concept disentanglement and causal unlearning; Matryoshka SAEs reduce absorption.',
+          take: 'Never pick our final ResNet-18 SAE purely by lowest MSE; evaluate grounding purity and causal Removal directly.',
+          caveat: 'LLM benchmark suite; we translate its evaluation discipline to RoboCasa object sets.' },
+        { id: 'p-mind', n: 'P7', arxiv: '2611.10400', score: 7, cls: 'Robot-Policy SAE', cat: 'robot', addedBy: 'both',
           title: 'Detecting and Explaining Robot Policy Failures from Sparse Internal Features (MIND)', meta: 'Ahmed, Nag, Akash, Begum (UNH), Nov 2026',
-          problem: 'Explain why visuomotor policies fail, using named SAE features.',
-          method: 'L1 SAEs (4× width) on per-token mid-layer activations of OpenVLA and π0.5. Features are named from a concept set only if precision and recall floors hold on held-out episodes; names are verified by clamping.',
-          finding: 'Clamping a named feature moved the arm along its concept in 12 of 14 cases. Failure monitor AUROC 0.991.',
-          take: 'A rigorous naming protocol for our latents (held-out precision/recall).',
-          caveat: 'Concepts are robot states, not objects.' },
-        { id: 'p-aircraft', n: 'P8', arxiv: '2606.15468', score: 7, cls: 'Vision SAE (CNN)',
+          context: 'Per-token mid-layer activations of OpenVLA and pi0.5 in sim and physical manipulation.',
+          whyUs: 'Gives us a strict, non-cherry-picked naming protocol for our ResNet-18 latents: only assign an object label to a feature if precision and recall floors hold on held-out episodes.',
+          method: 'L1 SAEs (4x width) with held-out precision/recall concept naming and causal clamping verification.',
+          finding: 'Clamping named features shifted arm behavior along the named concept in 12 of 14 cases; failure detection reached 0.991 AUROC.',
+          take: 'Adopt held-out precision and recall floors before admitting any SAE latent into our named kept set.',
+          caveat: 'Transformer VLAs; concepts are mostly robot states rather than scene objects.' },
+        { id: 'p-aircraft', n: 'P8', arxiv: '2606.15468', score: 7, cls: 'Vision SAE (CNN)', cat: 'vision', addedBy: 'luca',
           title: 'Analyzing Visual Aircraft Representations with Sparse Autoencoders', meta: 'Sharma, 2026',
-          problem: 'Can SAEs expose interpretable features in a CNN classifier?',
-          method: 'SAE (768 → 8192) on the ConvNeXt-Tiny final stage before pooling, 7 × 7 spatial. Input blur and feature suppression (local vs. global) against random controls.',
-          finding: 'Blurring the feature region flips 22 % of predictions vs. 4.5 % for random regions. Suppressing a single feature flipped nothing.',
-          take: 'Closest analogue to our spatial CNN tap. Ablate globally and in sets.',
-          caveat: 'Classifier, one layer, hand-picked features.' },
-        { id: 'p-patchsae', n: 'P9', arxiv: '2412.05276', score: 7, cls: 'Vision SAE',
-          title: 'PatchSAE: Sparse Autoencoders Reveal Selective Remapping of Visual Concepts During Adaptation', meta: 'Lim, Choi, Choo, Schneider, 2024',
-          problem: 'Does prompt adaptation create new visual concepts or remap existing ones?',
-          method: 'Per-patch SAE (64×) on CLIP ViT-B/16 layer 11. Reconstruction spliced back in; top latents kept or masked.',
-          finding: 'Splicing the reconstruction alone cost accuracy (68.25 → 64.82 %). Patch activations work as spatial soft masks.',
-          take: 'Report the cost of splicing; visualize latents as spatial masks.',
-          caveat: 'ViT classification, not control.' },
+          context: 'ConvNeXt-Tiny final spatial stage (7x7) on fine-grained aircraft image classification.',
+          whyUs: 'Close spatial CNN analogue to our pre-GAP ResNet-18 tap, confirming that single-feature suppression does nothing while spatially grounded set ablation flips predictions vs. random controls.',
+          method: 'SAE (768 to 8192) on the final CNN stage before pooling; compares local vs. global feature suppression and region blur against random controls.',
+          finding: 'Blurring the feature region flipped 22% of predictions vs. 4.5% for random regions; suppressing a single feature flipped nothing.',
+          take: 'Supports ablating object feature sets globally across spatial cells rather than single latents.',
+          caveat: 'Single-step classifier, one layer, hand-picked features.' },
+        { id: 'p-patchsae', n: 'P9', arxiv: '2412.05276', score: 7, cls: 'Vision SAE', cat: 'vision', addedBy: 'both',
+          title: 'PatchSAE: Sparse Autoencoders Reveal Selective Remapping of Visual Concepts During Adaptation', meta: 'Lim, Choi, Choo, Schneider, CVPR 2025',
+          context: 'CLIP ViT-B/16 patch tokens (layer 11) on natural image classification.',
+          whyUs: 'Shows how per-patch SAE activations act as interpretable spatial soft masks and proves that even unablated SAE splicing carries a measurable accuracy cost that must be reported as a baseline.',
+          method: 'Per-patch SAE (64x expansion) on CLIP ViT layer 11; splices reconstruction back in and masks top concept latents.',
+          finding: 'Unablated SAE splicing dropped accuracy from 68.25% to 64.82%; patch-level latents cleanly localize semantic objects.',
+          take: 'Report unablated SAE splicing cost on ResNet-18 before interpreting any ablation drop as Consequence (C-C).',
+          caveat: 'ViT patches with global self-attention (not CNN receptive fields) in 1-step classification.' },
+        { id: 'p-craft', n: 'P20', arxiv: '2211.10154', score: 7, cls: 'Vision / CNN Baseline', cat: 'vision', addedBy: 'allen',
+          title: 'CRAFT: Concept Recursive Activation FacTorization for Explainability', meta: 'Fel, Picard, Bethune, Boissin, Vigouroux, Colin, Cadene, Serre, CVPR 2023',
+          context: 'ResNet image classifiers on ImageNet.',
+          whyUs: 'Because ResNet-18 layer4 is post-ReLU (strictly non-negative), CRAFT (recursive NMF + Sobol sensitivity) is our strongest non-SAE baseline to test whether overcomplete SAEs actually beat undercomplete NMF for object kept sets.',
+          method: 'Applies Non-negative Matrix Factorization (NMF) to post-ReLU CNN activations and estimates concept causal importance via Sobol indices.',
+          finding: 'Extracts coherent object and part concepts directly from ResNet feature maps with high human interpretability.',
+          take: 'Ideal Seminar comparison baseline (Family 2 vs. Family 3) to justify why we need overcomplete SAEs over NMF.',
+          caveat: 'Undercomplete factorization (fewer factors than channels) cannot resolve superposition across dozens of kitchen objects.' },
+        { id: 'p-matryoshka', n: 'P21', arxiv: '2503.17547', score: 7, cls: 'SAE Architecture', cat: 'sae', addedBy: 'allen',
+          title: 'Learning Multi-Level Features with Matryoshka Sparse Autoencoders', meta: 'Bussmann, Nabeshima, Karvonen, Nanda, 2025',
+          context: 'LLMs only (Gemma-2-2B and TinyStories); NOT yet tested on vision CNNs.',
+          whyUs: 'Directly targets our whole-object vs. object-part question: nested dictionary prefixes force early latents to capture coarse whole objects ("drawer") while later latents refine fine affordance parts ("drawer handle"), cutting feature absorption.',
+          method: 'Trains multiple nested prefix reconstructions simultaneously inside one SAE so smaller prefixes must reconstruct coarse structure first.',
+          finding: 'Substantially reduces feature absorption and preserves hierarchical concept structure compared to flat TopK/BatchTopK SAEs.',
+          take: 'High-upside theoretical extension for our Seminar blueprint on whole-object vs. part granularity.',
+          caveat: 'LLM-only in the original paper; applying it to ResNet-18 spatial grids is an untested adaptation.' },
       ];
 
-      (function renderPapers() {
+      let paperState = { author: 'all', cat: 'all', sort: 'score' };
+
+      function getAuthorChip(addedBy) {
+        if (addedBy === 'both') return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-ios-green/12 text-ios-green border border-ios-green/25">Allen &amp; Luca</span>`;
+        if (addedBy === 'allen') return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-ios-blue/12 text-ios-blue border border-ios-blue/25">Allen</span>`;
+        return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-ios-purple/12 text-ios-purple border border-ios-purple/25">Luca</span>`;
+      }
+
+      function getScoreBadge(score) {
+        const color = score >= 9 ? 'text-ios-green bg-ios-green/10 border-ios-green/25' : (score === 8 ? 'text-ios-blue bg-ios-blue/10 border-ios-blue/25' : 'text-ios-orange bg-ios-orange/10 border-ios-orange/25');
+        const barColor = score >= 9 ? 'bg-ios-green' : (score === 8 ? 'bg-ios-blue' : 'bg-ios-orange');
+        const filled = Math.round(score / 2);
+        const bars = Array.from({ length: 5 }, (_, i) => `<span class="w-1.5 h-2.5 rounded-full ${i < filled ? barColor : 'bg-black/10 dark:bg-white/10'}"></span>`).join('');
+        return `
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border ${color} flex-shrink-0">
+            <div class="flex items-center gap-0.5">${bars}</div>
+            <span class="font-mono font-bold text-[11px] tabular-nums">${score}/10</span>
+          </div>`;
+      }
+
+      function setPaperFilter(key, val) {
+        paperState[key] = val;
+        const barId = key === 'author' ? 'authorFilterBar' : 'catFilterBar';
+        document.querySelectorAll(`#${barId} .paper-filter-btn`).forEach(b => {
+          b.classList.toggle('active', b.dataset.val === val);
+        });
+        renderPapers();
+      }
+
+      function togglePaperSort() {
+        paperState.sort = paperState.sort === 'score' ? 'id' : 'score';
+        const btn = document.getElementById('paperSortBtn');
+        if (btn) btn.innerHTML = `<span>Sort: ${paperState.sort === 'score' ? 'Score' : 'Paper ID'}</span>`;
+        renderPapers();
+      }
+
+      function openPdfModal(paperId) {
+        const p = PAPERS.find(x => x.id === paperId);
+        if (!p) return;
+        const modal = document.getElementById('pdfModal');
+        const frame = document.getElementById('pdfModalFrame');
+        document.getElementById('pdfModalId').textContent = `${p.n} · ${p.cls}`;
+        document.getElementById('pdfModalAuthor').innerHTML = getAuthorChip(p.addedBy);
+        document.getElementById('pdfModalScore').textContent = `${p.score}/10`;
+        document.getElementById('pdfModalScore').className = `font-mono font-bold ${p.score >= 9 ? 'text-ios-green' : (p.score === 8 ? 'text-ios-blue' : 'text-ios-orange')}`;
+        document.getElementById('pdfModalTitle').textContent = p.title;
+        document.getElementById('pdfModalAbsLink').href = `https://arxiv.org/abs/${p.arxiv}`;
+        document.getElementById('pdfModalOpenLink').href = `https://arxiv.org/pdf/${p.arxiv}`;
+        frame.src = `https://arxiv.org/pdf/${p.arxiv}`;
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closePdfModal() {
+        const modal = document.getElementById('pdfModal');
+        const frame = document.getElementById('pdfModalFrame');
+        if (!modal) return;
+        modal.classList.add('hidden');
+        if (frame) frame.src = 'about:blank';
+        document.body.style.overflow = '';
+      }
+
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closePdfModal();
+      });
+
+      function renderPapers() {
         const list = document.getElementById('paperList');
+        const stats = document.getElementById('paperStatsStrip');
         if (!list) return;
-        const row = (label, text) => `<div><span class="font-semibold text-ios-text dark:text-ios-darkText">${label}:</span> ${text}</div>`;
-        list.innerHTML = PAPERS.map(p => `
-          <div id="${p.id}" class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios space-y-3">
-            <div class="flex flex-wrap items-start justify-between gap-2">
-              <div>
-                <div class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary">${p.n} &middot; ${p.cls}</div>
-                <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText mt-0.5">${p.title}</h3>
-                <div class="text-ios-secondary mt-0.5">${p.meta} &middot; arXiv ${p.arxiv}</div>
+
+        const bothCount = PAPERS.filter(p => p.addedBy === 'both').length;
+        const allenCount = PAPERS.filter(p => p.addedBy === 'allen').length;
+        const lucaCount = PAPERS.filter(p => p.addedBy === 'luca').length;
+
+        let filtered = PAPERS.filter(p => {
+          if (paperState.author !== 'all' && p.addedBy !== paperState.author) return false;
+          if (paperState.cat !== 'all' && p.cat !== paperState.cat) return false;
+          return true;
+        });
+
+        filtered.sort((a, b) => {
+          if (paperState.sort === 'score') {
+            if (b.score !== a.score) return b.score - a.score;
+          }
+          return parseInt(a.n.slice(1), 10) - parseInt(b.n.slice(1), 10);
+        });
+
+        if (stats) {
+          stats.innerHTML = `
+            <span class="px-2.5 py-1 rounded-full bg-black/5 dark:bg-white/10 text-ios-text dark:text-ios-darkText font-semibold">${filtered.length} / ${PAPERS.length} shown</span>
+            <span class="px-2.5 py-1 rounded-full bg-ios-green/12 text-ios-green font-semibold">${bothCount} Both</span>
+            <span class="px-2.5 py-1 rounded-full bg-ios-blue/12 text-ios-blue font-semibold">${allenCount} Allen</span>
+            <span class="px-2.5 py-1 rounded-full bg-ios-purple/12 text-ios-purple font-semibold">${lucaCount} Luca</span>`;
+        }
+
+        if (!filtered.length) {
+          list.innerHTML = `<div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-8 text-center text-ios-secondary">No papers match the current filter. <button onclick="setPaperFilter('author','all');setPaperFilter('cat','all')" class="text-ios-blue font-semibold hover:underline ml-1">Reset filters</button></div>`;
+          return;
+        }
+
+        list.innerHTML = filtered.map(p => `
+          <article id="${p.id}" class="paper-card bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder hover:border-ios-blue/35 rounded-3xl p-5 sm:p-6 shadow-ios space-y-4">
+            <div class="flex flex-wrap items-start justify-between gap-3">
+              <div class="space-y-1 min-w-0 flex-1">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span class="font-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/10 text-ios-text dark:text-ios-darkText">${p.n}</span>
+                  <span class="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-ios-cyan/10 text-ios-cyan font-semibold">${p.cls}</span>
+                  ${getAuthorChip(p.addedBy)}
+                </div>
+                <h3 class="font-bold text-sm sm:text-base text-ios-text dark:text-ios-darkText leading-snug pt-0.5">${p.title}</h3>
+                <div class="text-[11px] text-ios-secondary">${p.meta} &middot; <span class="font-mono">arXiv:${p.arxiv}</span></div>
               </div>
-              <span class="font-mono font-bold ${p.score >= 8 ? 'text-ios-green' : 'text-ios-orange'}">${p.score}/10</span>
+              ${getScoreBadge(p.score)}
             </div>
-            <div class="space-y-1.5 text-ios-secondary leading-relaxed">
-              ${row('Problem', p.problem)}${row('Method', p.method)}${row('Key finding', p.finding)}${row('What we take', p.take)}${row('Caveat', p.caveat)}
-            </div>
-            <div class="flex flex-wrap items-center gap-3">
-              <a href="https://arxiv.org/abs/${p.arxiv}" target="_blank" class="text-ios-blue hover:underline">arXiv page ↗</a>
-              <a href="https://arxiv.org/pdf/${p.arxiv}" target="_blank" class="text-ios-blue hover:underline">PDF ↗</a>
-            </div>
-            <details class="paper-embed">
-              <summary class="cursor-pointer text-ios-blue font-semibold">Show embedded PDF</summary>
-              <iframe data-src="https://arxiv.org/pdf/${p.arxiv}" title="${p.title}" class="w-full mt-3 rounded-2xl border border-ios-border dark:border-ios-darkBorder bg-white" style="height: 75vh;"></iframe>
-            </details>
-          </div>`).join('');
 
-        // Load each PDF only when its embed is opened.
-        list.querySelectorAll('details.paper-embed').forEach(d => {
-          d.addEventListener('toggle', () => {
-            const frame = d.querySelector('iframe');
-            if (d.open && !frame.getAttribute('src')) frame.src = frame.dataset.src;
-          });
-        });
+            <!-- Context Contrast Box: Their Setup vs. Our ResNet-18 + SAE Kept Set -->
+            <div class="grid md:grid-cols-2 gap-3 p-3.5 rounded-2xl bg-ios-bg/85 dark:bg-ios-darkBg/85 border border-ios-border dark:border-ios-darkBorder">
+              <div class="space-y-1">
+                <div class="font-mono text-[10px] uppercase tracking-wider text-ios-secondary font-bold">Their Context</div>
+                <p class="text-ios-secondary leading-relaxed">${p.context}</p>
+              </div>
+              <div class="space-y-1 md:border-l md:border-ios-border md:dark:border-ios-darkBorder md:pl-3">
+                <div class="font-mono text-[10px] uppercase tracking-wider text-ios-blue font-bold">Why for Our ResNet-18 + SAE Kept Set</div>
+                <p class="text-ios-text dark:text-ios-darkText leading-relaxed">${p.whyUs}</p>
+              </div>
+            </div>
 
-        document.querySelectorAll('.paper-chip').forEach(chip => {
-          chip.addEventListener('click', () => {
-            const target = document.getElementById(chip.dataset.target);
-            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          });
+            <!-- Compact Details Grid -->
+            <div class="grid md:grid-cols-2 gap-3 text-ios-secondary leading-relaxed">
+              <div class="space-y-1.5">
+                <div><span class="font-semibold text-ios-text dark:text-ios-darkText">Method:</span> ${p.method}</div>
+                <div><span class="font-semibold text-ios-text dark:text-ios-darkText">Key finding:</span> ${p.finding}</div>
+              </div>
+              <div class="space-y-1.5">
+                <div><span class="font-semibold text-ios-text dark:text-ios-darkText">Actionable takeaway:</span> ${p.take}</div>
+                <div><span class="font-semibold text-ios-text dark:text-ios-darkText">Mismatch / caveat:</span> ${p.caveat}</div>
+              </div>
+            </div>
+
+            <!-- Compact iOS Action Strip (Single Shared PDF Viewer) -->
+            <div class="pt-2 border-t border-ios-border dark:border-ios-darkBorder flex flex-wrap items-center justify-between gap-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <button onclick="openPdfModal('${p.id}')" class="btn-ios px-3.5 py-1.5 rounded-full bg-ios-blue hover:bg-ios-blueHover text-white font-semibold text-[11px] shadow-ios-button inline-flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                  <span>Read PDF</span>
+                </button>
+                <a href="https://arxiv.org/abs/${p.arxiv}" target="_blank" rel="noopener" class="btn-ios px-3.5 py-1.5 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 text-ios-text dark:text-ios-darkText font-medium text-[11px] inline-flex items-center gap-1">
+                  <span>arXiv</span>
+                  <span class="text-[10px] opacity-70">&#8599;</span>
+                </a>
+              </div>
+              <span class="font-mono text-[10px] text-ios-secondary">arXiv:${p.arxiv}</span>
+            </div>
+          </article>`).join('');
+      }
+
+      document.querySelectorAll('.paper-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const targetId = chip.dataset.target;
+          let target = document.getElementById(targetId);
+          if (!target && targetId !== 'p-base') {
+            setPaperFilter('author', 'all');
+            setPaperFilter('cat', 'all');
+            target = document.getElementById(targetId);
+          }
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            target.classList.add('ring-2', 'ring-ios-blue');
+            setTimeout(() => target.classList.remove('ring-2', 'ring-ios-blue'), 1200);
+          }
         });
-      })();
+      });
+
+      renderPapers();
     </script>
 
     <!-- ======================================================== -->
