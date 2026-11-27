@@ -939,7 +939,7 @@
             <div class="font-mono text-[10px] uppercase tracking-wider text-ios-blue">2 &middot; Decompose</div>
             <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Spatial SAE per camera</div>
             <div class="text-ios-secondary mt-1">TopK, BatchTopK, JumpReLU, ResNet-18</div>
-            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-gao">P3</span><span class="paper-chip" data-target="p-batchtopk">P5</span><span class="paper-chip" data-target="p-jumprelu">P6</span><span class="paper-chip" data-target="p-salve">P7</span></div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-gao">P3</span><span class="paper-chip" data-target="p-batchtopk">P5</span><span class="paper-chip" data-target="p-jumprelu">P6</span><span class="paper-chip" data-target="p-conceptsae">P7</span><span class="paper-chip" data-target="p-aircraft">P10</span></div>
           </div>
           <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
           <div class="flex-1 p-3 rounded-2xl bg-ios-purple/10">
@@ -953,7 +953,7 @@
             <div class="font-mono text-[10px] uppercase tracking-wider text-ios-green">4 &middot; Discovery</div>
             <div class="font-semibold text-ios-text dark:text-ios-darkText mt-1">Ground &amp; name kept set</div>
             <div class="text-ios-secondary mt-1">Spatial grounding &amp; behavior check</div>
-            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-event">P1</span><span class="paper-chip" data-target="p-salve">P7</span></div>
+            <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-event">P1</span><span class="paper-chip" data-target="p-conceptsae">P7</span></div>
           </div>
           <div class="hidden lg:flex items-center text-ios-secondary">&rarr;</div>
           <div class="flex-1 p-3 rounded-2xl bg-ios-orange/10">
@@ -970,7 +970,7 @@
             <div class="mt-2 flex flex-wrap gap-1"><span class="paper-chip" data-target="p-base">SIR</span><span class="paper-chip" data-target="p-base">ILSE</span></div>
           </div>
         </div>
-        <p class="text-ios-secondary leading-relaxed"><b class="text-ios-text dark:text-ios-darkText">Our gap:</b> robot-policy SAE papers (P1, P2) study transformer VLAs; ResNet-18 SAE work (P7) studies single-step classification; LLM SAE papers (P3, P4, P5, P6, P8, P9) assume discrete text tokens. Nobody has combined spatial SAEs on a RoboCasa ResNet-18 backbone with object-level kept-set grounding and ILSE's D-R-C evaluation.</p>
+        <p class="text-ios-secondary leading-relaxed"><b class="text-ios-text dark:text-ios-darkText">Our gap:</b> robot-policy SAE papers (P1, P2) study transformer VLAs; spatial CNN SAE work (P7, P10) studies single-image classification; LLM SAE papers (P3, P4, P5, P6, P8, P9) assume discrete text tokens. Nobody has combined spatial SAEs on a RoboCasa ResNet-18 backbone with object-level kept-set grounding and ILSE's D-R-C evaluation.</p>
       </div>
 
       <!-- Base papers -->
@@ -1036,7 +1036,7 @@
             <button onclick="navigate('progress')" class="paper-filter-btn">Progress</button>
           </div>
           <button onclick="navigate('papers')" class="btn-ios px-4 py-2 rounded-full bg-ios-blue hover:bg-ios-blueHover text-white font-semibold text-xs shadow-ios-button inline-flex items-center gap-1.5">
-            <span>Core Papers (P1-P9)</span>
+            <span>Core Papers (P1-P10)</span>
             <span>&#8594;</span>
           </button>
         </div>
@@ -1091,7 +1091,7 @@
               <span class="px-2 py-0.5 rounded-full bg-ios-blue text-white font-mono font-bold text-[10px]">Next</span>
             </div>
             <div class="font-bold text-ios-text dark:text-ios-darkText">2. Close Reading &amp; Matrix</div>
-            <p class="text-ios-secondary leading-relaxed">Read P1-P9 fully including appendices. Build comparison matrix (architecture, tap, SAE, grounding, D-R-C).</p>
+            <p class="text-ios-secondary leading-relaxed">Read P1-P10 fully including appendices. Build comparison matrix (architecture, tap, SAE, grounding, D-R-C).</p>
           </div>
           <div class="p-4 rounded-2xl bg-ios-bg/70 dark:bg-ios-darkBg/70 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
             <div class="flex items-center justify-between">
@@ -1153,7 +1153,7 @@
           </div>
           <div class="p-4 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-ios-cyan/12 text-ios-cyan font-mono font-bold text-[10px] flex items-center justify-center">04</span><h4 class="font-bold text-ios-text dark:text-ios-darkText">Spatial SAEs on Vision &amp; ResNet-18</h4></div>
-            <p class="text-ios-secondary leading-relaxed">Grounding spatial CNN activations to objects, ResNet-18 SAE vector editing (P7), why language-blind layer4 separates visual inventory from task-conditioned use, and why single features rarely decide outputs.</p>
+            <p class="text-ios-secondary leading-relaxed">Grounding spatial CNN activations to objects, spatial ResNet-18 concept SAEs with written-back edits (P7), CNN feature suppression vs. random controls (P10), why language-blind layer4 separates visual inventory from task-conditioned use, and why single features rarely decide outputs.</p>
           </div>
           <div class="p-4 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-ios-green/12 text-ios-green font-mono font-bold text-[10px] flex items-center justify-center">05</span><h4 class="font-bold text-ios-text dark:text-ios-darkText">SAEs in Robot Policies &amp; Matrix</h4></div>
@@ -1176,7 +1176,7 @@
           <div class="p-3 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder"><span class="font-mono text-[10px] font-bold text-ios-blue">01 &middot; 3m</span><div class="font-semibold text-ios-text dark:text-ios-darkText mt-0.5">Motivation: Which objects did the robot use?</div></div>
           <div class="p-3 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder"><span class="font-mono text-[10px] font-bold text-ios-blue">02 &middot; 3m</span><div class="font-semibold text-ios-text dark:text-ios-darkText mt-0.5">Explicit route: SIR's kept set &amp; ILSE D-R-C</div></div>
           <div class="p-3 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder"><span class="font-mono text-[10px] font-bold text-ios-blue">03 &middot; 4m</span><div class="font-semibold text-ios-text dark:text-ios-darkText mt-0.5">Implicit route: Superposition &amp; spatial SAEs</div></div>
-          <div class="p-3 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder"><span class="font-mono text-[10px] font-bold text-ios-purple">04 &middot; 4m</span><div class="font-semibold text-ios-text dark:text-ios-darkText mt-0.5">Literature comparison table (P1-P9)</div></div>
+          <div class="p-3 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder"><span class="font-mono text-[10px] font-bold text-ios-purple">04 &middot; 4m</span><div class="font-semibold text-ios-text dark:text-ios-darkText mt-0.5">Literature comparison table (P1-P10)</div></div>
           <div class="p-3 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder"><span class="font-mono text-[10px] font-bold text-ios-purple">05 &middot; 3m</span><div class="font-semibold text-ios-text dark:text-ios-darkText mt-0.5">3 pitfalls: Dark matter, absorption, pooling</div></div>
           <div class="p-3 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder"><span class="font-mono text-[10px] font-bold text-ios-purple">06 &middot; 3m</span><div class="font-semibold text-ios-text dark:text-ios-darkText mt-0.5">Blueprint &amp; open questions for Praktikum</div></div>
         </div>
@@ -1307,7 +1307,7 @@
           </div>
           <div class="p-4 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-ios-blue/12 text-ios-blue font-mono font-bold text-[10px] flex items-center justify-center">02</span><h4 class="font-bold text-ios-text dark:text-ios-darkText">Background &amp; Setup Summary</h4></div>
-            <p class="text-ios-secondary leading-relaxed">Concise pointer to SIR/ILSE (D-C, R-C, C-C) and our core SAE methods (P1-P9), avoiding overlap with the Seminar report.</p>
+            <p class="text-ios-secondary leading-relaxed">Concise pointer to SIR/ILSE (D-C, R-C, C-C) and our core SAE methods (P1-P10), avoiding overlap with the Seminar report.</p>
           </div>
           <div class="p-4 rounded-2xl bg-ios-bg/65 dark:bg-ios-darkBg/65 border border-ios-border dark:border-ios-darkBorder space-y-1.5">
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-ios-purple/12 text-ios-purple font-mono font-bold text-[10px] flex items-center justify-center">03</span><h4 class="font-bold text-ios-text dark:text-ios-darkText">Method &amp; Implementation</h4></div>
@@ -1423,14 +1423,14 @@
           finding: 'Matches or beats TopK and Gated SAEs on reconstruction fidelity while eliminating L1 shrinkage and fixed-k slot competition.',
           take: 'Strong candidate when testing strict Removal (R-C), because dropping distractor features does not alter kept-feature thresholds.',
           caveat: 'Requires tuning the L0 penalty and bandwidth hyperparameter; originally validated on LLMs.' },
-        { id: 'p-salve', n: 'P7', arxiv: '2512.15938', score: 9, cls: 'Vision SAE (ResNet-18)', cat: 'vision', addedBy: 'allen',
-          title: 'SALVE: Sparse Autoencoder-Latent Vector Editing for Mechanistic Control of Neural Networks', meta: 'Flovik, 2025',
-          context: 'Single-step image classification on ResNet-18 and ViT-B/16.',
-          whyUs: 'Directly validated on ResNet-18 (our exact visual backbone!). Pairs SAE latents with spatial grounding (Grad-FAM) and measures the suppression threshold alpha_crit needed to flip outputs, giving us a concrete ResNet-18 SAE reference.',
-          method: 'Trains an L1 SAE on ResNet-18 activations, localizes latent concepts spatially via Grad-FAM, and evaluates causal control by suppressing concept latents.',
-          finding: 'Demonstrates that ResNet-18 intermediate representations decompose cleanly into spatially grounded, causally editable SAE features.',
-          take: 'Direct ResNet-18 validation blueprint; combine its spatial localization check with our RoboCasa box-IoU grounding.',
-          caveat: 'Single-step image classification rather than closed-loop 10-step robotics rollouts.' },
+        { id: 'p-conceptsae', n: 'P7', arxiv: '2509.22015', score: 9, cls: 'Vision SAE (ResNet-18, spatial)', cat: 'vision', addedBy: 'luca',
+          title: 'Concept-SAE: A Controllable and Invertible Concept Interface for Sparse Autoencoders', meta: 'Ding, Chen, Zhao, Xu (CUHK), 2025',
+          context: 'Image classification on ResNet-18 (CelebA, ImageNet) and ViT-B/32. SAE on the spatial feature maps of several ResNet layers, with concept tokens that predict an existence score and a spatial mask.',
+          whyUs: 'The only spatial SAE on our exact backbone that also writes edited features back into the network. Its masks are a finer version of our bounding-box grounding, and it warns that deep ResNet layers are spatially fused, which matters for our 4 x 4 layer4 tap.',
+          method: 'Hybrid SAE: supervised concept tokens (existence score + mask, labels from a VLM and a segmentation model) plus free L1 tokens. Edited concept scores are re-aggregated and substituted for the original feature map at the chosen layer.',
+          finding: 'Localization ratio about 1.4 vs. 1.0 for the CEM baseline on ResNet-18 layers 5 / 7 / 9. Deeper layers were excluded because their features are spatially fused and lack clear localization.',
+          take: 'Ground latents spatially and validate them by substituting the edited map back into the forward pass; prefer layer3 if layer4 latents do not stay inside object boxes.',
+          caveat: 'Supervised concepts and classification only; evidence of corrections is mostly qualitative.' },
         { id: 'p-absorption', n: 'P8', arxiv: '2409.14507', score: 9, cls: 'SAE Failure Modes', cat: 'sae', addedBy: 'allen',
           title: 'A is for Absorption: Studying Feature Splitting and Absorption in Sparse Autoencoders', meta: 'Chanin, Wilken-Smith, Dulka, Bhatnagar, Bloom, 2024',
           context: 'LLM SAEs (Gemma Scope) studying hierarchical concept splitting.',
@@ -1447,6 +1447,14 @@
           finding: 'Roughly half of SAE error variance is linearly predictable from input activations, proving real semantic information hides inside the residual error.',
           take: 'Report BOTH Mode A (pure reconstruction x_hat, strict removal) and Mode B (residual-preserving x_hat + e) so we bound dark-matter leakage.',
           caveat: 'Measured on LLMs; our 128x128 ResNet-18 layer4 has far lower intrinsic dimensionality, so we should measure how much variance stays in e.' },
+        { id: 'p-aircraft', n: 'P10', arxiv: '2606.15468', score: 8, cls: 'Vision SAE (CNN, spatial)', cat: 'vision', addedBy: 'luca',
+          title: 'Analyzing Visual Aircraft Representations with Sparse Autoencoders', meta: 'Sharma, 2026',
+          context: 'ConvNeXt-Tiny classifier on FGVC-Aircraft. SAE (768 to 8192, L1) on the 7 x 7 final-stage feature map before global average pooling, one sample per grid cell.',
+          whyUs: 'Closest CNN analogue to our pre-GAP spatial tap, with causal tests against random controls in both input space and feature space.',
+          method: 'Input blur of the top-activating cell and its 3 x 3 neighborhood vs. random cells; feature suppression at one location vs. all 49 locations, vs. random features.',
+          finding: 'Blurring the feature region flips 22.0% of predictions vs. 4.5% for random regions. Suppressing a single feature, locally or globally, flipped no prediction.',
+          take: 'Ablate latent sets across all cells of an object box, never one latent in one cell, and always report random-feature and random-region controls.',
+          caveat: 'Classifier, one layer, eight hand-picked features; coarse 7 x 7 localization.' },
       ];
 
       let paperState = { author: 'all', cat: 'all', sort: 'score' };
