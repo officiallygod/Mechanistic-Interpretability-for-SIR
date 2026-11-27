@@ -924,7 +924,7 @@
       <!-- Pipeline context -->
       <div class="bg-ios-card dark:bg-ios-darkCard border border-ios-border dark:border-ios-darkBorder rounded-3xl p-6 shadow-ios space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-2">
-          <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Where each 9/10 core paper fits in our ResNet-18 + SAE kept-set pipeline</h3>
+          <h3 class="font-semibold text-sm text-ios-text dark:text-ios-darkText">Where each core paper fits in our ResNet-18 + SAE kept-set pipeline</h3>
           <span class="font-mono text-[10px] text-ios-secondary">Click any chip to jump to card</span>
         </div>
         <div class="flex flex-col lg:flex-row lg:items-stretch gap-2">
@@ -1383,14 +1383,14 @@
           finding: 'Splicing the SAE reconstruction dropped success to near 0% at several OpenVLA layers despite good MSE. Event-aligned feature removal lowers success vs. random latents.',
           take: 'Always measure spliced ResNet-18 fidelity before ablation; always run a random-alive-latent baseline.',
           caveat: 'Transformer VLA tokens; grounds to motions, not spatial kitchen objects.' },
-        { id: 'p-notall', n: 'P2', arxiv: '2603.19233', score: 9, cls: 'Robot-Policy SAE', cat: 'robot', addedBy: 'both',
+        { id: 'p-notall', n: 'P2', arxiv: '2603.19233', score: 7, cls: 'Robot-Policy SAE · method relevance', cat: 'robot', addedBy: 'both',
           title: 'Not All Features Are Created Equal: A Mechanistic Study of Vision-Language-Action Models', meta: 'Grant, Zhao, Wang (Case Western), 2026',
-          context: '520+ TopK SAEs across 6 transformer VLA architectures on LIBERO, MetaWorld, and ALOHA.',
-          whyUs: 'Directly validates two core findings for our ResNet-18 kept set: (1) pooling before the SAE destroys control (supporting our pre-GAP layer3/layer4 tap), and (2) ablating a single latent rarely moves behavior, so kept-set removal must ablate object feature sets.',
+          context: 'Asks whether VLAs encode a task concept or a coordinate-bound motor program. 520+ TopK SAEs on per-token residual streams of 6 transformer VLAs (LIBERO, MetaWorld, ALOHA); features are 79 manipulation concepts found by Cohen&rsquo;s d, never objects or image regions.',
+          whyUs: 'Different purpose from ours (no object grounding, no CNN), so its relevance is methodological only: (1) a mean-pooled SAE destroys control, which supports our pre-GAP layer3/layer4 tap, and (2) single-latent ablation rarely moves behavior, so removal must ablate latent sets.',
           method: 'TopK SAEs (k = 64) with activation injection, single-feature ablation, and residual write-back h + W_dec(z_new - z) that preserves the error term.',
           finding: 'A mean-pooled SAE cut pi0.5 success from 89.9% to 3.3%. Single-feature ablation had no effect on 28 to 92% of concept/task pairs; motor programs bind to workspace coordinates.',
-          take: 'Keep spatial resolution before GAP, write back edits as residual deltas, and ablate object latent sets.',
-          caveat: 'Transformer VLAs rather than a language-blind ResNet-18 CNN.' },
+          take: 'Method only: keep spatial resolution before GAP, write back edits as residual deltas, and ablate latent sets.',
+          caveat: 'Not object-level and not a CNN: features are manipulation concepts in transformer VLA residual streams.' },
         { id: 'p-gao', n: 'P3', arxiv: '2406.04093', score: 9, cls: 'SAE Architecture', cat: 'sae', addedBy: 'both',
           title: 'Scaling and Evaluating Sparse Autoencoders', meta: 'Gao et al. (OpenAI), 2024 / ICLR 2025',
           context: 'LLM residual streams (GPT-4 / GPT-2) with discrete text tokens.',
